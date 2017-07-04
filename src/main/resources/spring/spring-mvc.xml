@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+	    default-lazy-init="false">
+
+	<!-- 浣跨敤CoC,鎯緥浼樺厛鍘熷垯(convention over configuration)鐨勬柟寮忔潵閰嶇疆SpringMVC鍙互甯垜浠０鏄嶤ontroller鐨勬椂鍊欑渷涓嬪緢澶氬姛澶€?		鍙鎴戜滑鐨凜ontroller鏄互XXXController鐨勬柟寮忓懡鍚嶇殑璇濆氨鍙互浣跨敤鍒癈oC甯︽潵鐨勫ソ澶勩€?		渚嬪锛屽浜庢櫘閫氱殑Controller锛堥潪MultiActionController锛夛紝CoC甯垜浠仛浠ヤ笅鐨勬槧灏勶細
+		HomeController鏄犲皠鍒?home*璇锋眰URL
+	 -->
+  	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+	  <!-- 浣跨敤annocation鍒涘缓Controller鐨刡ean -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>     
+	<context:component-scan base-package="com.hcb.xigou.controller">
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/> -->
+	</context:component-scan>
+	
+	<mvc:annotation-driven >
+    <!-- 消息转换器 -->
+    <mvc:message-converters register-defaults="true">
+        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+            <property name="supportedMediaTypes" value="text/plain;charset=UTF-8"/>
+            <property name="writeAcceptCharset" value="false"/>
+        </bean>
+    </mvc:message-converters>
+  </mvc:annotation-driven>
+	<mvc:default-servlet-handler/>
+	<!-- 瀹氫箟spring杩囨护鍣?-->
+	<!-- <mvc:interceptors>  
+    		<bean class="com.hcb.xigou.intercepter.UserOperationInterceptor"></bean>
+	</mvc:interceptors> -->
+	
+	<!-- 瀹氫箟棣栭〉 -->
+	<mvc:view-controller path="/" view-name="redirect:/"/>
+
+	<!-- 瀹氫箟JSP --> 
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/pages/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	<!-- end -->
+</beans>
