@@ -1,19 +1,19 @@
 package com.hcb.xigou.service;
 
-import com.hcb.xigou.dto.Captcha;
+import com.hcb.xigou.dto.Captchas;
 
 public interface ICaptchaService {
    public int deleteByPrimaryKey(Integer fakeId);
 
-   public int insert(Captcha record);
+   public int insert(Captchas record);
 
-   public int insertSelective(Captcha record);
+   public int insertSelective(Captchas record);
 
-   public Captcha selectByPrimaryKey(Integer fakeId);
+   public Captchas selectByPrimaryKey(Integer fakeId);
 
-   public int updateByPrimaryKeySelective(Captcha record);
+   public int updateByPrimaryKeySelective(Captchas record);
 
-   public int updateByPrimaryKey(Captcha record);
+   public int updateByPrimaryKey(Captchas record);
    
    public boolean sendTo(final String phone);
 

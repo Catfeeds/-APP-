@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hcb.xigou.dao.interfaceClass.CaptchaMapper" >
-  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Captcha" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.CaptchasMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Captchas" >
     <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
-    <result column="captcha_uuid" property="captchaUuid" jdbcType="VARCHAR" />
     <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
     <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
     <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
@@ -11,25 +10,25 @@
     <result column="captcha" property="captcha" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    fake_id, captcha_uuid, create_datetime, update_datetime, delete_at, phone, captcha
+    fake_id, create_datetime, update_datetime, delete_at, phone, captcha
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from captcha
+    from captchas
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
   <select id="selectByphone" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from captcha
+    from captchas
     where phone = #{phone,jdbcType=VARCHAR} and delete_at is null
   </select>
   
   <select id="selectByCaptchaPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
     <include refid="Base_Column_List" />
-    from captcha
+    from captchas
     where phone = #{phone,jdbcType=VARCHAR} and captcha = #{captcha,jdbcType=VARCHAR} and delete_at is null
   </select>
   
@@ -38,25 +37,22 @@
   
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from captcha
+    delete from captchas
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.hcb.xigou.dto.Captcha" >
-    insert into captcha (fake_id, captcha_uuid, create_datetime, 
+  <insert id="insert" parameterType="com.hcb.xigou.dto.Captchas" >
+    insert into captcha (fake_id, create_datetime, 
       update_datetime, delete_at, phone, 
       captcha)
-    values (#{fakeId,jdbcType=INTEGER}, #{captchaUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+    values (#{fakeId,jdbcType=INTEGER}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{captcha,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Captcha" >
-    insert into captcha
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Captchas" >
+    insert into captchas
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
         fake_id,
-      </if>
-      <if test="captchaUuid != null" >
-        captcha_uuid,
       </if>
       <if test="createDatetime != null" >
         create_datetime,
@@ -78,9 +74,6 @@
       <if test="fakeId != null" >
         #{fakeId,jdbcType=INTEGER},
       </if>
-      <if test="captchaUuid != null" >
-        #{captchaUuid,jdbcType=VARCHAR},
-      </if>
       <if test="createDatetime != null" >
         #{createDatetime,jdbcType=TIMESTAMP},
       </if>
@@ -98,12 +91,9 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.Captcha" >
-    update captcha
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.Captchas" >
+    update captchas
     <set >
-      <if test="captchaUuid != null" >
-        captcha_uuid = #{captchaUuid,jdbcType=VARCHAR},
-      </if>
       <if test="createDatetime != null" >
         create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
       </if>
@@ -122,10 +112,9 @@
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Captcha" >
-    update captcha
-    set captcha_uuid = #{captchaUuid,jdbcType=VARCHAR},
-      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Captchas" >
+    update captchas
+    set create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
       update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
       delete_at = #{deleteAt,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},

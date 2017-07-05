@@ -2,10 +2,8 @@ package com.hcb.xigou.dto;
 
 import java.util.Date;
 
-public class Captcha {
+public class Captchas {
     private Integer fakeId;
-
-    private String captchaUuid;
 
     private Date createDatetime;
 
@@ -23,14 +21,6 @@ public class Captcha {
 
     public void setFakeId(Integer fakeId) {
         this.fakeId = fakeId;
-    }
-
-    public String getCaptchaUuid() {
-        return captchaUuid;
-    }
-
-    public void setCaptchaUuid(String captchaUuid) {
-        this.captchaUuid = captchaUuid == null ? null : captchaUuid.trim();
     }
 
     public Date getCreateDatetime() {

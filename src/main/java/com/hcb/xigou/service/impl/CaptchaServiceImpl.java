@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
-import com.hcb.xigou.dao.interfaceClass.CaptchaMapper;
-import com.hcb.xigou.dto.Captcha;
+import com.hcb.xigou.dao.interfaceClass.CaptchasMapper;
+import com.hcb.xigou.dto.Captchas;
 import com.hcb.xigou.service.ICaptchaService;
 
 @Service("CaptchaService")
 public class CaptchaServiceImpl implements ICaptchaService{
      
 	@Autowired
-	CaptchaMapper captchaMapper;
+	CaptchasMapper captchaMapper;
 	
 	@Override
 	public int deleteByPrimaryKey(Integer fakeId) {
@@ -26,27 +26,27 @@ public class CaptchaServiceImpl implements ICaptchaService{
 	}
 
 	@Override
-	public int insert(Captcha record) {
+	public int insert(Captchas record) {
 		return captchaMapper.insert(record);
 	}
 
 	@Override
-	public int insertSelective(Captcha record) {
+	public int insertSelective(Captchas record) {
 		return captchaMapper.insertSelective(record);
 	}
 
 	@Override
-	public Captcha selectByPrimaryKey(Integer fakeId) {
+	public Captchas selectByPrimaryKey(Integer fakeId) {
 		return captchaMapper.selectByPrimaryKey(fakeId);
 	}
 
 	@Override
-	public int updateByPrimaryKeySelective(Captcha record) {
+	public int updateByPrimaryKeySelective(Captchas record) {
 		return captchaMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
-	public int updateByPrimaryKey(Captcha record) {
+	public int updateByPrimaryKey(Captchas record) {
 		return captchaMapper.updateByPrimaryKey(record);
 	}
 
@@ -54,9 +54,9 @@ public class CaptchaServiceImpl implements ICaptchaService{
 	public boolean sendTo(String phone) {
 
 		boolean a = false;
-		Captcha captcha = captchaMapper.selectByphone(phone);
+		Captchas captcha = captchaMapper.selectByphone(phone);
         if(captcha == null){
-        	Captcha captcha1 = new Captcha();
+        	Captchas captcha1 = new Captchas();
         	Random random = new Random();
         	String flag="";
         	for(int i=0;i<6;i++){
@@ -171,7 +171,7 @@ public class CaptchaServiceImpl implements ICaptchaService{
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("phone", phone);
 		map.put("captcha", captcha);
-		Captcha captcha1 =  captchaMapper.selectByCaptchaPhone(map);
+		Captchas captcha1 =  captchaMapper.selectByCaptchaPhone(map);
 		if(captcha1 == null){
 			return false;
 		}else{
