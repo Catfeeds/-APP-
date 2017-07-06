@@ -1,4 +1,4 @@
-package com.hcb.xigou;
+package com.hcb.xigou.controller;
 
 import java.util.HashMap;
 import java.util.Map;
