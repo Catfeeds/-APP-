@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.mapper.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.pojo.Goods" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="merchant_uuid" property="merchantUuid" jdbcType="VARCHAR" />
+    <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="DECIMAL" />
+    <result column="numbers" property="numbers" jdbcType="INTEGER" />
+    <result column="classifier" property="classifier" jdbcType="CHAR" />
+    <result column="first_uuid" property="firstUuid" jdbcType="VARCHAR" />
+    <result column="firt_category_name" property="firtCategoryName" jdbcType="VARCHAR" />
+    <result column="second_uuid" property="secondUuid" jdbcType="VARCHAR" />
+    <result column="second_category_name" property="secondCategoryName" jdbcType="VARCHAR" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="good_code" property="goodCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.pojo.GoodsWithBLOBs" extends="BaseResultMap" >
+    <result column="poster" property="poster" jdbcType="LONGVARCHAR" />
+    <result column="photos" property="photos" jdbcType="LONGVARCHAR" />
+    <result column="models" property="models" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, good_uuid, create_datetime, update_datetime, delete_at, merchant_uuid, good_name, 
+    description, title, cover, unit_price, numbers, classifier, first_uuid, firt_category_name, 
+    second_uuid, second_category_name, store_uuid, address, good_code
+  </sql>
+  <sql id="Blob_Column_List" >
+    poster, photos, models
+  </sql>
+  
+  
+  <!-- 查询总条数  -->
+  <select id="selectCountByGood" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    select  
+  	count(fake_id)
+  	from goods 
+  	where delete_at is null
+  	<if test="goodName != null">
+  		and good_name like '%#{goodName,jdbcType=VARCHAR}%'
+  	</if>
+  	<if test="goodUuid != null">
+  		and good_uuid= '#{goodUuid,jdbcType=VARCHAR}'
+  	</if>
+  	<if test="min != null and max != null">
+  		and unit_price BETWEEN #{min} and #{max}
+  	</if>
+  </select>
+ 
+  
+  <!--商品列表   商品状态（上架/下架）   数据库字段不完整 -->
+  <select id="selectGoodDetails" parameterMap="java.util.HashMap" resultMap="BaseResultMap"> 
+  	select  
+  	<include refid="Base_Column_List" />
+  	from goods 
+  	where delete_at is null
+  	<if test="goodName != null">
+  		and good_name like '%#{goodName,jdbcType=VARCHAR}%'
+  	</if>
+  	<if test="goodUuid != null">
+  		and good_uuid= '#{goodUuid,jdbcType=VARCHAR}'
+  	</if>
+  	<if test="min != null and max != null">
+  		and unit_price BETWEEN #{min} and #{max}
+  	</if>
+    LIMIT #{start},#{end}
+  </select>
+
+  
+  <!-- 商品详情 -->
+  <select id="selectGoodById" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">
+  	select * from goods 
+  	where 
+  	fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  
+   <!-- 删除/批量删除 -->
+  <delete id="deleteByGoodsId" parameterType="java.lang.Integer" >
+  	delete from goods
+  	where fake_id in
+  	<foreach item="fakeIdItem" collection="array" open="(" separator="," close=")">
+            #{fakeId,jdbcType=INTEGER}
+        </foreach>
+  </delete>
+  
+  
+  
+   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="insert" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+    insert into goods (fake_id, good_uuid, create_datetime, 
+      update_datetime, delete_at, merchant_uuid, 
+      good_name, description, title, 
+      cover, unit_price, numbers, 
+      classifier, first_uuid, firt_category_name, 
+      second_uuid, second_category_name, store_uuid, 
+      address, good_code, poster, 
+      photos, models)
+    values (#{fakeId,jdbcType=INTEGER}, #{goodUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{merchantUuid,jdbcType=VARCHAR}, 
+      #{goodName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{cover,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, #{numbers,jdbcType=INTEGER}, 
+      #{classifier,jdbcType=CHAR}, #{firstUuid,jdbcType=VARCHAR}, #{firtCategoryName,jdbcType=VARCHAR}, 
+      #{secondUuid,jdbcType=VARCHAR}, #{secondCategoryName,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}, #{poster,jdbcType=LONGVARCHAR}, 
+      #{photos,jdbcType=LONGVARCHAR}, #{models,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="merchantUuid != null" >
+        merchant_uuid,
+      </if>
+      <if test="goodName != null" >
+        good_name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="numbers != null" >
+        numbers,
+      </if>
+      <if test="classifier != null" >
+        classifier,
+      </if>
+      <if test="firstUuid != null" >
+        first_uuid,
+      </if>
+      <if test="firtCategoryName != null" >
+        firt_category_name,
+      </if>
+      <if test="secondUuid != null" >
+        second_uuid,
+      </if>
+      <if test="secondCategoryName != null" >
+        second_category_name,
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="goodCode != null" >
+        good_code,
+      </if>
+      <if test="poster != null" >
+        poster,
+      </if>
+      <if test="photos != null" >
+        photos,
+      </if>
+      <if test="models != null" >
+        models,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="goodUuid != null" >
+        #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUuid != null" >
+        #{merchantUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodName != null" >
+        #{goodName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null" >
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="numbers != null" >
+        #{numbers,jdbcType=INTEGER},
+      </if>
+      <if test="classifier != null" >
+        #{classifier,jdbcType=CHAR},
+      </if>
+      <if test="firstUuid != null" >
+        #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="firtCategoryName != null" >
+        #{firtCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondUuid != null" >
+        #{secondUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secondCategoryName != null" >
+        #{secondCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="goodCode != null" >
+        #{goodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="poster != null" >
+        #{poster,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="photos != null" >
+        #{photos,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="models != null" >
+        #{models,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+    update goods
+    <set >
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUuid != null" >
+        merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodName != null" >
+        good_name = #{goodName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="numbers != null" >
+        numbers = #{numbers,jdbcType=INTEGER},
+      </if>
+      <if test="classifier != null" >
+        classifier = #{classifier,jdbcType=CHAR},
+      </if>
+      <if test="firstUuid != null" >
+        first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="firtCategoryName != null" >
+        firt_category_name = #{firtCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondUuid != null" >
+        second_uuid = #{secondUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secondCategoryName != null" >
+        second_category_name = #{secondCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="goodCode != null" >
+        good_code = #{goodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="poster != null" >
+        poster = #{poster,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="photos != null" >
+        photos = #{photos,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="models != null" >
+        models = #{models,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+    update goods
+    set good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      good_name = #{goodName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      cover = #{cover,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      numbers = #{numbers,jdbcType=INTEGER},
+      classifier = #{classifier,jdbcType=CHAR},
+      first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      firt_category_name = #{firtCategoryName,jdbcType=VARCHAR},
+      second_uuid = #{secondUuid,jdbcType=VARCHAR},
+      second_category_name = #{secondCategoryName,jdbcType=VARCHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      good_code = #{goodCode,jdbcType=VARCHAR},
+      poster = #{poster,jdbcType=LONGVARCHAR},
+      photos = #{photos,jdbcType=LONGVARCHAR},
+      models = #{models,jdbcType=LONGVARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.pojo.Goods" >
+    update goods
+    set good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      good_name = #{goodName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      cover = #{cover,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      numbers = #{numbers,jdbcType=INTEGER},
+      classifier = #{classifier,jdbcType=CHAR},
+      first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      firt_category_name = #{firtCategoryName,jdbcType=VARCHAR},
+      second_uuid = #{secondUuid,jdbcType=VARCHAR},
+      second_category_name = #{secondCategoryName,jdbcType=VARCHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      good_code = #{goodCode,jdbcType=VARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>
