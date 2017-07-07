@@ -17,6 +17,7 @@ import com.hcb.xigou.pojo.Users;
 import com.hcb.xigou.service.LoginService;
 
 @Controller
+@RequestMapping("login/")
 public class LoginController {
 	
 	private final String KEY_SESSION_USER = "userSession";
@@ -27,7 +28,7 @@ public class LoginController {
 	@RequestMapping("login")
 	public String loginIndex(HttpServletRequest req, HttpServletResponse res, ModelMap model,@RequestParam(required = true) String userUuid,@RequestParam(required = true) String password) {
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("userNum", userUuid);
+		map.put("userUuid", userUuid);
 		map.put("password", password);
 		Users loginUser = loginService.selectByUserAndPassword(map);
 		HttpSession session = req.getSession(true);

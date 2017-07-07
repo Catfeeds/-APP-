@@ -11,6 +11,7 @@ import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.GoodsService;
 
 @Controller
+@RequestMapping("goods/")
 public class GoodsController {
 	
 	@Autowired
@@ -28,5 +29,8 @@ public class GoodsController {
 		model.put("goods",goods);
 		return null;
 	}
+	
+	
+	
 	
 }
