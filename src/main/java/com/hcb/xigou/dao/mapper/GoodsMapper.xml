@@ -57,7 +57,7 @@
  
   
   <!--商品列表   商品状态（上架/下架）   数据库字段不完整 -->
-  <select id="selectGoodDetails" parameterMap="java.util.HashMap" resultMap="BaseResultMap"> 
+  <select id="selectGoodDetails" parameterMap="java.util.HashMap" resultMap="ResultMapWithBLOBs"> 
   	select  
   	<include refid="Base_Column_List" />
   	from goods 
@@ -77,9 +77,12 @@
   
   <!-- 商品详情 -->
   <select id="selectGoodById" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">
-  	select * from goods 
+  	<include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods
   	where 
-  	fake_id = #{fakeId,jdbcType=INTEGER}
+  	fake_id = #{fakeId,jdbcType=INTEGER} and delete_at is null
   </select>
   
    <!-- 删除/批量删除 -->
@@ -99,8 +102,31 @@
     ,
     <include refid="Blob_Column_List" />
     from goods
-    where fake_id = #{fakeId,jdbcType=INTEGER}
+    where fake_id = #{fakeId,jdbcType=INTEGER} and delete_at is null
   </select>
+  
+  <select id="selectGoodByGoodUuid" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods
+    where good_uuid = #{fakeId,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <delete id="deleteByGoodUuids" parameterType="java.util.HashMap" >
+    delete from managers
+    where 
+    <if test="storeUuid!='' and storeUuid!=null ">
+			and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if >
+	<if test="goodUuids!='' and goodUuids!=null ">
+		and good_uuid in 
+	    <foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </delete>
   
   <insert id="insert" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
     insert into goods (fake_id, good_uuid, create_datetime, 

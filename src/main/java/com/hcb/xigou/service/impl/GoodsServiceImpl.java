@@ -17,8 +17,8 @@ public class GoodsServiceImpl implements GoodsService {
 	GoodsMapper goodsMapper;
 	
 	@Override
-	public void deleteByGoodsId(int[] fakeId) {
-		goodsMapper.deleteByGoodsId(fakeId);
+	public int deleteByGoodsId(int[] fakeId) {
+		return goodsMapper.deleteByGoodsId(fakeId);
 	}
 	
 	@Override
@@ -34,6 +34,16 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public int selectCountByGood(Map<String, Object> map) {
 		return goodsMapper.selectCountByGood(map);
+	}
+
+	@Override
+	public Goods selectGoodByGoodUuid(String goodUuid) {
+		return goodsMapper.selectGoodByGoodUuid(goodUuid);
+	}
+
+	@Override
+	public int deleteByGoodUuids(Map<String, Object> map) {
+		return goodsMapper.deleteByGoodUuids(map);
 	}
 
 }

@@ -5,38 +5,76 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hcb.xigou.pojo.Users;
-import com.hcb.xigou.service.LoginService;
+import com.hcb.xigou.controller.base.BaseController;
+import com.hcb.xigou.dto.Managers;
+import com.hcb.xigou.service.IManagersService;
+
+import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("login/")
-public class LoginController {
-	
-	private final String KEY_SESSION_USER = "userSession";
+public class LoginController extends BaseController{
 	
 	@Autowired
-	LoginService loginService;
+	IManagersService managersService;
 	
 	@RequestMapping("login")
-	public String loginIndex(HttpServletRequest req, HttpServletResponse res, ModelMap model,@RequestParam(required = true) String userUuid,@RequestParam(required = true) String password) {
+	@ResponseBody
+	public String loginIndex(HttpServletRequest req, HttpServletResponse res, ModelMap model) {
+		JSONObject json = new JSONObject();
+		if (sign == 1) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("nickname") == null || bodyInfo.get("password") == null|| bodyInfo.get("grade") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		
+		if(bodyInfo.getString("grade").equals("3")){
+			if (bodyInfo.get("store_uuid") == null) {
+				json.put("result", 1);
+				json.put("description", "请检查参数格式是否正确或者参数是否完整");
+				return buildReqJsonObject(json);
+			}
+		}
+		
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("userUuid", userUuid);
-		map.put("password", password);
-		Users loginUser = loginService.selectByUserAndPassword(map);
-		HttpSession session = req.getSession(true);
-		session.setAttribute(KEY_SESSION_USER,loginUser);
-		if (loginUser==null) {
-			return "redirect:/login";
+		map.put("nickname", bodyInfo.getString("nickname"));
+		map.put("grade", bodyInfo.getString("grade"));
+		map.put("password", bodyInfo.getString("password"));
+		
+		Managers managers = managersService.selectBynicknameAndGrade(map);
+		if (managers==null) {
+			json.put("result", 1);
+			json.put("description", "登录失败，用户名或密码错误");
+			return buildReqJsonObject(json);
 		}else{
-			return "";
+			if(bodyInfo.getString("grade").equals("3")){
+				if(managers.getStoreUuid().equals(bodyInfo.getString("store_uuid"))){
+					json.put("result", 0);
+					json.put("description", "登录成功");
+					json.put("store_uuid", managers.getStoreUuid());
+					return buildReqJsonObject(json);
+				}else{
+					json.put("result", 1);
+					json.put("description", "登录失败，用户名或密码错误");
+					return buildReqJsonObject(json);
+				}
+			}else{
+				json.put("result", 0);
+				json.put("description", "登录成功");
+				return buildReqJsonObject(json);
+			}
 		}
 	}
 }

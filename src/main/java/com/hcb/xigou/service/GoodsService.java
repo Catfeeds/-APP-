@@ -11,7 +11,7 @@ public interface GoodsService {
 	 * 删除商品
 	 * @param fakeId
 	 */
-	public void deleteByGoodsId(int[] fakeId);
+	public int deleteByGoodsId(int[] fakeId);
 	
 	/**
 	 * 总条数
@@ -34,4 +34,8 @@ public interface GoodsService {
 	 */
 	public Goods selectGoodById(int fakeId);
 	
+	
+	Goods selectGoodByGoodUuid(String goodUuid);
+	
+	int deleteByGoodUuids(Map<String,Object> map);
 }
