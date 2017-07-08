@@ -1,5 +1,6 @@
 package com.hcb.xigou.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.hcb.xigou.dto.Banners;
@@ -20,4 +21,8 @@ public interface IBannersService {
     Banners selectByBannerUuid(String bannerUuid);
     
     int deleteByBannerUuids(Map<String,Object> map);
+    
+    List<Banners> searchBannerByMap(Map<String,Object> map);
+    
+    int countBannerByMap(Map<String,Object> map);
 }

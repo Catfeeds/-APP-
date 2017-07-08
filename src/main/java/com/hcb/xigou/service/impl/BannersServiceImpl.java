@@ -1,5 +1,6 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,15 @@ public class BannersServiceImpl implements IBannersService{
 	@Override
 	public int deleteByBannerUuids(Map<String, Object> map) {
 		return bannersMapper.deleteByBannerUuids(map);
+	}
+
+	@Override
+	public List<Banners> searchBannerByMap(Map<String, Object> map) {
+		return bannersMapper.searchBannerByMap(map);
+	}
+
+	@Override
+	public int countBannerByMap(Map<String, Object> map) {
+		return bannersMapper.countBannerByMap(map);
 	}
 }

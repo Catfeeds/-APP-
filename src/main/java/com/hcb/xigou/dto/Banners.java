@@ -24,8 +24,18 @@ public class Banners {
     private Integer currentindex;
     
     private Integer bannerStatus;
+    
+    private String bannerName;
 
-    public Integer getBannerStatus() {
+    public String getBannerName() {
+		return bannerName;
+	}
+
+	public void setBannerName(String bannerName) {
+		this.bannerName = bannerName;
+	}
+
+	public Integer getBannerStatus() {
 		return bannerStatus;
 	}
 

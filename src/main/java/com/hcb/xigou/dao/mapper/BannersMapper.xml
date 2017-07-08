@@ -13,10 +13,11 @@
     <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
     <result column="currentIndex" property="currentindex" jdbcType="INTEGER" />
     <result column="banner_status" property="bannerStatus" jdbcType="INTEGER" />
+    <result column="banner_name" property="bannerName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, banner_uuid, create_datetime, update_datetime, delete_at, type, url, store_uuid, 
-    good_uuid, currentIndex,banner_status
+    good_uuid, currentIndex,banner_status,banner_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -30,6 +31,31 @@
     <include refid="Base_Column_List" />
     from banners
     where banner_uuid = #{bannerUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <select id="searchBannerByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from banners
+    where delete_at is null
+    <if test="bannerName !='' and bannerName != null">
+		banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
+	</if>
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="countBannerByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+   select count(1) from banners
+    where delete_at is null
+    <if test="bannerName !='' and bannerName != null">
+		banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
+	</if>
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
   </select>
   
   <update id="deleteByBannerUuids" parameterType="java.util.HashMap" >
@@ -55,11 +81,11 @@
     insert into banners (fake_id, banner_uuid, create_datetime, 
       update_datetime, delete_at, type, 
       url, store_uuid, good_uuid, 
-      currentIndex,banner_status)
+      currentIndex,banner_status,banner_name)
     values (#{fakeId,jdbcType=INTEGER}, #{bannerUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{url,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, 
-      #{currentindex,jdbcType=INTEGER},  #{bannerStatus,jdbcType=INTEGER})
+      #{currentindex,jdbcType=INTEGER},  #{bannerStatus,jdbcType=INTEGER}, #{bannerName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Banners" >
     insert into banners
@@ -97,6 +123,9 @@
       <if test="bannerStatus != null" >
         banner_status,
       </if>
+      <if test="bannerName != null" >
+        banner_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -131,6 +160,9 @@
       </if>
       <if test="bannerStatus != null" >
          #{bannerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="bannerName != null" >
+         #{bannerName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -167,6 +199,9 @@
       <if test="bannerStatus != null" >
          banner_status = #{bannerStatus,jdbcType=INTEGER},
       </if>
+      <if test="bannerName != null" >
+         banner_name = #{bannerName,jdbcType=VARCHAR},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -181,7 +216,8 @@
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       good_uuid = #{goodUuid,jdbcType=VARCHAR},
       currentIndex = #{currentindex,jdbcType=INTEGER},
-      banner_status = #{bannerStatus,jdbcType=INTEGER}
+      banner_status = #{bannerStatus,jdbcType=INTEGER},
+      banner_name = #{bannerName,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>
