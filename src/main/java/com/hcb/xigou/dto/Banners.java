@@ -22,8 +22,18 @@ public class Banners {
     private String goodUuid;
 
     private Integer currentindex;
+    
+    private Integer bannerStatus;
 
-    public Integer getFakeId() {
+    public Integer getBannerStatus() {
+		return bannerStatus;
+	}
+
+	public void setBannerStatus(Integer bannerStatus) {
+		this.bannerStatus = bannerStatus;
+	}
+
+	public Integer getFakeId() {
         return fakeId;
     }
 

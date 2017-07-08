@@ -43,8 +43,18 @@ public class Goods {
     private String address;
 
     private String goodCode;
+    
+    private Integer goodStatus;
 
-    public Integer getFakeId() {
+    public Integer getGoodStatus() {
+		return goodStatus;
+	}
+
+	public void setGoodStatus(Integer goodStatus) {
+		this.goodStatus = goodStatus;
+	}
+
+	public Integer getFakeId() {
         return fakeId;
     }
 

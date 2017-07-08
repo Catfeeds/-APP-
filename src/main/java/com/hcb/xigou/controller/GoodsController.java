@@ -1,13 +1,13 @@
 package com.hcb.xigou.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,7 +27,7 @@ public class GoodsController extends BaseController{
 	
 	@RequestMapping("delete")
 	@ResponseBody
-	public String delete(ModelMap model){
+	public String delete(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
 			json.put("result", "1");
@@ -49,6 +49,7 @@ public class GoodsController extends BaseController{
 		if(goodUUids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("goodUUids", "goodUUids");
+			map.put("deleteAt", new Date());
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
@@ -71,7 +72,7 @@ public class GoodsController extends BaseController{
 	
 	@RequestMapping("select")
 	@ResponseBody
-	public String selectGoodid(ModelMap model){
+	public String selectGoodid(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
 			json.put("result", "1");

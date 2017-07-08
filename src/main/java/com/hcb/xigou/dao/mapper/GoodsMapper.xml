@@ -22,6 +22,7 @@
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="good_code" property="goodCode" jdbcType="VARCHAR" />
+    <result column="good_status" property="goodStatus" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.pojo.GoodsWithBLOBs" extends="BaseResultMap" >
     <result column="poster" property="poster" jdbcType="LONGVARCHAR" />
@@ -31,7 +32,7 @@
   <sql id="Base_Column_List" >
     fake_id, good_uuid, create_datetime, update_datetime, delete_at, merchant_uuid, good_name, 
     description, title, cover, unit_price, numbers, classifier, first_uuid, firt_category_name, 
-    second_uuid, second_category_name, store_uuid, address, good_code
+    second_uuid, second_category_name, store_uuid, address, good_code,good_status
   </sql>
   <sql id="Blob_Column_List" >
     poster, photos, models
@@ -111,11 +112,12 @@
     ,
     <include refid="Blob_Column_List" />
     from goods
-    where good_uuid = #{fakeId,jdbcType=VARCHAR} and delete_at is null
+    where good_uuid = #{goodUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
-  <delete id="deleteByGoodUuids" parameterType="java.util.HashMap" >
-    delete from managers
+  <update id="deleteByGoodUuids" parameterType="java.util.HashMap" >
+   update goods
+  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 
     <if test="storeUuid!='' and storeUuid!=null ">
 			and store_uuid = #{storeUuid,jdbcType=VARCHAR}
@@ -126,7 +128,7 @@
 		  #{item}  
 		</foreach>
 	</if>
-  </delete>
+  </update>
   
   <insert id="insert" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
     insert into goods (fake_id, good_uuid, create_datetime, 
@@ -135,7 +137,7 @@
       cover, unit_price, numbers, 
       classifier, first_uuid, firt_category_name, 
       second_uuid, second_category_name, store_uuid, 
-      address, good_code, poster, 
+      address, good_code, good_status,poster, 
       photos, models)
     values (#{fakeId,jdbcType=INTEGER}, #{goodUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{merchantUuid,jdbcType=VARCHAR}, 
@@ -143,7 +145,7 @@
       #{cover,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, #{numbers,jdbcType=INTEGER}, 
       #{classifier,jdbcType=CHAR}, #{firstUuid,jdbcType=VARCHAR}, #{firtCategoryName,jdbcType=VARCHAR}, 
       #{secondUuid,jdbcType=VARCHAR}, #{secondCategoryName,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}, #{poster,jdbcType=LONGVARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}, #{goodStatus,jdbcType=VARCHAR}, #{poster,jdbcType=LONGVARCHAR}, 
       #{photos,jdbcType=LONGVARCHAR}, #{models,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
@@ -208,6 +210,9 @@
       </if>
       <if test="goodCode != null" >
         good_code,
+      </if>
+      <if test="goodStatus != null" >
+        good_status,
       </if>
       <if test="poster != null" >
         poster,
@@ -280,6 +285,9 @@
       <if test="goodCode != null" >
         #{goodCode,jdbcType=VARCHAR},
       </if>
+      <if test="goodStatus != null" >
+        #{goodStatus,jdbcType=INTEGER},
+      </if>
       <if test="poster != null" >
         #{poster,jdbcType=LONGVARCHAR},
       </if>
@@ -351,6 +359,9 @@
       <if test="goodCode != null" >
         good_code = #{goodCode,jdbcType=VARCHAR},
       </if>
+      <if test="goodStatus != null" >
+        good_status = #{goodStatus,jdbcType=INTEGER},
+      </if>
       <if test="poster != null" >
         poster = #{poster,jdbcType=LONGVARCHAR},
       </if>
@@ -384,6 +395,7 @@
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       good_code = #{goodCode,jdbcType=VARCHAR},
+      good_status = #{goodStatus,jdbcType=INTEGER},
       poster = #{poster,jdbcType=LONGVARCHAR},
       photos = #{photos,jdbcType=LONGVARCHAR},
       models = #{models,jdbcType=LONGVARCHAR}
@@ -409,7 +421,8 @@
       second_category_name = #{secondCategoryName,jdbcType=VARCHAR},
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
-      good_code = #{goodCode,jdbcType=VARCHAR}
+      good_code = #{goodCode,jdbcType=VARCHAR},
+      good_status = #{goodStatus,jdbcType=INTEGER}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

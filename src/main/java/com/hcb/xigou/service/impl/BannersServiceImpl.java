@@ -1,5 +1,7 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +43,15 @@ public class BannersServiceImpl implements IBannersService{
 	@Override
 	public int updateByPrimaryKey(Banners record) {
 		return bannersMapper.updateByPrimaryKey(record);
+	}
+
+	@Override
+	public Banners selectByBannerUuid(String bannerUuid) {
+		return bannersMapper.selectByBannerUuid(bannerUuid);
+	}
+
+	@Override
+	public int deleteByBannerUuids(Map<String, Object> map) {
+		return bannersMapper.deleteByBannerUuids(map);
 	}
 }

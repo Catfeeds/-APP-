@@ -1,5 +1,7 @@
 package com.hcb.xigou.service;
 
+import java.util.Map;
+
 import com.hcb.xigou.dto.Banners;
 
 public interface IBannersService {
@@ -14,4 +16,8 @@ public interface IBannersService {
     int updateByPrimaryKeySelective(Banners record);
 
     int updateByPrimaryKey(Banners record);
+    
+    Banners selectByBannerUuid(String bannerUuid);
+    
+    int deleteByBannerUuids(Map<String,Object> map);
 }
