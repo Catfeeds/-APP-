@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.UserOrdersMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.UserOrders" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="order_uuid" property="orderUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="user_uuid" property="userUuid" jdbcType="VARCHAR" />
+    <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
+    <result column="coupon_uuids" property="couponUuids" jdbcType="VARCHAR" />
+    <result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
+    <result column="coupon_money" property="couponMoney" jdbcType="DECIMAL" />
+    <result column="fraction" property="fraction" jdbcType="INTEGER" />
+    <result column="paid_money" property="paidMoney" jdbcType="DECIMAL" />
+    <result column="numbers" property="numbers" jdbcType="INTEGER" />
+    <result column="pay_status" property="payStatus" jdbcType="CHAR" />
+    <result column="pay_way" property="payWay" jdbcType="CHAR" />
+    <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="alipay_number" property="alipayNumber" jdbcType="VARCHAR" />
+    <result column="wechat_number" property="wechatNumber" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="fail_time" property="failTime" jdbcType="TIMESTAMP" />
+    <result column="collect_time" property="collectTime" jdbcType="TIMESTAMP" />
+    <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP" />
+    <result column="return_time" property="returnTime" jdbcType="TIMESTAMP" />
+    <result column="address_uuid" property="addressUuid" jdbcType="VARCHAR" />
+    <result column="delivery_time" property="deliveryTime" jdbcType="VARCHAR" />
+    <result column="give_status" property="giveStatus" jdbcType="CHAR" />
+    <result column="sign_time" property="signTime" jdbcType="TIMESTAMP" />
+    <result column="courier_uuid" property="courierUuid" jdbcType="VARCHAR" />
+    <result column="scaner_uuid" property="scanerUuid" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="daily_sign" property="dailySign" jdbcType="VARCHAR" />
+    <result column="voucher" property="voucher" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="is_sign" property="isSign" jdbcType="CHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.Orders" extends="BaseResultMap" >
+    <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    o.fake_id, o.order_uuid, o.create_datetime, o.update_datetime, o.delete_at, o.user_uuid, o.good_uuid, 
+    o.coupon_uuids, o.total_money, o.coupon_money, o.fraction, o.paid_money, o.numbers, o.pay_status, 
+    o.pay_way, o.order_number, o.alipay_number, o.wechat_number, o.pay_time, o.fail_time, o.collect_time, 
+    o.comment_time, o.return_time, o.address_uuid, o.delivery_time, o.give_status, o.sign_time, o.courier_uuid, 
+    o.scaner_uuid, o.remarks, o.store_uuid, o.daily_sign, o.voucher, o.content, o.code, o.type, o.bar_code, 
+    o.is_sign,u.nickname
+  </sql>
+  <sql id="Blob_Column_List" >
+    car_uuids
+  </sql>
+
+
+  
+    <select id="searchUsersOrderByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	  	select 
+	  	<include refid="Base_Column_List"/>
+	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
+	  	where delete_at is null
+	  	<if test="orderNumber != null and orderNumber != ''">
+	  		and order_number = #{orderNumber,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="phone != null and phone != ''">
+	  		and (
+	  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
+	  		)
+	  	</if>
+	 	<if test="storeUuid != null and storeUuid != ''">
+	  		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	  	</if>
+	  	order by create_datetime desc LIMIT #{start},#{end}
+    </select>
+  
+  <select id="countUsersOrderByMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
+  	where delete_at is null
+  	<if test="orderNumber != null and orderNumber != ''">
+  		and order_number = #{orderNumber,jdbcType=VARCHAR}
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and (
+  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
+  		)
+  	</if>
+ 	<if test="storeUuid != null and storeUuid != ''">
+  		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  
+</mapper>
