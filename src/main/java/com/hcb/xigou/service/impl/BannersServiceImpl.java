@@ -65,4 +65,9 @@ public class BannersServiceImpl implements IBannersService{
 	public int countBannerByMap(Map<String, Object> map) {
 		return bannersMapper.countBannerByMap(map);
 	}
+
+	@Override
+	public int insertByBanner(Banners banner) {
+		return bannersMapper.insertByBanner(banner);
+	}
 }

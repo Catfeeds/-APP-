@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hcb.xigou.dao.mapper.GoodsMapper" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.GoodsMapper" >
   <resultMap id="BaseResultMap" type="com.hcb.xigou.pojo.Goods" >
     <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
     <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />

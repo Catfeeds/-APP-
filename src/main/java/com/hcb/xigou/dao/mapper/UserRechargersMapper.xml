@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.RechargesMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Recharges" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="recharge_uuid" property="rechargeUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="user_uuid" property="userUuid" jdbcType="VARCHAR" />
+    <result column="recharge_number" property="rechargeNumber" jdbcType="VARCHAR" />
+    <result column="wechat_number" property="wechatNumber" jdbcType="VARCHAR" />
+    <result column="alipay_number" property="alipayNumber" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="third_way" property="thirdWay" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, recharge_uuid, create_datetime, update_datetime, delete_at, user_uuid, recharge_number, 
+    wechat_number, alipay_number, pay_time, amount, status, third_way,phone,nickname,name
+  </sql>
+
+	<select id="searchUserRechargersByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
+  	where where delete_at is null
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%',#{nickname,jdbcType=VARCHAR}),'%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="thirdWay != null and thirdWay != ''">
+  		and third_way = #{thirdWay,jdbcType=VARCHAR}
+  	</if>
+  	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  <select id="countUserRechargersByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from users u  LEFT JOIN recharges r ud on u.user_uuid = r.user_uuid
+  	where where delete_at is null
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="thirdWay != null and thirdWay != ''">
+  		and third_way = #{thirdWay,jdbcType=VARCHAR}
+  	</if>
+  </select>
+ 
+</mapper>

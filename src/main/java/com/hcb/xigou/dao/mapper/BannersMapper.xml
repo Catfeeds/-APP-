@@ -87,7 +87,9 @@
       #{url,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, 
       #{currentindex,jdbcType=INTEGER},  #{bannerStatus,jdbcType=INTEGER}, #{bannerName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Banners" >
+  
+  
+  <insert id="insertByBanner" parameterType="com.hcb.xigou.dto.Banners" >
     insert into banners
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -220,4 +222,10 @@
       banner_name = #{bannerName,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
+  
+  <insert id="insertByBanner" parameterType="com.hcb.xigou.dto.Banners">
+  
+  </insert>
+  
+  
 </mapper>
