@@ -46,4 +46,15 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.deleteByGoodUuids(map);
 	}
 
+	@Override
+	public List<Goods> searchGoodsByMap(Map<String, Object> map) {
+		
+		return goodsMapper.searchGoodsByMap(map);
+	}
+
+	@Override
+	public int countGoodsByMap(Map<String, Object> map) {
+		return goodsMapper.countGoodsByMap(map);
+	}
+
 }

@@ -19,4 +19,8 @@ public interface GoodsMapper {
 	public Goods selectGoodByGoodUuid(String goodUuid);
 	
 	int deleteByGoodUuids(Map<String,Object> map);
+
+	public List<Goods> searchGoodsByMap(Map<String, Object> map);
+
+	public int countGoodsByMap(Map<String, Object> map);
 }

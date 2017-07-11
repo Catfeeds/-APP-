@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
-import com.hcb.xigou.dto.Orders;
-import com.hcb.xigou.pojo.Goods;
-import com.hcb.xigou.service.GoodsService;
+import com.hcb.xigou.dto.UserActivity;
+import com.hcb.xigou.dto.UserRechargers;
+import com.hcb.xigou.service.UserActivityService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("goods/")
-public class GoodsController extends BaseController{
+@RequestMapping("userActivity/")
+public class UserActivityController extends BaseController{
 	
 	@Autowired
-	GoodsService goodsService;
+	UserActivityService userActivityService;
 	
 	@RequestMapping("delete")
 	@ResponseBody
@@ -38,24 +38,23 @@ public class GoodsController extends BaseController{
 		}
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("good_uuid") == null) {
+		if (bodyInfo.get("activity_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		JSONArray jsonArray = bodyInfo.getJSONArray("good_uuid");
-		List<String> goodUUids = new ArrayList<String>();
+		JSONArray jsonArray = bodyInfo.getJSONArray("activity_uuid");
+		List<String> activityUuids = new ArrayList<String>();
 		for(int i=0;i<jsonArray.size();i++){
-			goodUUids.add(jsonArray.getString(i));
+			activityUuids.add(jsonArray.getString(i));
 		}
-		if(goodUUids.size()>0){
+		if(activityUuids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("goodUUids", "goodUUids");
-			map.put("deleteAt", new Date());
+			map.put("activityUuids", "activityUuids");
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
-			int rs = goodsService.deleteByGoodUuids(map);
+			int rs = userActivityService.deleteByActivityUuid(map);
 			if(rs == 1){
 				json.put("result", 0);
 				json.put("description", "删除成功");
@@ -72,9 +71,9 @@ public class GoodsController extends BaseController{
 		}
 	}
 	
-	@RequestMapping("select")
+	@RequestMapping("update_status")
 	@ResponseBody
-	public String selectGoodid(){
+	public String updateActivityStatus(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
 			json.put("result", "1");
@@ -82,20 +81,104 @@ public class GoodsController extends BaseController{
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("good_uuid") == null) {
+		if (bodyInfo.get("activity_uuid") == null||bodyInfo.get("good_status") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		Goods goods = goodsService.selectGoodByGoodUuid(bodyInfo.getString("good_uuid"));
-		if(goods!=null){
+		UserActivity userActivity =  userActivityService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
+		Map<String,Object> map = new HashMap<String,Object> ();
+		if(userActivity!=null){
+			map.put("activityUuid", bodyInfo.getString("activity_uuid"));
+			map.put("goodStatus",bodyInfo.getString("good_status"));
+			map.put("updateDatetime",new Date());
+			int rs = 0;
+			rs = userActivityService.updateByActivityAndGoods(map);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "更改Activity状态成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "更改Activity状态失败，请重试");
+				return buildReqJsonObject(json);
+			}
+		}else{
+			json.put("result", 1);
+			json.put("description", "更改Activity状态失败，未查询到Activity信息");
+			return buildReqJsonObject(json);
+		}
+	}
+
+	@RequestMapping("detail")
+	@ResponseBody
+	public String selectActivityid(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("activity_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		UserActivity userActivity =  userActivityService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
+		if(userActivity!=null){
 			json.put("result", 0);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
-			json.put("goods", goods);
+			json.put("userActivity", userActivity);
 			return buildReqJsonObject(json);
 		}else{
 			json.put("result", 1);
-			json.put("description", "未查询到商品信息");
+			json.put("description", "未查询到Activity信息");
+			return buildReqJsonObject(json);
+		}
+	}
+	
+	
+	@RequestMapping("insert")
+	@ResponseBody
+	public String insertActivity(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("store_uuid")==null||bodyInfo.get("banner") == null||
+				bodyInfo.get("good_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		JSONArray jsonArray = bodyInfo.getJSONArray("good_uuid");
+		List<String> goodUuids = new ArrayList<String>();
+		for(int i=0;i<jsonArray.size();i++){
+			goodUuids.add(jsonArray.getString(i));
+		}
+		if(goodUuids.size()>0){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("goodUuids", "goodUuids");
+			map.put("banner",bodyInfo.getString("banner"));
+			map.put("storeUuid",bodyInfo.getString("store_uuid"));
+			
+			int rs = userActivityService.insertByActivityUuids(map);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "添加成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "请检查参数格式是否正确或者参数是否完整");
+				return buildReqJsonObject(json);
+			}
+		}else{
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
 	}
@@ -125,7 +208,8 @@ public class GoodsController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		ModelMap model = new ModelMap();
-		List<Goods> list = new ArrayList<Goods>();
+
+		List<UserActivity> list = new ArrayList<UserActivity>();
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");
 		if (pageIndex <= 0) {
@@ -138,25 +222,9 @@ public class GoodsController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(bodyInfo.getString("good_name")!=null&&!"".equals(bodyInfo.getString("good_name"))){
-				map.put("goodName",bodyInfo.getString("good_name"));
-			}
-			if(bodyInfo.getString("firt_category_name")!=null&&!"".equals(bodyInfo.getString("firt_category_name"))){
-				map.put("firtCategoryName",bodyInfo.getString("firt_category_name"));
-			}
-			if(bodyInfo.getString("good_status")!=null&&!"".equals(bodyInfo.getString("good_status"))){
-				map.put("goodStatus",bodyInfo.getString("good_status"));
-			}
-			if(bodyInfo.getString("minPrice")!=null&&!"".equals(bodyInfo.getString("minPrice"))){
-				map.put("minPrice",bodyInfo.getString("minPrice"));
-			}
-			if(bodyInfo.getString("maxPrice")!=null&&!"".equals(bodyInfo.getString("maxPrice"))){
-				map.put("maxPrice",bodyInfo.getString("maxPrice"));
-			}
-			
-			list = goodsService.searchGoodsByMap(map);
+			list = userActivityService.searchUserActivityByMap(map);
 			Integer count = 0;
-			count = goodsService.countGoodsByMap(map);
+			count = userActivityService.countUserActivityByMap(map);
 			if (count % pageSize == 0) {
 				Integer total = count / pageSize;
 				Integer sign = 0;
@@ -183,10 +251,11 @@ public class GoodsController extends BaseController{
 		
 		model.put("description", "查询成功");
 		model.put("result", "0");
-		model.put("goodsList", list);
+		model.put("userRechargersList", list);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
 		a = a.replace("]\"", "]");
 		return a;
 	}
+	
 }

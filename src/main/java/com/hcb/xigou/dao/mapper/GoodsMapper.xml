@@ -22,7 +22,7 @@
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="good_code" property="goodCode" jdbcType="VARCHAR" />
-    <result column="good_status" property="goodStatus" jdbcType="INTEGER" />
+    <result column="good_status" property="goodStatus" jdbcType="CHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.pojo.GoodsWithBLOBs" extends="BaseResultMap" >
     <result column="poster" property="poster" jdbcType="LONGVARCHAR" />
@@ -39,44 +39,51 @@
   </sql>
   
   
-  <!-- 查询总条数  -->
-  <select id="selectCountByGood" parameterType="java.util.HashMap" resultType="java.lang.Integer">
-    select  
-  	count(fake_id)
-  	from goods 
+  <select id="countGoodsByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    select  count(1) from goods 
   	where delete_at is null
-  	<if test="goodName != null">
-  		and good_name like '%#{goodName,jdbcType=VARCHAR}%'
+  	<if test="goodName != null and goodName != ''">
+  		and good_name like %#{goodName,jdbcType=VARCHAR}%
   	</if>
-  	<if test="goodUuid != null">
-  		and good_uuid= '#{goodUuid,jdbcType=VARCHAR}'
+  	<if test="firtCategoryName != null firtCategoryName != ''">
+  		and firt_category_name= #{firtCategoryName,jdbcType=VARCHAR}
   	</if>
-  	<if test="min != null and max != null">
-  		and unit_price BETWEEN #{min} and #{max}
+  	<if test="goodStatus ！ = null and goodStatus != ''">
+  		and good_status = #{goodStatus,jdbcType=VARCHAR}
   	</if>
+  	<if test="minPrice != null and minPrice != null">
+  		and unit_price &gt;=#{minPrice,jdbcType=VARCHAR}
+  	</if>
+  	<if test="maxPrice ! null and maxPrice != ''">
+  		and unit_price &lt;=#{maxPrice,jdbcType=VARCHAR}
+  	</if>
+  	
   </select>
- 
-  
-  <!--商品列表   商品状态（上架/下架）   数据库字段不完整 -->
-  <select id="selectGoodDetails" parameterMap="java.util.HashMap" resultMap="ResultMapWithBLOBs"> 
+  <select id="searchGoodsByMap" parameterMap="java.util.HashMap" resultMap="BaseResultMap"> 
   	select  
   	<include refid="Base_Column_List" />
   	from goods 
   	where delete_at is null
-  	<if test="goodName != null">
-  		and good_name like '%#{goodName,jdbcType=VARCHAR}%'
+  	<if test="goodName != null and goodName != ''">
+  		and good_name like %#{goodName,jdbcType=VARCHAR}%
   	</if>
-  	<if test="goodUuid != null">
-  		and good_uuid= '#{goodUuid,jdbcType=VARCHAR}'
+  	<if test="firtCategoryName != null firtCategoryName != ''">
+  		and firt_category_name= #{firtCategoryName,jdbcType=VARCHAR}
   	</if>
-  	<if test="min != null and max != null">
-  		and unit_price BETWEEN #{min} and #{max}
+  	<if test="goodStatus ！ = null and goodStatus != ''">
+  		and good_status = #{goodStatus,jdbcType=VARCHAR}
   	</if>
-    LIMIT #{start},#{end}
+  	<if test="minPrice != null and minPrice != null">
+  		and unit_price &gt;=#{minPrice,jdbcType=VARCHAR}
+  	</if>
+  	<if test="maxPrice ! null and maxPrice != ''">
+  		and unit_price &lt;=#{maxPrice,jdbcType=VARCHAR}
+  	</if>
+   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
 
   
-  <!-- 商品详情 -->
+
   <select id="selectGoodById" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">
   	<include refid="Base_Column_List" />
     ,
@@ -85,8 +92,7 @@
   	where 
   	fake_id = #{fakeId,jdbcType=INTEGER} and delete_at is null
   </select>
-  
-   <!-- 删除/批量删除 -->
+
   <delete id="deleteByGoodsId" parameterType="java.lang.Integer" >
   	delete from goods
   	where fake_id in

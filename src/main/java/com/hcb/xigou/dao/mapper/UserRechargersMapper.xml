@@ -20,45 +20,43 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    fake_id, recharge_uuid, create_datetime, update_datetime, delete_at, user_uuid, recharge_number, 
-    wechat_number, alipay_number, pay_time, amount, status, third_way,phone,nickname,name
+    r.fake_id, r.recharge_uuid, r.create_datetime, r.update_datetime, r.delete_at, r.user_uuid, r.recharge_number, 
+    r.wechat_number, r.alipay_number, r.pay_time, r.amount, r.status, r.third_way,u.phone,u.nickname,u.name
   </sql>
-
 	<select id="searchUserRechargersByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
-  	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where where delete_at is null
+  	from recharges r  LEFT JOIN users u on r.user_uuid = u.user_uuid
+  	where r.delete_at is null
   	<if test="name != null and name != ''">
-  		and name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+  		and u.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
   	</if>
   	<if test="nickname != null and nickname != ''">
-  		and nickname like CONCAT(CONCAT('%',#{nickname,jdbcType=VARCHAR}),'%')
+  		and u.nickname like CONCAT(CONCAT('%',#{nickname,jdbcType=VARCHAR}),'%')
   	</if>
   	<if test="phone != null and phone != ''">
-  		and phone = #{phone,jdbcType=VARCHAR}
+  		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
   	<if test="thirdWay != null and thirdWay != ''">
-  		and third_way = #{thirdWay,jdbcType=VARCHAR}
+  		and r.third_way = #{thirdWay,jdbcType=VARCHAR}
   	</if>
-  	order by create_datetime desc LIMIT #{start},#{end}
+  	order by r.create_datetime desc LIMIT #{start},#{end}
   </select>
   <select id="countUserRechargersByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
-  	from users u  LEFT JOIN recharges r ud on u.user_uuid = r.user_uuid
-  	where where delete_at is null
+  	from recharges r LEFT JOIN users u  on u.user_uuid = r.user_uuid
+  	where r.delete_at is null
   	<if test="name != null and name != ''">
-  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  		and u.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
   	</if>
   	<if test="nickname != null and nickname != ''">
-  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  		and u.nickname like CONCAT(CONCAT('%',#{nickname,jdbcType=VARCHAR}),'%')
   	</if>
   	<if test="phone != null and phone != ''">
-  		and phone = #{phone,jdbcType=VARCHAR}
+  		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
   	<if test="thirdWay != null and thirdWay != ''">
-  		and third_way = #{thirdWay,jdbcType=VARCHAR}
+  		and r.third_way = #{thirdWay,jdbcType=VARCHAR}
   	</if>
   </select>
- 
 </mapper>

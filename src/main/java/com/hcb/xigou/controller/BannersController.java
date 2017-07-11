@@ -265,7 +265,6 @@ public class BannersController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
-		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("currentIndex")==null||bodyInfo.get("banner_uuid") == null||
 				bodyInfo.get("banner_name") == null||bodyInfo.get("url") == null) {
@@ -274,15 +273,15 @@ public class BannersController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Banners banner = new Banners();
-		banner.setBannerUuid(headInfo.getString("banner_uuid"));
+		banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
 		banner.setCreateDatetime(new Date());
 		banner.setUpdateDatetime(new Date());
-		banner.setType(headInfo.getString("type"));
-		banner.setUrl(headInfo.getString("url"));
-		banner.setStoreUuid(headInfo.getString("store_uuid"));
-		banner.setCurrentindex(headInfo.getInt("currentindex"));
-		banner.setGoodUuid(headInfo.getString("good_uuid"));
-		banner.setBannerName(headInfo.getString("banner_name"));
+		banner.setType(bodyInfo.getString("type"));
+		banner.setUrl(bodyInfo.getString("url"));
+		banner.setStoreUuid(bodyInfo.getString("store_uuid"));
+		banner.setCurrentindex(bodyInfo.getInt("currentindex"));
+		banner.setGoodUuid(bodyInfo.getString("good_uuid"));
+		banner.setBannerName(bodyInfo.getString("banner_name"));
 		int rs = 0;
 		rs = bannersService.insertByBanner(banner);
 		if(rs == 1){

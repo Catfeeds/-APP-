@@ -47,30 +47,30 @@
   	select 
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where where delete_at is null
+  	where u.delete_at is null
   	<if test="name != null and name != ''">
-  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="nickname != null and nickname != ''">
-  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  		and u.nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="phone != null and phone != ''">
-  		and phone = #{phone,jdbcType=VARCHAR}
+  		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
-  	order by create_datetime desc LIMIT #{start},#{end}
+  	order by u.create_datetime desc LIMIT #{start},#{end}
   </select>
   <select id="countUserMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where where delete_at is null
+  	where u.delete_at is null
   	<if test="name != null and name != ''">
-  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="nickname != null and nickname != ''">
-  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  		and u.nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="phone != null and phone != ''">
-  		and phone = #{phone,jdbcType=VARCHAR}
+  		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
   </select>
   
@@ -80,36 +80,36 @@
   	select 
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where where delete_at is null
+  	where u.delete_at is null
   	<if test="name != null and name != ''">
-  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="nickname != null and nickname != ''">
-  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  		and u.nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="phone != null and phone != ''">
-  		and phone = #{phone,jdbcType=VARCHAR}
+  		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
   	<if test="memberCardNumber != null and memberCardNumber != ''">
-  		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  		and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
   	</if>
-  	order by create_datetime desc LIMIT #{start},#{end}
+  	order by u.create_datetime desc LIMIT #{start},#{end}
   </select>
   <select id="countMemberMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where where delete_at is null
+  	where u.delete_at is null
   	<if test="name != null and name != ''">
-  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="nickname != null and nickname != ''">
-  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  		and u.nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
   	</if>
   	<if test="phone != null and phone != ''">
-  		and phone = #{phone,jdbcType=VARCHAR}
+  		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
   	<if test="memberCardNumber != null and memberCardNumber != ''">
-  		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  		and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
   	</if>
   </select>
   

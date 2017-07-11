@@ -37,7 +37,6 @@ public class OrdersController extends BaseController{
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
-		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
@@ -63,17 +62,20 @@ public class OrdersController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(headInfo.getString("order_number")!=null&&!"".equals(headInfo.getString("order_number"))){
-				map.put("orderNumber",headInfo.getString("order_number"));
+			if(bodyInfo.getString("order_number")!=null&&!"".equals(bodyInfo.getString("order_number"))){
+				map.put("orderNumber",bodyInfo.getString("order_number"));
 			}
-			if(headInfo.getString("phone")!=null&&!"".equals(headInfo.getString("phone"))){
-				map.put("phone",headInfo.getString("phone"));
+			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
+				map.put("phone",bodyInfo.getString("phone"));
 			}
-			if(headInfo.getString("create_datetime")!=null){
-				map.put("createDatetime", headInfo.getString("create_datetime"));
+			if(bodyInfo.getString("startTime")!=null){
+				map.put("startTime", bodyInfo.getString("startTime"));
 			}
-			if(headInfo.getString("pay_status")!=null){
-				map.put("payStatus", headInfo.getString("pay_status"));
+			if(bodyInfo.getString("endTime")!=null){
+				map.put("endTime", bodyInfo.getString("endTime"));
+			}
+			if(bodyInfo.getString("pay_status")!=null){
+				map.put("payStatus", bodyInfo.getString("pay_status"));
 			}
 			
 			list = ordersService.searchOrderByMap(map);

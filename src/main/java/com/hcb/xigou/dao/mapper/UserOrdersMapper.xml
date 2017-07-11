@@ -63,35 +63,47 @@
 	  	select 
 	  	<include refid="Base_Column_List"/>
 	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
-	  	where delete_at is null
+	  	where o.delete_at is null
 	  	<if test="orderNumber != null and orderNumber != ''">
-	  		and order_number = #{orderNumber,jdbcType=VARCHAR}
+	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
 	  	</if>
 	  	<if test="phone != null and phone != ''">
-	  		and (
+	  		and o.user_uuid in (
 	  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
 	  		)
 	  	</if>
+	  	<if test="startTime!=null and startTime!=''">
+  			and o.create_datetime &gt; = #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime!=null and endTime!=''">
+  			and o.create_datetime &lt; = #{endTime,jdbcType=VARCHAR}
+  		</if>
 	 	<if test="storeUuid != null and storeUuid != ''">
-	  		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	  		and o.store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	  	</if>
-	  	order by create_datetime desc LIMIT #{start},#{end}
+	  	order by o.create_datetime desc LIMIT #{start},#{end}
     </select>
   
   <select id="countUsersOrderByMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
-  	where delete_at is null
+  	where o.delete_at is null
   	<if test="orderNumber != null and orderNumber != ''">
-  		and order_number = #{orderNumber,jdbcType=VARCHAR}
-  	</if>
-  	<if test="phone != null and phone != ''">
-  		and (
-  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
-  		)
-  	</if>
- 	<if test="storeUuid != null and storeUuid != ''">
-  		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
-  	</if>
+	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="phone != null and phone != ''">
+	  		and o.user_uuid in (
+	  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
+	  		)
+	  	</if>
+	  	<if test="startTime!=null and startTime!=''">
+  			and o.create_datetime &gt; = #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime!=null and endTime!=''">
+  			and o.create_datetime &lt; = #{endTime,jdbcType=VARCHAR}
+  		</if>
+	 	<if test="storeUuid != null and storeUuid != ''">
+	  		and o.store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	  	</if>
   </select>
   
   

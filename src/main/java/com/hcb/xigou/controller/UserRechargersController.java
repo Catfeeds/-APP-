@@ -37,7 +37,6 @@ public class UserRechargersController extends BaseController{
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
-		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
@@ -63,17 +62,17 @@ public class UserRechargersController extends BaseController{
 			int start = (pageIndex - 1) * pageSize;
 			map.put("start", start);
 			map.put("end", pageSize);
-			if(headInfo.getString("name")!=null&&!"".equals(headInfo.getString("name"))){
-				map.put("name", headInfo.getString("name"));
+			if(bodyInfo.getString("name")!=null&&!"".equals(bodyInfo.getString("name"))){
+				map.put("name", bodyInfo.getString("name"));
 			}
-			if(headInfo.getString("nickname")!=null&&!"".equals(headInfo.getString("nickname"))){
-				map.put("nickname", headInfo.getString("nickname"));
+			if(bodyInfo.getString("nickname")!=null&&!"".equals(bodyInfo.getString("nickname"))){
+				map.put("nickname", bodyInfo.getString("nickname"));
 			}
-			if(headInfo.getString("phone")!=null&&!"".equals(headInfo.getString("phone"))){
-				map.put("phone", headInfo.getString("phone"));
+			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
+				map.put("phone", bodyInfo.getString("phone"));
 			}
-			if(headInfo.getString("third_way")!=null&&!"".equals(headInfo.getString("third_way"))){
-				map.put("thirdWay", headInfo.getString("third_way"));
+			if(bodyInfo.getString("third_way")!=null&&!"".equals(bodyInfo.getString("third_way"))){
+				map.put("thirdWay", bodyInfo.getString("third_way"));
 			}
 			list = userRechargersService.searchUserRechargersByMap(map);
 			Integer count = 0;

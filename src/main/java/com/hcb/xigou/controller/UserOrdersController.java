@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
-import com.hcb.xigou.dto.Orders;
 import com.hcb.xigou.dto.UserOrders;
 import com.hcb.xigou.service.UserOrdersService;
 
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("UserOrders/")
+@RequestMapping("userOrders/")
 public class UserOrdersController extends BaseController{
 	
 	@Autowired
@@ -39,7 +38,6 @@ public class UserOrdersController extends BaseController{
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
-		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
@@ -65,17 +63,20 @@ public class UserOrdersController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(headInfo.getString("order_number")!=null&&!"".equals(headInfo.getString("order_number"))){
-				map.put("orderNumber",headInfo.getString("order_number"));
+			if(bodyInfo.getString("order_number")!=null&&!"".equals(bodyInfo.getString("order_number"))){
+				map.put("orderNumber",bodyInfo.getString("order_number"));
 			}
-			if(headInfo.getString("phone")!=null&&!"".equals(headInfo.getString("phone"))){
-				map.put("phone",headInfo.getString("phone"));
+			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
+				map.put("phone",bodyInfo.getString("phone"));
 			}
-			if(headInfo.getString("create_datetime")!=null){
-				map.put("createDatetime", headInfo.getString("create_datetime"));
+			if(bodyInfo.getString("startTime")!=null){
+				map.put("startTime", bodyInfo.getString("startTime"));
 			}
-			if(headInfo.getString("store_uuid")!=null){
-				map.put("storeUuid", headInfo.getString("store_uuid"));
+			if(bodyInfo.getString("endTime")!=null){
+				map.put("endTime", bodyInfo.getString("endTime"));
+			}
+			if(bodyInfo.getString("store_uuid")!=null){
+				map.put("storeUuid", bodyInfo.getString("store_uuid"));
 			}
 			
 			list = userOrdersService.searchUsersOrderByMap(map);
