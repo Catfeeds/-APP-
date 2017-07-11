@@ -28,8 +28,13 @@
     <include refid="Base_Column_List" />
     from managers
     where delete_at is null
-    and nickname =  #{nickname,jdbcType=VARCHAR}
-    and grade = #{grade,jdbcType=CHAR}
+    and nickname =  #{nickname,jdbcType=VARCHAR} 
+    <if test="password !='' and password != null">
+		and password =  #{password,jdbcType=VARCHAR}
+	</if>
+	<if test="grade !='' and grade != null">
+		and grade = #{grade,jdbcType=CHAR}
+	</if>
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

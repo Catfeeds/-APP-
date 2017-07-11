@@ -222,10 +222,4 @@
       banner_name = #{bannerName,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
-  
-  <insert id="insertByBanner" parameterType="com.hcb.xigou.dto.Banners">
-  
-  </insert>
-  
-  
 </mapper>

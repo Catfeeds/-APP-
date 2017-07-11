@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.UserManageMapper;
 import com.hcb.xigou.dto.UserManage;
 import com.hcb.xigou.service.UserManageService;
 
+@Service("UserManageService")
 public class UserManageServiceImpl implements UserManageService {
 	@Autowired
 	UserManageMapper userManageMapper;

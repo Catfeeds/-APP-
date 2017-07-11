@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.UserRechargersMapper;
 import com.hcb.xigou.dto.UserRechargers;
 import com.hcb.xigou.service.UserRechargersService;
 
+@Service("UserRechargersService")
 public class UserRechargersServiceImpl implements UserRechargersService {
 	
 	@Autowired

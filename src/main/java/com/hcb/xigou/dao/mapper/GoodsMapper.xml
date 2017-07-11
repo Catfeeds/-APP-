@@ -58,7 +58,7 @@
  
   
   <!--商品列表   商品状态（上架/下架）   数据库字段不完整 -->
-  <select id="selectGoodDetails" parameterMap="java.util.HashMap" resultMap="ResultMapWithBLOBs"> 
+  <select id="selectGoodDetails" parameterType="java.util.HashMap" resultMap="ResultMapWithBLOBs"> 
   	select  
   	<include refid="Base_Column_List" />
   	from goods 

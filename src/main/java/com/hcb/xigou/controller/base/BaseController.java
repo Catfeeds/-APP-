@@ -157,7 +157,6 @@ public class BaseController {
 		Date date = new Date();
 		String time = format.format(date);
 		return new OutHead().setReturnCode("000").setReturnDescription("验证通过").setSysTime(time);
-		
 	}
 
 	protected String buildReqJson(List<Object> msgs) {

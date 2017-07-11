@@ -36,14 +36,6 @@ public class LoginController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		
-		if(bodyInfo.getString("grade").equals("3")){
-			if (bodyInfo.get("store_uuid") == null) {
-				json.put("result", 1);
-				json.put("description", "请检查参数格式是否正确或者参数是否完整");
-				return buildReqJsonObject(json);
-			}
-		}
-		
 		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("nickname", bodyInfo.getString("nickname"));
 		map.put("grade", bodyInfo.getString("grade"));
@@ -56,10 +48,12 @@ public class LoginController extends BaseController{
 			return buildReqJsonObject(json);
 		}else{
 			if(bodyInfo.getString("grade").equals("3")){
-				if(managers.getStoreUuid().equals(bodyInfo.getString("store_uuid"))){
+				if(managers.getStoreUuid()!=null){
 					json.put("result", 0);
 					json.put("description", "登录成功");
 					json.put("store_uuid", managers.getStoreUuid());
+					json.put("nickname", bodyInfo.getString("nickname"));
+					json.put("password", bodyInfo.getString("password"));
 					return buildReqJsonObject(json);
 				}else{
 					json.put("result", 1);
