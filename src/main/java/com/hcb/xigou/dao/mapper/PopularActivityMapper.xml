@@ -29,7 +29,7 @@
   </sql>
   
   
-  <update id="deleteByActivityUuids" parameterMap="java.util.HashMap" >
+  <update id="deleteByActivityUuids" parameterType="java.util.HashMap" >
    update activity_zones
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 

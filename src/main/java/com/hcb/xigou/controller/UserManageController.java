@@ -63,14 +63,20 @@ public class UserManageController extends BaseController{
 			int start = (pageIndex - 1) * pageSize;
 			map.put("start", start);
 			map.put("end", pageSize);
-			if(bodyInfo.getString("name")!=null&&!"".equals(bodyInfo.getString("name"))){
-				map.put("name", bodyInfo.getString("name"));
+			if(bodyInfo.get("name")!=null){
+				if(!"".equals(bodyInfo.getString("name"))){
+					map.put("name", bodyInfo.getString("name"));
+				}
 			}
-			if(bodyInfo.getString("nickname")!=null&&!"".equals(bodyInfo.getString("nickname"))){
-				map.put("nickname", bodyInfo.getString("nickname"));
+			if(bodyInfo.get("nickname")!=null){
+				if(!"".equals(bodyInfo.getString("nickname"))){
+					map.put("nickname", bodyInfo.getString("nickname"));
+				}
 			}
-			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
-				map.put("phone", bodyInfo.getString("phone"));
+			if(bodyInfo.get("phone")!=null){
+				if(!"".equals(bodyInfo.getString("phone"))){
+					map.put("phone", bodyInfo.getString("phone"));
+				}
 			}
 			list = userManageService.searchUserMagageByMap(map);
 			Integer count = 0;

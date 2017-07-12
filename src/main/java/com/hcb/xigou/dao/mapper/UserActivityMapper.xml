@@ -29,7 +29,7 @@
   </sql>
   
   
-  <update id="deleteByActivityUuid" parameterMap="java.util.HashMap" >
+  <update id="deleteByActivityUuid" parameterType="java.util.HashMap" >
    update activity_zones
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 
@@ -53,7 +53,7 @@
   	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </select>
   
-  <update id="updateByActivityAndGoods" parameterMap="java.util.HashMap">
+  <update id="updateByActivityAndGoods" parameterType="java.util.HashMap">
   	update goods
   	<set >
       <if test="updateDatetime != null" >
@@ -73,7 +73,7 @@
   </update>
   
   
-  <insert id="insertByActivityUuids" parameterMap="java.util.HashMap">
+  <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
   	<foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
 		   insert into  activity_zones 
 		  (good_uuid,type,banner,store_uuid) 
@@ -92,6 +92,7 @@
     and az.type = 'selling'
 	order by az.create_datetime desc LIMIT #{start},#{end}
   </select>
+
   <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
     select count(1) from activity_zones
     where az.delete_at is null

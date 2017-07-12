@@ -120,7 +120,7 @@
     where good_uuid = #{goodUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
-  <update id="deleteByGoodUuids" parameterMap="java.util.HashMap" >
+  <update id="deleteByGoodUuids" parameterType="java.util.HashMap" >
    update goods
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 

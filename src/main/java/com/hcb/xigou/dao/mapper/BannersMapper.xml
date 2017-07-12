@@ -58,7 +58,7 @@
 	</if>
   </select>
   
-  <update id="deleteByBannerUuids" parameterMap="java.util.HashMap" >
+  <update id="deleteByBannerUuids" parameterType="java.util.HashMap" >
    update banners
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 
