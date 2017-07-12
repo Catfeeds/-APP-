@@ -29,19 +29,35 @@
   </sql>
   
   
-  <update id="deleteByActivityUuid" parameterType="java.util.HashMap" >
+  <update id="deleteByActivityUuids" parameterMap="java.util.HashMap" >
    update activity_zones
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 
     <if test="storeUuid!='' and storeUuid!=null ">
 		store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if >
-	<if test="bannerUuids!='' and bannerUuids!=null ">
-		and banner_uuid in 
+	<if test="activityUuids!='' and activityUuids!=null ">
+		and activity_uuid in 
 	    <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
+  </update>
+  
+  <update id="updateByPopularActivityIsSTop" parameterType="java.util.HashMap">
+  	update goods
+  	<set >
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isStop == 1" >
+        is_stop = 2,
+      </if>
+      <if test="isStop == 2" >
+        is_stop = 1,
+      </if>
+    </set>
+   
   </update>
   
   
@@ -52,23 +68,6 @@
   	where delete_at is null 
   	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </select>
-  
-  <update id="updateByActivityAndGoods" parameterType="java.util.HashMap">
-  	update goods
-  	<set >
-      <if test="updateDatetime != null" >
-        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="goodStatus == up" >
-        good_status = down,
-      </if>
-      <if test="goodStatus == down" >
-        good_status = up,
-      </if>
-    </set>
-   
-  </update>
-  
   
   <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
   	<foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
