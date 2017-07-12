@@ -29,46 +29,47 @@
   </sql>
   
   
-  <update id="deleteByActivityUuid" parameterType="java.util.HashMap" >
+  <update id="deleteByActivityUuids" parameterType="java.util.HashMap" >
    update activity_zones
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 
     <if test="storeUuid!='' and storeUuid!=null ">
 		store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if >
-	<if test="bannerUuids!='' and bannerUuids!=null ">
-		and banner_uuid in 
+	<if test="activityUuids!='' and activityUuids!=null ">
+		and activity_uuid in 
 	    <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
   </update>
   
-  
-  <select id="selectByActivityUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select 
-  	<include refid="Base_Column_List" />
-  	from activity_zones
-  	where delete_at is null 
-  	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
-  </select>
-  
-  <update id="updateByActivityAndGoods" parameterType="java.util.HashMap">
+  <update id="updateByPopularActivityIsSTop" parameterType="java.util.HashMap">
   	update goods
   	<set >
       <if test="updateDatetime != null" >
         update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
       </if>
-      <if test="goodStatus == up" >
-        good_status = down,
+      <if test="isStop == 1" >
+        is_stop = 2,
       </if>
-      <if test="goodStatus == down" >
-        good_status = up,
+      <if test="isStop == 2" >
+        is_stop = 1,
       </if>
     </set>
    
   </update>
   
+  
+  <select id="selectByPopularActivityId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from activity_zones
+  	where delete_at is null 
+  	<if test="activityUuid != null and activityUuid != ''">
+  		and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  	</if>
+  </select>
   
   <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
   	<foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
@@ -80,22 +81,6 @@
   </insert>
   
   
-  <select id="searchUserActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
-    select 
-    <include refid="Base_Column_List" />
-    from activity_zones az LEFT JOIN goods g  
-	on g.good_uuid = az.good_uuid
-    where az.delete_at is null
-    and az.type = 'selling'
-	order by az.create_datetime desc LIMIT #{start},#{end}
-  </select>
-  
-  <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
-    select count(1) from activity_zones
-    where az.delete_at is null
-    and az.type = 'selling'
-    group by az.banner
-  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

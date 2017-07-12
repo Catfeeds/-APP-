@@ -38,6 +38,7 @@ public class ActivityZones {
     private String storeUuid;
 
     private String isStop;
+    
 
     public Integer getFakeId() {
         return fakeId;

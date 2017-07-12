@@ -193,7 +193,7 @@ public class GoodsController extends BaseController{
 		}
 		
 		model.put("description", "查询成功");
-		model.put("result", "0");
+		model.put("result",0);
 		model.put("goodsList", list);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");

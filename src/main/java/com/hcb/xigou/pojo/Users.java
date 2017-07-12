@@ -1,6 +1,7 @@
 package com.hcb.xigou.pojo;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Users {
@@ -10,7 +11,7 @@ public class Users {
 
     private Date createDatetime;
 
-    private Date updateDatetime;
+    private String updateDatetime;
 
     private String deleteAt;
 
@@ -90,12 +91,14 @@ public class Users {
         this.createDatetime = createDatetime;
     }
 
-    public Date getUpdateDatetime() {
+    public String getUpdateDatetime() {
         return updateDatetime;
     }
 
     public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(updateDatetime);
+        this.updateDatetime = time;
     }
 
     public String getDeleteAt() {

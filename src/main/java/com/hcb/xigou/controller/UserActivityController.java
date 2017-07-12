@@ -250,7 +250,7 @@ public class UserActivityController extends BaseController{
 		}
 		
 		model.put("description", "查询成功");
-		model.put("result", "0");
+		model.put("result",0);
 		model.put("userRechargersList", list);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");

@@ -248,7 +248,7 @@ public class BannersController extends BaseController{
 		}
 		
 		model.put("description", "查询成功");
-		model.put("result", "0");
+		model.put("result",0);
 		model.put("bannerList", list);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
