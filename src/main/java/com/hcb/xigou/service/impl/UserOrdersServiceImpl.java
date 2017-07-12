@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.UserOrdersMapper;
 import com.hcb.xigou.dto.UserOrders;
 import com.hcb.xigou.service.UserOrdersService;
 
+@Service("UserOrdersService")
 public class UserOrdersServiceImpl implements UserOrdersService {
 	
 	@Autowired

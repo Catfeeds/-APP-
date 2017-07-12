@@ -57,9 +57,8 @@
   	<if test="maxPrice ! null and maxPrice != ''">
   		and unit_price &lt;=#{maxPrice,jdbcType=VARCHAR}
   	</if>
-  	
   </select>
-  <select id="searchGoodsByMap" parameterMap="java.util.HashMap" resultMap="BaseResultMap"> 
+  <select id="searchGoodsByMap" parameterType="java.util.HashMap" resultMap="BaseResultMap"> 
   	select  
   	<include refid="Base_Column_List" />
   	from goods 
