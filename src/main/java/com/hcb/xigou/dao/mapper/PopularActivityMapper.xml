@@ -61,12 +61,14 @@
   </update>
   
   
-  <select id="selectByActivityUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPopularActivityId" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select 
   	<include refid="Base_Column_List" />
   	from activity_zones
   	where delete_at is null 
-  	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  	<if test="activityUuid != null and activityUuid != ''">
+  		and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  	</if>
   </select>
   
   <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
@@ -79,22 +81,6 @@
   </insert>
   
   
-  <select id="searchUserActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
-    select 
-    <include refid="Base_Column_List" />
-    from activity_zones az LEFT JOIN goods g  
-	on g.good_uuid = az.good_uuid
-    where az.delete_at is null
-    and az.type = 'selling'
-	order by az.create_datetime desc LIMIT #{start},#{end}
-  </select>
-  
-  <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
-    select count(1) from activity_zones
-    where az.delete_at is null
-    and az.type = 'selling'
-    group by az.banner
-  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

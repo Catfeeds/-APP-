@@ -43,7 +43,7 @@
   </sql>
   
   
-  <select id="searchUserMagageByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap">
+  <select id="searchUserMagageByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
@@ -59,7 +59,7 @@
   	</if>
   	order by u.create_datetime desc LIMIT #{start},#{end}
   </select>
-  <select id="countUserMagageByMap" resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
+  <select id="countUserMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
   	where u.delete_at is null
@@ -76,7 +76,7 @@
   
   
   
-  <select id="searchMemberMagageByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap">
+  <select id="searchMemberMagageByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
@@ -95,7 +95,7 @@
   	</if>
   	order by u.create_datetime desc LIMIT #{start},#{end}
   </select>
-  <select id="countMemberMagageByMap" resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
+  <select id="countMemberMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
   	where u.delete_at is null

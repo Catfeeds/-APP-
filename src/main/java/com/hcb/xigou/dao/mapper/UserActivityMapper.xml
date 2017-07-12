@@ -83,7 +83,7 @@
   </insert>
   
   
-  <select id="searchUserActivityByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap" >
+  <select id="searchUserActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
     <include refid="Base_Column_List" />
     from activity_zones az LEFT JOIN goods g  
@@ -92,8 +92,7 @@
     and az.type = 'selling'
 	order by az.create_datetime desc LIMIT #{start},#{end}
   </select>
-  
-  <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
+  <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
     select count(1) from activity_zones
     where az.delete_at is null
     and az.type = 'selling'

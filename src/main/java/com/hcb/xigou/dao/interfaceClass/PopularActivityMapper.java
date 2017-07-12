@@ -12,4 +12,6 @@ public interface PopularActivityMapper {
 
 	int updateByPopularActivityIsSTop(Map<String, Object> map);
 
+	PopularActivity selectByPopularActivityId(String activity_uuid);
+
 }

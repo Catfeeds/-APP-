@@ -32,5 +32,11 @@ public class PopularActivityServiceImpl implements PopularActivityService {
 		
 		return PopularActivityMapper.updateByPopularActivityIsSTop(map);
 	}
+
+	@Override
+	public PopularActivity selectByPopularActivityId(String activity_uuid) {
+		
+		return PopularActivityMapper.selectByPopularActivityId(activity_uuid);
+	}
 	
 }

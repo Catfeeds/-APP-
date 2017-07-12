@@ -39,7 +39,7 @@
   </sql>
   
   
-  <select id="countGoodsByMap" parameterMap="java.util.HashMap" resultType="java.lang.Integer">
+  <select id="countGoodsByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
     select  count(1) from goods 
   	where delete_at is null
   	<if test="goodName != null and goodName != ''">
@@ -58,7 +58,7 @@
   		and unit_price &lt;=#{maxPrice,jdbcType=VARCHAR}
   	</if>
   </select>
-  <select id="searchGoodsByMap" parameterMap="java.util.HashMap" resultMap="BaseResultMap"> 
+  <select id="searchGoodsByMap" parameterType="java.util.HashMap" resultMap="BaseResultMap"> 
   	select  
   	<include refid="Base_Column_List" />
   	from goods 

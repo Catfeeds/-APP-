@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
 import com.hcb.xigou.dto.UserActivity;
 import com.hcb.xigou.service.PopularActivityService;
@@ -106,6 +107,34 @@ public class PopularActivityController extends BaseController{
 		}else{
 			json.put("result", 1);
 			json.put("description", "更改Activity状态失败，未查询到Activity信息");
+			return buildReqJsonObject(json);
+		}
+	}
+
+	@RequestMapping("detail")
+	@ResponseBody
+	public String selectPopularActivityId(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("activity_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		PopularActivity popularActivity = popularActivityService.selectByPopularActivityId(bodyInfo.getString("activity_uuid"));
+		if(popularActivity!=null){
+			json.put("result", 0);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			json.put("popularActivity", popularActivity);
+			return buildReqJsonObject(json);
+		}else{
+			json.put("result", 1);
+			json.put("description", "未查询到popularActivity信息");
 			return buildReqJsonObject(json);
 		}
 	}
