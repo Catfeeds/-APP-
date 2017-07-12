@@ -33,7 +33,7 @@
     where banner_uuid = #{bannerUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
-  <select id="searchBannerByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap" >
+  <select id="searchBannerByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
     <include refid="Base_Column_List" />
     from banners
@@ -47,7 +47,7 @@
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
-  <select id="countBannerByMap" resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
+  <select id="countBannerByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
    select count(1) from banners
     where delete_at is null
     <if test="bannerName !='' and bannerName != null">
@@ -58,7 +58,7 @@
 	</if>
   </select>
   
-  <update id="deleteByBannerUuids" parameterMap="java.util.HashMap" >
+  <update id="deleteByBannerUuids" parameterType="java.util.HashMap" >
    update banners
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 

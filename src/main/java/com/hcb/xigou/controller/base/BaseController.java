@@ -117,6 +117,7 @@ public class BaseController {
 						}
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					sign = 1;
 				}
 			}

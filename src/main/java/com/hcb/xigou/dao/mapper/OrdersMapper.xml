@@ -69,7 +69,7 @@
   </delete>
   
   
-  <select id="searchOrderByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap" >
+  <select id="searchOrderByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
   	select 
   	<include refid="Base_Column_List"/>
   	from orders
@@ -94,7 +94,7 @@
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
-  <select id="countOrderyMap"  resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
+  <select id="countOrderyMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from orders
   	where delete_at is null
   	<if test="orderNumber != null and orderNumber != ''">
