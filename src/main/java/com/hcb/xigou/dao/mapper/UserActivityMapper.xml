@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.UserActivityMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.UserActivity" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="activity_uuid" property="activityUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
+    <result column="merchant_uuid" property="merchantUuid" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="sign" property="sign" jdbcType="CHAR" />
+    <result column="groups" property="groups" jdbcType="CHAR" />
+    <result column="banner" property="banner" jdbcType="VARCHAR" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="is_stop" property="isStop" jdbcType="CHAR" />
+    <result column="good_status" property="goodStatus" jdbcType="CHAR" />
+    <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
+    image, title, description, start_time, end_time, type, sign, groups, banner, store_uuid,good_status,good_name
+  </sql>
+  
+  
+  <update id="deleteByActivityUuid" parameterType="java.util.HashMap" >
+   update activity_zones
+  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
+    where 
+    <if test="storeUuid!='' and storeUuid!=null ">
+		store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if >
+	<if test="bannerUuids!='' and bannerUuids!=null ">
+		and banner_uuid in 
+	    <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </update>
+  
+  
+  <select id="selectByActivityUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from activity_zones
+  	where delete_at is null 
+  	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateByActivityAndGoods" parameterType="java.util.HashMap">
+  	update goods
+  	<set >
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodStatus == up" >
+        good_status = down,
+      </if>
+      <if test="goodStatus == down" >
+        good_status = up,
+      </if>
+    </set>
+    where good_uuid = (
+    select good_uuid from activity_zones 
+      where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+    )
+  </update>
+  
+  
+  <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
+  	<foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
+		   insert into  activity_zones 
+		  (good_uuid,type,banner,store_uuid) 
+		  values 
+		  (#{item},'selling',#{banner,jdbcType=VARCHAR},#{storeUuid,jdbcType=VARCHAR})
+	</foreach>
+  </insert>
+  
+  
+  <select id="searchUserActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones az LEFT JOIN goods g  
+	on g.good_uuid = az.good_uuid
+    where az.delete_at is null
+    and az.type = 'selling'
+	order by az.create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+    select count(1) from activity_zones
+    where az.delete_at is null
+    and az.type = 'selling'
+    group by az.banner
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+
+
+</mapper>

@@ -37,6 +37,8 @@ public class ActivityZones {
 
     private String storeUuid;
 
+    private String isStop;
+
     public Integer getFakeId() {
         return fakeId;
     }
@@ -171,5 +173,13 @@ public class ActivityZones {
 
     public void setStoreUuid(String storeUuid) {
         this.storeUuid = storeUuid == null ? null : storeUuid.trim();
+    }
+
+    public String getIsStop() {
+        return isStop;
+    }
+
+    public void setIsStop(String isStop) {
+        this.isStop = isStop == null ? null : isStop.trim();
     }
 }
