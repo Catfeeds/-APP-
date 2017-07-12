@@ -4,6 +4,7 @@ package com.hcb.xigou.dao.interfaceClass;
 import java.util.List;
 import java.util.Map;
 
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.pojo.Goods;
 
 public interface GoodsMapper {
@@ -23,4 +24,10 @@ public interface GoodsMapper {
 	public List<Goods> searchGoodsByMap(Map<String, Object> map);
 
 	public int countGoodsByMap(Map<String, Object> map);
+	
+	int insertSelective(Goods record);
+	
+	Goods selectByGoodUuid(String goodUuid);
+	
+	int updateByGoodsUuid(Goods record);
 }

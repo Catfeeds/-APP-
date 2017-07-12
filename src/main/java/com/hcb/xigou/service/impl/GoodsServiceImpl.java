@@ -57,4 +57,22 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.countGoodsByMap(map);
 	}
 
+	@Override
+	public int insertSelective(Goods record) {
+		// TODO Auto-generated method stub
+		return goodsMapper.insertSelective(record);
+	}
+
+	@Override
+	public Goods selectByGoodUuid(String goodUuid) {
+		// TODO Auto-generated method stub
+		return goodsMapper.selectByGoodUuid(goodUuid);
+	}
+
+	@Override
+	public int updateByGoodsUuid(Goods record) {
+		// TODO Auto-generated method stub
+		return goodsMapper.updateByGoodsUuid(record);
+	}
+
 }

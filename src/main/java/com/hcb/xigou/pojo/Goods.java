@@ -134,6 +134,7 @@ public class Goods {
         this.cover = cover == null ? null : cover.trim();
     }
 
+    
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }

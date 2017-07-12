@@ -3,6 +3,7 @@ package com.hcb.xigou.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.pojo.Goods;
 
 public interface GoodsService {
@@ -22,4 +23,10 @@ public interface GoodsService {
 	public List<Goods> searchGoodsByMap(Map<String, Object> map);
 
 	public int countGoodsByMap(Map<String, Object> map);
+	
+	int insertSelective(Goods record);
+	
+	Goods selectByGoodUuid(String goodUuid);
+	
+	int updateByGoodsUuid(Goods record);
 }

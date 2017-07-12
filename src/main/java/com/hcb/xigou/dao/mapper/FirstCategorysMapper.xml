@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.FirstCategorysMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.FirstCategorys" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="first_uuid" property="firstUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, first_uuid, create_datetime, update_datetime, delete_at, category_name, 
+    image, store_uuid
+  </sql>
+  <select id="selectByFirstUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from first_categorys
+    where first_uuid = #{firstUuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from first_categorys
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from first_categorys
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.FirstCategorys" >
+    insert into first_categorys (fake_id, first_uuid, create_datetime, 
+      update_datetime, delete_at, category_name, 
+      image, store_uuid)
+    values (#{fakeId,jdbcType=INTEGER}, #{firstUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.FirstCategorys" >
+    insert into first_categorys
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="firstUuid != null" >
+        first_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="firstUuid != null" >
+        #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        #{storeUuid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.FirstCategorys" >
+    update first_categorys
+    <set >
+      <if test="firstUuid != null" >
+        first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.FirstCategorys" >
+    update first_categorys
+    set first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>

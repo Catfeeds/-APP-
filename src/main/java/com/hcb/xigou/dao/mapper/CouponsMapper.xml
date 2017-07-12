@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.CouponsMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Coupons" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="coupon_uuid" property="couponUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="user_uuid" property="userUuid" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" />
+    <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
+    <result column="grant_time" property="grantTime" jdbcType="TIMESTAMP" />
+    <result column="fail_time" property="failTime" jdbcType="TIMESTAMP" />
+    <result column="first_uuid" property="firstUuid" jdbcType="VARCHAR" />
+    <result column="second_uuid" property="secondUuid" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="coupon_status" property="couponStatus" jdbcType="CHAR" />
+    <result column="coupon_stock" property="couponStock" jdbcType="INTEGER" />
+    <result column="is_grant" property="isGrant" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, coupon_uuid, create_datetime, update_datetime, delete_at, user_uuid, amount, 
+    good_uuid, grant_time, fail_time, first_uuid, second_uuid, title, description, type, content, 
+    coupon_status, coupon_stock, is_grant
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupons
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCouponUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from banners
+    where coupon_uuid = #{couponUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coupons
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  
+  <update id="deleteByCouponUuids" parameterType="java.util.HashMap" >
+   update coupons
+  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
+    where 
+	<if test="couponUuids!='' and couponUuids!=null ">
+		and coupon_uuid in 
+	    <foreach item="item" index="index" collection="couponUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </update>
+  
+  <select id="searchCouponByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from banners
+    where delete_at is null
+	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="countCouponByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+   select count(1) from banners
+    where delete_at is null
+  </select>
+  
+  <insert id="insert" parameterType="com.hcb.xigou.dto.Coupons" >
+    insert into coupons (fake_id, coupon_uuid, create_datetime, 
+      update_datetime, delete_at, user_uuid, 
+      amount, good_uuid, grant_time, fail_time, 
+      first_uuid, second_uuid, title, 
+      description, type, content, 
+      coupon_status, coupon_stock, is_grant
+      )
+    values (#{fakeId,jdbcType=INTEGER}, #{couponUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, #{grantTime,jdbcType=TIMESTAMP}, #{failTime,jdbcType=TIMESTAMP}, 
+      #{firstUuid,jdbcType=VARCHAR}, #{secondUuid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{content,jdbcType=VARCHAR}, 
+      #{couponStatus,jdbcType=CHAR}, #{couponStock,jdbcType=INTEGER}, #{isGrant,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Coupons" >
+    insert into coupons
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="couponUuid != null" >
+        coupon_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="userUuid != null" >
+        user_uuid,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid,
+      </if>
+      <if test="grantTime != null" >
+        grant_time,
+      </if>
+      <if test="failTime != null" >
+        fail_time,
+      </if>
+      <if test="firstUuid != null" >
+        first_uuid,
+      </if>
+      <if test="secondUuid != null" >
+        second_uuid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="couponStatus != null" >
+        coupon_status,
+      </if>
+      <if test="couponStock != null" >
+        coupon_stock,
+      </if>
+      <if test="isGrant != null" >
+        is_grant,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="couponUuid != null" >
+        #{couponUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="grantTime != null" >
+        #{grantTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failTime != null" >
+        #{failTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstUuid != null" >
+        #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secondUuid != null" >
+        #{secondUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStatus != null" >
+        #{couponStatus,jdbcType=CHAR},
+      </if>
+      <if test="couponStock != null" >
+        #{couponStock,jdbcType=INTEGER},
+      </if>
+      <if test="isGrant != null" >
+        #{isGrant,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.Coupons" >
+    update coupons
+    <set >
+      <if test="couponUuid != null" >
+        coupon_uuid = #{couponUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        user_uuid = #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="grantTime != null" >
+        grant_time = #{grantTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failTime != null" >
+        fail_time = #{failTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstUuid != null" >
+        first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secondUuid != null" >
+        second_uuid = #{secondUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStatus != null" >
+        coupon_status = #{couponStatus,jdbcType=CHAR},
+      </if>
+      <if test="couponStock != null" >
+        coupon_stock = #{couponStock,jdbcType=INTEGER},
+      </if>
+      <if test="isGrant != null" >
+        is_grant = #{isGrant,jdbcType=CHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Coupons" >
+    update coupons
+    set coupon_uuid = #{couponUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      user_uuid = #{userUuid,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=VARCHAR},
+      good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      grant_time = #{grantTime,jdbcType=TIMESTAMP},
+      fail_time = #{failTime,jdbcType=TIMESTAMP},
+      first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      second_uuid = #{secondUuid,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      content = #{content,jdbcType=VARCHAR},
+      coupon_status = #{couponStatus,jdbcType=CHAR},
+      coupon_stock = #{couponStock,jdbcType=INTEGER},
+      is_grant = #{isGrant,jdbcType=CHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByCouponUuid" parameterType="com.hcb.xigou.dto.Coupons" >
+    update coupons
+    <set >
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        user_uuid = #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="grantTime != null" >
+        grant_time = #{grantTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failTime != null" >
+        fail_time = #{failTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstUuid != null" >
+        first_uuid = #{firstUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secondUuid != null" >
+        second_uuid = #{secondUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStatus != null" >
+        coupon_status = #{couponStatus,jdbcType=CHAR},
+      </if>
+      <if test="couponStock != null" >
+        coupon_stock = #{couponStock,jdbcType=INTEGER},
+      </if>
+      <if test="isGrant != null" >
+        is_grant = #{isGrant,jdbcType=CHAR},
+      </if>
+    </set>
+    where coupon_uuid = #{couponUuid,jdbcType=VARCHAR}
+  </update>
+</mapper>
