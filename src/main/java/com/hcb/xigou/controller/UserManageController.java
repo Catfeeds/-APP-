@@ -50,7 +50,6 @@ public class UserManageController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		ModelMap model = new ModelMap();
-
 		List<UserManage> list = new ArrayList<UserManage>();
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");

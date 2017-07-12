@@ -59,7 +59,7 @@
 
 
   
-    <select id="searchUsersOrderByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    <select id="searchUsersOrderByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap" >
 	  	select 
 	  	<include refid="Base_Column_List"/>
 	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
@@ -84,7 +84,7 @@
 	  	order by o.create_datetime desc LIMIT #{start},#{end}
     </select>
   
-  <select id="countUsersOrderByMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  <select id="countUsersOrderByMap"  resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
   	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
   	where o.delete_at is null
   	<if test="orderNumber != null and orderNumber != ''">

@@ -23,7 +23,7 @@
     r.fake_id, r.recharge_uuid, r.create_datetime, r.update_datetime, r.delete_at, r.user_uuid, r.recharge_number, 
     r.wechat_number, r.alipay_number, r.pay_time, r.amount, r.status, r.third_way,u.phone,u.nickname,u.name
   </sql>
-	<select id="searchUserRechargersByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	<select id="searchUserRechargersByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
   	from recharges r  LEFT JOIN users u on r.user_uuid = u.user_uuid
@@ -42,7 +42,7 @@
   	</if>
   	order by r.create_datetime desc LIMIT #{start},#{end}
   </select>
-  <select id="countUserRechargersByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  <select id="countUserRechargersByMap" resultType="java.lang.Integer" parameterMap="java.util.HashMap" >
   	select count(1)
   	from recharges r LEFT JOIN users u  on u.user_uuid = r.user_uuid
   	where r.delete_at is null
