@@ -88,27 +88,15 @@ public class BaseController {
 							headString = headInfo.toString();
 							String nickname = null;
 							String password = null;
-							String grade = null;
-							String store_uuid = null;
 							try {
 								nickname = headInfo.getString("nickname");
 								password = headInfo.getString("password");
-								grade = headInfo.getString("grade");
-								store_uuid = headInfo.getString("store_uuid");
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							if(nickname!=null&&!"".equals(nickname)&&password!=null&&!"".equals(password)&&grade!=null&&!"".equals(grade)){
+							if(nickname!=null&&!"".equals(nickname)&&password!=null&&!"".equals(password)){
 								Map<String,Object> map = new HashMap<String,Object>();
 								map.put("nickname", nickname);
-								map.put("grade", grade);
-								if(grade.equals("3")){
-									if(store_uuid!=null&&!"".equals(store_uuid)){
-										map.put("store_uuid", store_uuid);
-									}else{
-										sign = 2;
-									}
-								}
 								managers = managersService.selectBynicknameAndGrade(map);
 								if(managers == null){
 									sign = 1;
