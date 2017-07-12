@@ -93,8 +93,9 @@ public class UserManageController extends BaseController{
 					json.put("description", "操作失败，请求页数大于总页数");
 					return buildReqJsonObject(json);
 				}
-				model.put("total", total);// 页码总数
+				model.put("total", total);//页码总数
 				model.put("page", pageIndex);
+				model.put("count", count);//数据总条数
 			}
 		}
 		

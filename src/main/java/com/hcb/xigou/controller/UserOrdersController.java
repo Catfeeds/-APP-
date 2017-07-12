@@ -105,7 +105,6 @@ public class UserOrdersController extends BaseController{
 				model.put("page", pageIndex);
 			}
 		}
-		
 		model.put("description", "查询成功");
 		model.put("result",0);
 		model.put("userOrdersList", list);
