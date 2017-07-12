@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.UserActivityMapper;
 import com.hcb.xigou.dto.UserActivity;
 import com.hcb.xigou.service.UserActivityService;
 
+@Service("UserActivityService")
 public class UserActivityServiceImpl implements UserActivityService {
 	
 	@Autowired
