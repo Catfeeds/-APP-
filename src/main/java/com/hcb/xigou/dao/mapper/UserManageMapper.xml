@@ -42,10 +42,16 @@
     u.device_osver, u.app_version, u.store_uuid, u.member_card_number,ud.address
   </sql>
   
+  <sql id="Base_Column_List_G" >
+    u.user_uuid, u.create_datetime,
+    u.phone, u.nickname,u.headimgurl, u.birthday, u.country, u.province, u.city,
+    u.balance, u.client_id, u.name, 
+    u.member_card_number,ud.address
+  </sql>
   
   <select id="searchUserMagageByMap" resultMap="BaseResultMap" parameterMap="java.util.HashMap">
   	select 
-  	<include refid="Base_Column_List" />
+  	<include refid="Base_Column_List_G" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
   	where u.delete_at is null
   	<if test="name != null and name != ''">
