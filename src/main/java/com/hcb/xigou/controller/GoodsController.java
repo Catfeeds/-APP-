@@ -249,7 +249,7 @@ public class GoodsController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date createTime = new Date();
 		try {
 			String createAt=null;
@@ -317,7 +317,7 @@ public class GoodsController extends BaseController{
 		}
 		GoodsWithBLOBs goods =(GoodsWithBLOBs) goodsService.selectByGoodUuid(bodyInfo.getString("good_uuid"));
 		goods.setSecondCategoryName(bodyInfo.getString("category_name"));
-		goods.setCreateDatetime(updateTime);
+		goods.setUpdateDatetime(updateTime);
 		goods.setFirstUuid(bodyInfo.getString("first_uuid"));
 		goods.setSecondUuid(bodyInfo.getString("second_uuid"));
 		goods.setCover(bodyInfo.getString("cover"));
