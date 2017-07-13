@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,7 @@ public class BannersController extends BaseController{
 		}
 		if(bannerUuids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("bannerUuids", "bannerUuids");
+			map.put("bannerUuids", bannerUuids);
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
@@ -266,14 +267,16 @@ public class BannersController extends BaseController{
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("currentIndex")==null||bodyInfo.get("banner_uuid") == null||
+		if (bodyInfo.get("currentIndex")==null||
 				bodyInfo.get("banner_name") == null||bodyInfo.get("url") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		Banners banner = new Banners();
-		banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
+		UUID uuid = UUID.randomUUID();
+		String bannerUuid= uuid.toString();
+		banner.setBannerUuid(bannerUuid);
 		banner.setCreateDatetime(new Date());
 		banner.setUpdateDatetime(new Date());
 		banner.setType(bodyInfo.getString("type"));

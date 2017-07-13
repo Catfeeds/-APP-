@@ -112,7 +112,7 @@ public class CouponsController  extends BaseController{
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
-		//JSONObject headInfo = JSONObject.fromObject(headString);
+		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
@@ -140,10 +140,10 @@ public class CouponsController  extends BaseController{
 			map.put("end", pageSize);
 			/*if(bodyInfo.get("bannerName") == null){
 				map.put("bannerName", bodyInfo.getString("bannerName"));
-			}
+			}*/
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
-			}*/
+			}
 			
 			list = couponsService.searchCouponByMap(map);
 			Integer count = 0;
@@ -160,6 +160,7 @@ public class CouponsController  extends BaseController{
 				}
 				model.put("total", total);
 				model.put("page", pageIndex);
+				model.put("count", count);
 			} else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
@@ -169,6 +170,7 @@ public class CouponsController  extends BaseController{
 				}
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count", count);
 			}
 		}
 		
@@ -252,19 +254,26 @@ public class CouponsController  extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Coupons coupon = couponsService.selectByCouponUuid(bodyInfo.getString("coupon_uuid"));
-		int couponStock =coupon.getCouponStock()+bodyInfo.getInt("coupon_stock");
-		coupon.setCouponStock(couponStock);
-		int rs = 0;
-		rs = couponsService.updateByCouponUuid(coupon);
-		if(rs == 1){
-			json.put("result", 0);
-			json.put("description", "添加优惠券库存成功");
-			return buildReqJsonObject(json);
+		if(coupon !=null){
+			int couponStock =coupon.getCouponStock()+bodyInfo.getInt("coupon_stock");
+			coupon.setCouponStock(couponStock);
+			int rs = 0;
+			rs = couponsService.updateByCouponUuid(coupon);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "添加优惠券库存成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "添加优惠券库存失败，请重试");
+				return buildReqJsonObject(json);
+			}
 		}else{
 			json.put("result", 1);
-			json.put("description", "添加优惠券库存失败，请重试");
+			json.put("description", "查询不到优惠券库存，请重试");
 			return buildReqJsonObject(json);
 		}
+		
 	}
 	
 	@RequestMapping("isGrant")
@@ -283,18 +292,25 @@ public class CouponsController  extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Coupons coupon = couponsService.selectByCouponUuid(bodyInfo.getString("coupon_uuid"));
-		coupon.setIsGrant("2");
-		int rs = 0;
-		rs = couponsService.updateByCouponUuid(coupon);
-		if(rs == 1){
-			json.put("result", 0);
-			json.put("description", "发放优惠券成功");
-			return buildReqJsonObject(json);
+		if(coupon !=null){
+			coupon.setIsGrant("2");
+			int rs = 0;
+			rs = couponsService.updateByCouponUuid(coupon);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "发放优惠券成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "发放优惠券失败，请重试");
+				return buildReqJsonObject(json);
+			}	
 		}else{
 			json.put("result", 1);
-			json.put("description", "发放优惠券失败，请重试");
+			json.put("description", "查询不到优惠券，请重试");
 			return buildReqJsonObject(json);
-		}
+		}	
+		
 	}
 	
 	@RequestMapping("update")
@@ -316,39 +332,46 @@ public class CouponsController  extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Coupons coupon = couponsService.selectByCouponUuid(bodyInfo.getString("coupon_uuid"));
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date updateTime = new Date();
-		Date grantTime = new Date();
-		Date failTime = new Date();
-		try {
-			String updateAt=null;
-			updateTime = format.parse(updateAt);
-			grantTime = format.parse(bodyInfo.getString("grant_time"));
-			failTime = format.parse(bodyInfo.getString("fail_time"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		UUID uuid = UUID.randomUUID();
-		String couponUuid= uuid.toString();
-		coupon.setAmount(bodyInfo.getString("amount"));
-		coupon.setTitle(bodyInfo.getString("coupon_name"));
-		coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
-		coupon.setType(bodyInfo.getString("type"));
-		coupon.setCouponUuid(couponUuid);
-		coupon.setUpdateDatetime(updateTime);
-		coupon.setGrantTime(grantTime);
-		coupon.setFailTime(failTime);
-		coupon.setIsGrant("1");
-		int rs = 0;
-		rs = couponsService.updateByCouponUuid(coupon);
-		if(rs == 1){
-			json.put("result", 0);
-			json.put("description", "编辑优惠券成功");
-			return buildReqJsonObject(json);
+		if(coupon != null){
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date updateTime = new Date();
+			Date grantTime = new Date();
+			Date failTime = new Date();
+			try {
+				String updateAt=null;
+				updateTime = format.parse(updateAt);
+				grantTime = format.parse(bodyInfo.getString("grant_time"));
+				failTime = format.parse(bodyInfo.getString("fail_time"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			UUID uuid = UUID.randomUUID();
+			String couponUuid= uuid.toString();
+			coupon.setAmount(bodyInfo.getString("amount"));
+			coupon.setTitle(bodyInfo.getString("coupon_name"));
+			coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
+			coupon.setType(bodyInfo.getString("type"));
+			coupon.setCouponUuid(couponUuid);
+			coupon.setUpdateDatetime(updateTime);
+			coupon.setGrantTime(grantTime);
+			coupon.setFailTime(failTime);
+			coupon.setIsGrant("1");
+			int rs = 0;
+			rs = couponsService.updateByCouponUuid(coupon);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "编辑优惠券成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "编辑优惠券失败，请重试");
+				return buildReqJsonObject(json);
+			}
 		}else{
 			json.put("result", 1);
-			json.put("description", "编辑优惠券失败，请重试");
+			json.put("description", "查询不到优惠券，请重试");
 			return buildReqJsonObject(json);
 		}
+		
 	}
 }

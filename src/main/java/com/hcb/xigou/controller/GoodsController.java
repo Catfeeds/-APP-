@@ -316,31 +316,38 @@ public class GoodsController extends BaseController{
 			e.printStackTrace();
 		}
 		GoodsWithBLOBs goods =(GoodsWithBLOBs) goodsService.selectByGoodUuid(bodyInfo.getString("good_uuid"));
-		goods.setSecondCategoryName(bodyInfo.getString("category_name"));
-		goods.setUpdateDatetime(updateTime);
-		goods.setFirstUuid(bodyInfo.getString("first_uuid"));
-		goods.setSecondUuid(bodyInfo.getString("second_uuid"));
-		goods.setCover(bodyInfo.getString("cover"));
-		BigDecimal unitPrice=new BigDecimal(bodyInfo.getString("unit_price"));
-		goods.setUnitPrice(unitPrice);
-		goods.setPhotos(bodyInfo.getString("photos"));
-		goods.setPoster(bodyInfo.getString("poster"));
-		goods.setTitle(bodyInfo.getString("title"));
-		
-		FirstCategorys first = firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
-		goods.setFirtCategoryName(first.getCategoryName());
-		
-		int rs = 0;
-		rs = goodsService.updateByGoodsUuid(goods);
-		if(rs == 1){
-			json.put("result", 0);
-			json.put("description", "编辑商品成功");
-			return buildReqJsonObject(json);
+		if(goods !=null){
+			goods.setSecondCategoryName(bodyInfo.getString("category_name"));
+			goods.setUpdateDatetime(updateTime);
+			goods.setFirstUuid(bodyInfo.getString("first_uuid"));
+			goods.setSecondUuid(bodyInfo.getString("second_uuid"));
+			goods.setCover(bodyInfo.getString("cover"));
+			BigDecimal unitPrice=new BigDecimal(bodyInfo.getString("unit_price"));
+			goods.setUnitPrice(unitPrice);
+			goods.setPhotos(bodyInfo.getString("photos"));
+			goods.setPoster(bodyInfo.getString("poster"));
+			goods.setTitle(bodyInfo.getString("title"));
+			
+			FirstCategorys first = firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
+			goods.setFirtCategoryName(first.getCategoryName());
+			
+			int rs = 0;
+			rs = goodsService.updateByGoodsUuid(goods);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "编辑商品成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "编辑商品失败，请重试");
+				return buildReqJsonObject(json);
+			}
 		}else{
 			json.put("result", 1);
-			json.put("description", "编辑商品失败，请重试");
+			json.put("description", "查询不到商品，请重试");
 			return buildReqJsonObject(json);
 		}
+		
 	}
 	
 }

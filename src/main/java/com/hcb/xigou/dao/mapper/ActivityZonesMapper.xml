@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.ActivityZonesMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.ActivityZones" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="activity_uuid" property="activityUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
+    <result column="merchant_uuid" property="merchantUuid" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="sign" property="sign" jdbcType="CHAR" />
+    <result column="groups" property="groups" jdbcType="CHAR" />
+    <result column="banner" property="banner" jdbcType="VARCHAR" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="is_stop" property="isStop" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
+    image, title, description, start_time, end_time, type, sign, groups, banner, store_uuid, 
+    is_stop
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from activity_zones
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  
+    <select id="selectByActivityUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <select id="searchActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+    where delete_at is null
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="countActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+   select count(1) from activity_zones
+    where delete_at is null
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  <update id="deleteByActivityUuids" parameterType="java.util.HashMap" >
+   update activity_zones
+  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
+    where 
+    <if test="storeUuid!='' and storeUuid!=null ">
+			and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if >
+	<if test="activityUuids!='' and activityUuids!=null ">
+		and activity_uuid in 
+	    <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </update>
+  
+  <insert id="insert" parameterType="com.hcb.xigou.dto.ActivityZones" >
+    insert into activity_zones (fake_id, activity_uuid, create_datetime, 
+      update_datetime, delete_at, good_uuid, 
+      merchant_uuid, image, title, 
+      description, start_time, end_time, 
+      type, sign, groups, banner, 
+      store_uuid, is_stop)
+    values (#{fakeId,jdbcType=INTEGER}, #{activityUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, 
+      #{merchantUuid,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=CHAR}, #{sign,jdbcType=CHAR}, #{groups,jdbcType=CHAR}, #{banner,jdbcType=VARCHAR}, 
+      #{storeUuid,jdbcType=VARCHAR}, #{isStop,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.ActivityZones" >
+    insert into activity_zones
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="activityUuid != null" >
+        activity_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid,
+      </if>
+      <if test="merchantUuid != null" >
+        merchant_uuid,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="sign != null" >
+        sign,
+      </if>
+      <if test="groups != null" >
+        groups,
+      </if>
+      <if test="banner != null" >
+        banner,
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid,
+      </if>
+      <if test="isStop != null" >
+        is_stop,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="activityUuid != null" >
+        #{activityUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUuid != null" >
+        #{merchantUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=CHAR},
+      </if>
+      <if test="groups != null" >
+        #{groups,jdbcType=CHAR},
+      </if>
+      <if test="banner != null" >
+        #{banner,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="isStop != null" >
+        #{isStop,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.ActivityZones" >
+    update activity_zones
+    <set >
+      <if test="activityUuid != null" >
+        activity_uuid = #{activityUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUuid != null" >
+        merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="sign != null" >
+        sign = #{sign,jdbcType=CHAR},
+      </if>
+      <if test="groups != null" >
+        groups = #{groups,jdbcType=CHAR},
+      </if>
+      <if test="banner != null" >
+        banner = #{banner,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="isStop != null" >
+        is_stop = #{isStop,jdbcType=CHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByActivityUuid" parameterType="com.hcb.xigou.dto.ActivityZones" >
+    update activity_zones
+    <set >
+      <if test="activityUuid != null" >
+        activity_uuid = #{activityUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUuid != null" >
+        merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="sign != null" >
+        sign = #{sign,jdbcType=CHAR},
+      </if>
+      <if test="groups != null" >
+        groups = #{groups,jdbcType=CHAR},
+      </if>
+      <if test="banner != null" >
+        banner = #{banner,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="isStop != null" >
+        is_stop = #{isStop,jdbcType=CHAR},
+      </if>
+    </set>
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.ActivityZones" >
+    update activity_zones
+    set activity_uuid = #{activityUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=CHAR},
+      sign = #{sign,jdbcType=CHAR},
+      groups = #{groups,jdbcType=CHAR},
+      banner = #{banner,jdbcType=VARCHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      is_stop = #{isStop,jdbcType=CHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>
