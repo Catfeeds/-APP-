@@ -77,7 +77,7 @@
   
   <select id="selectByPopularActivityId" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select 
-  	<include refid="Base_Column_List_G" />
+  	<include refid="Base_Column_List" />
   	from activity_zones
   	where delete_at is null 
   	<if test="activityUuid != null and activityUuid != ''">
