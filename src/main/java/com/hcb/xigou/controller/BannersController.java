@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.service.IBannersService;
+import com.hcb.xigou.util.MD5Util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -274,8 +276,13 @@ public class BannersController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Banners banner = new Banners();
-		UUID uuid = UUID.randomUUID();
-		String bannerUuid= uuid.toString();
+		String bannerUuid = "";
+		try {
+			bannerUuid = MD5Util.md5Digest(bodyInfo.getString("banner_name") + System.currentTimeMillis() + RandomStringUtils.random(8));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		banner.setBannerUuid(bannerUuid);
 		banner.setCreateDatetime(new Date());
 		banner.setUpdateDatetime(new Date());
