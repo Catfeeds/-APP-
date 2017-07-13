@@ -64,17 +64,25 @@ public class MemberManageController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(bodyInfo.getString("name")!=null&&!"".equals(bodyInfo.getString("name"))){
-				map.put("name", bodyInfo.getString("name"));
+			if(bodyInfo.get("name")!=null){
+				if(!"".equals(bodyInfo.getString("name"))){
+					map.put("name", bodyInfo.getString("name"));
+				}
 			}
-			if(bodyInfo.getString("nickname")!=null&&!"".equals(bodyInfo.getString("nickname"))){
-				map.put("nickname", bodyInfo.getString("nickname"));
+			if(bodyInfo.get("nickname")!=null){
+				if(!"".equals(bodyInfo.getString("nickname"))){
+					map.put("nickname", bodyInfo.getString("nickname"));
+				}
 			}
-			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
-				map.put("phone", bodyInfo.getString("phone"));
+			if(bodyInfo.get("phone")!=null){
+				if(!"".equals(bodyInfo.getString("phone"))){
+					map.put("phone", bodyInfo.getString("phone"));
+				}
 			}
-			if(bodyInfo.getString("member_card_number")!=null&&!"".equals(bodyInfo.getString("member_card_number"))){
-				map.put("memberCardNumber", bodyInfo.getString("member_card_number"));
+			if(bodyInfo.getString("member_card_number")!=null){
+				if(!"".equals(bodyInfo.getString("member_card_number"))){
+					map.put("memberCardNumber", bodyInfo.getString("member_card_number"));
+				}
 			}
 			list = userManageService.searchMemberMagageByMap(map);
 			Integer count = 0;
@@ -100,6 +108,7 @@ public class MemberManageController extends BaseController{
 				}
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count",count);
 			}
 		}
 		

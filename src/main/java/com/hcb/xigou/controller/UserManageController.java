@@ -102,7 +102,7 @@ public class UserManageController extends BaseController{
 				}
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
-				
+				model.put("count",count);
 			}
 		}
 		

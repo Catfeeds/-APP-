@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
-import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
-import com.hcb.xigou.dto.UserActivity;
 import com.hcb.xigou.service.PopularActivityService;
 
 import net.sf.json.JSONArray;
@@ -96,7 +94,7 @@ public class PopularActivityController extends BaseController{
 			int rs = 0;
 			rs = popularActivityService.updateByPopularActivityIsSTop(map);
 			if(rs == 1){
-				json.put("result", 0);
+				json.put("result",0);
 				json.put("description", "更改Activity状态成功");
 				return buildReqJsonObject(json);
 			}else{

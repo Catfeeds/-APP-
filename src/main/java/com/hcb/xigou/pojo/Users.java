@@ -9,7 +9,7 @@ public class Users {
 
     private String userUuid;
 
-    private Date createDatetime;
+    private String createDatetime;
 
     private String updateDatetime;
 
@@ -27,7 +27,7 @@ public class Users {
 
     private Byte sex;
 
-    private Date birthday;
+    private String birthday;
 
     private String country;
 
@@ -83,12 +83,14 @@ public class Users {
         this.userUuid = userUuid == null ? null : userUuid.trim();
     }
 
-    public Date getCreateDatetime() {
+    public String getCreateDatetime() {
         return createDatetime;
     }
 
     public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(createDatetime);
+        this.createDatetime = time;
     }
 
     public String getUpdateDatetime() {
@@ -157,12 +159,14 @@ public class Users {
         this.sex = sex;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String time = format.format(birthday);
+        this.birthday = time;
     }
 
     public String getCountry() {
