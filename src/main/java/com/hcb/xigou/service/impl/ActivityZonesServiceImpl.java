@@ -10,7 +10,7 @@ import com.hcb.xigou.dao.interfaceClass.ActivityZonesMapper;
 import com.hcb.xigou.dto.ActivityZones;
 import com.hcb.xigou.service.IActivityZonesService;
 
-@Service("BannersService")
+@Service("ActivityZonesService")
 public class ActivityZonesServiceImpl implements IActivityZonesService{
 
 	@Autowired
