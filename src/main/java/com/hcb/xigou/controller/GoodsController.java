@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +24,7 @@ import com.hcb.xigou.pojo.GoodsWithBLOBs;
 import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
+import com.hcb.xigou.util.MD5Util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -257,8 +259,13 @@ public class GoodsController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		UUID uuid = UUID.randomUUID();
-		String goodUuid= uuid.toString();
+		String goodUuid = "";
+		try {
+			goodUuid = MD5Util.md5Digest(bodyInfo.getString("unit_price") + System.currentTimeMillis() + RandomStringUtils.random(8));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		GoodsWithBLOBs goods =new GoodsWithBLOBs();
 		goods.setGoodUuid(goodUuid);
 		goods.setSecondCategoryName(bodyInfo.getString("category_name"));

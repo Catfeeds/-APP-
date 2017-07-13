@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.ActivityZones;
 import com.hcb.xigou.service.IActivityZonesService;
+import com.hcb.xigou.util.MD5Util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -44,8 +46,13 @@ public class ActivityZonesController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		ActivityZones activity = new ActivityZones();
-		UUID uuid = UUID.randomUUID();
-		String activityUuid= uuid.toString();
+		String activityUuid = "";
+		try {
+			activityUuid = MD5Util.md5Digest(bodyInfo.getString("store_uuid") + System.currentTimeMillis() + RandomStringUtils.random(8));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		activity.setActivityUuid(activityUuid);
 		activity.setTitle(bodyInfo.getString("title"));
 		activity.setCreateDatetime(new Date());
