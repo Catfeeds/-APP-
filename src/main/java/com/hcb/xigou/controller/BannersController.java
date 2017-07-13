@@ -273,7 +273,6 @@ public class BannersController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Banners banner = new Banners();
-		banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
 		banner.setCreateDatetime(new Date());
 		banner.setUpdateDatetime(new Date());
 		banner.setType(bodyInfo.getString("type"));

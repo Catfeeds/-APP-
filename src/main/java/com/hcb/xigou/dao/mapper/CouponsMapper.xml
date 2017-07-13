@@ -37,7 +37,7 @@
   <select id="selectByCouponUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from banners
+    from coupons
     where coupon_uuid = #{couponUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
@@ -61,13 +61,13 @@
   <select id="searchCouponByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
     <include refid="Base_Column_List" />
-    from banners
+    from coupons
     where delete_at is null
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
   <select id="countCouponByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
-   select count(1) from banners
+   select count(1) from coupons
     where delete_at is null
   </select>
   

@@ -30,4 +30,8 @@ public interface GoodsMapper {
 	Goods selectByGoodUuid(String goodUuid);
 	
 	int updateByGoodsUuid(Goods record);
+
+	public Goods selectByActivityGood(String activityUuid);
+
+	public List<Goods> searchGood(String activity_uuid);
 }

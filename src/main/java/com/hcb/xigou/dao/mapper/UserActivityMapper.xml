@@ -24,10 +24,13 @@
     <result column="good_name" property="goodName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
-    image, title, description, start_time, end_time, type, sign, groups, banner, store_uuid,good_status,good_name
+    az.fake_id, az.activity_uuid, az.create_datetime, az.update_datetime, az.delete_at, az.good_uuid, az.merchant_uuid,      
+	az.image, az.title, az.description, az.start_time, az.end_time, az.type, az.sign, az.groups, az.banner, az.store_uuid,g.good_status,g.good_name 
   </sql>
-  
+  <sql id="Base_Column_List_G" >
+    az.fake_id, az.activity_uuid, az.create_datetime, az.update_datetime, az.delete_at, az.good_uuid, az.merchant_uuid,      
+	az.image, az.title, az.description, az.start_time, az.end_time, az.type, az.sign, az.groups, az.banner, az.store_uuid
+  </sql>
   
   <update id="deleteByActivityUuid" parameterType="java.util.HashMap" >
    update activity_zones
@@ -47,10 +50,10 @@
   
   <select id="selectByActivityUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select 
-  	<include refid="Base_Column_List" />
-  	from activity_zones
-  	where delete_at is null 
-  	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  	<include refid="Base_Column_List_G" />
+  	from az.activity_zones 
+  	where az.delete_at is null 
+  	and az.activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </select>
   
   <update id="updateByActivityAndGoods" parameterType="java.util.HashMap">
@@ -95,17 +98,8 @@
 
   <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
     select count(1) from activity_zones
-    where az.delete_at is null
-    and az.type = 'selling'
-    group by az.banner
+    where delete_at is null
+    and type = 'selling'
   </select>
-  
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from activity_zones
-    where fake_id = #{fakeId,jdbcType=INTEGER}
-  </select>
-
 
 </mapper>

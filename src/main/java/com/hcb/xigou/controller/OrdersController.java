@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.Orders;
-import com.hcb.xigou.service.IOrdersService;
+import com.hcb.xigou.service.UserOrdersService;
 
 import net.sf.json.JSONObject;
 
@@ -21,7 +21,7 @@ import net.sf.json.JSONObject;
 @RequestMapping("order/")
 public class OrdersController extends BaseController{
 	@Autowired
-	IOrdersService ordersService;
+	UserOrdersService userOrdersService;
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -62,25 +62,29 @@ public class OrdersController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(bodyInfo.getString("order_number")!=null&&!"".equals(bodyInfo.getString("order_number"))){
-				map.put("orderNumber",bodyInfo.getString("order_number"));
+			if(bodyInfo.get("order_number")!=null){
+				if(!"".equals(bodyInfo.getString("order_number"))){
+					map.put("orderNumber",bodyInfo.getString("order_number"));
+				}
 			}
-			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
-				map.put("phone",bodyInfo.getString("phone"));
+			if(bodyInfo.get("phone")!=null){
+				if(!"".equals(bodyInfo.getString("phone"))){
+					map.put("phone",bodyInfo.getString("phone"));
+				}
 			}
-			if(bodyInfo.getString("startTime")!=null){
+			if(bodyInfo.get("startTime")!=null){
 				map.put("startTime", bodyInfo.getString("startTime"));
 			}
-			if(bodyInfo.getString("endTime")!=null){
+			if(bodyInfo.get("endTime")!=null){
 				map.put("endTime", bodyInfo.getString("endTime"));
 			}
-			if(bodyInfo.getString("pay_status")!=null){
+			if(bodyInfo.get("pay_status")!=null){
 				map.put("payStatus", bodyInfo.getString("pay_status"));
 			}
 			
-			list = ordersService.searchOrderByMap(map);
+			list = userOrdersService.searchOrderByMap(map);
 			Integer count = 0;
-			count = ordersService.countOrderyMap(map);
+			count = userOrdersService.countOrderyMap(map);
 			if (count % pageSize == 0) {
 				Integer total = count / pageSize;
 				Integer sign = 0;

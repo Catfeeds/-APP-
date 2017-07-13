@@ -45,16 +45,40 @@
     <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    fake_id, order_uuid, create_datetime, update_datetime, delete_at, user_uuid, good_uuid, 
+    fake_id, order_uuid, create_datetime, update_datetime, delete_at, user_uuid,good_uuid, 
     coupon_uuids, total_money, coupon_money, fraction, paid_money, numbers, pay_status, 
     pay_way, order_number, alipay_number, wechat_number, pay_time, fail_time, collect_time, 
     comment_time, return_time, address_uuid, delivery_time, give_status, sign_time, courier_uuid, 
-    scaner_uuid, remarks, store_uuid, daily_sign, voucher, content, code, type, bar_code, 
+    scaner_uuid, remarks, store_uuid, daily_sign, voucher, content, code, type, bar_code,
+    is_sign
+  </sql>
+   <sql id="Base_Column_List_G" >
+    fake_id, order_uuid, create_datetime, update_datetime, delete_at, user_uuid,
+    coupon_uuids, total_money, coupon_money, fraction, paid_money, numbers, pay_status, 
+    pay_way, order_number, alipay_number, wechat_number, pay_time, fail_time, collect_time, 
+    comment_time, return_time, address_uuid, delivery_time, give_status, sign_time, courier_uuid, 
+    scaner_uuid, remarks, store_uuid, daily_sign, voucher, content, code, type, bar_code,
     is_sign
   </sql>
   <sql id="Blob_Column_List" >
     car_uuids
   </sql>
+  
+  
+  
+  <select id="selectByActivityGood"  parameterType="java.lang.String">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from goods
+  	where good_uuid in(
+		select good_uuid from activity_zones 
+		 where activity_uuid = #{activity_uuid,jdbcType=VARCHAR}
+	)
+  </select>
+  
+  
+  
+  
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -71,14 +95,14 @@
   
   <select id="searchOrderByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
   	select 
-  	<include refid="Base_Column_List"/>
+  	<include refid="Base_Column_List_G"/>
   	from orders
   	where delete_at is null
   	<if test="orderNumber != null and orderNumber != ''">
   		and order_number = #{orderNumber,jdbcType=VARCHAR}
   	</if>
   	<if test="phone != null and phone != ''">
-  		and (
+  		and user_uuid in(
   			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
   		)
   	</if>
@@ -101,7 +125,7 @@
   		and order_number = #{orderNumber,jdbcType=VARCHAR}
   	</if>
   	<if test="phone != null and phone != ''">
-  		and (
+  		and user_uuid in(
   			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
   		)
   	</if>

@@ -46,7 +46,7 @@
     <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    o.fake_id, o.order_uuid, o.create_datetime, o.update_datetime, o.delete_at, o.user_uuid, o.good_uuid, 
+    o.fake_id, o.order_uuid, o.create_datetime, o.update_datetime, o.delete_at, o.user_uuid,
     o.coupon_uuids, o.total_money, o.coupon_money, o.fraction, o.paid_money, o.numbers, o.pay_status, 
     o.pay_way, o.order_number, o.alipay_number, o.wechat_number, o.pay_time, o.fail_time, o.collect_time, 
     o.comment_time, o.return_time, o.address_uuid, o.delivery_time, o.give_status, o.sign_time, o.courier_uuid, 
@@ -67,9 +67,9 @@
 	  	<if test="orderNumber != null and orderNumber != ''">
 	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
 	  	</if>
-	  	<if test="phone != null and phone != ''">
+	  	<if test="nickname != null and nickname != ''">
 	  		and o.user_uuid in (
-	  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
+	  			select user_uuid from users where nickname =CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%') 
 	  		)
 	  	</if>
 	  	<if test="startTime!=null and startTime!=''">
@@ -92,7 +92,7 @@
 	  	</if>
 	  	<if test="phone != null and phone != ''">
 	  		and o.user_uuid in (
-	  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
+	  			select user_uuid from users where nickname =CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%') 
 	  		)
 	  	</if>
 	  	<if test="startTime!=null and startTime!=''">
@@ -103,6 +103,56 @@
   		</if>
 	 	<if test="storeUuid != null and storeUuid != ''">
 	  		and o.store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	  	</if>
+  </select>
+  
+  
+  
+  
+  <select id="searchOrderByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	  	select 
+	  	<include refid="Base_Column_List"/>
+	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
+	  	where o.delete_at is null
+	  	<if test="orderNumber != null and orderNumber != ''">
+	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="nickname != null and nickname != ''">
+	  		and o.user_uuid in (
+	  			select user_uuid from users where nickname =CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%') 
+	  		)
+	  	</if>
+	  	<if test="startTime!=null and startTime!=''">
+  			and o.create_datetime &gt; = #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime!=null and endTime!=''">
+  			and o.create_datetime &lt; = #{endTime,jdbcType=VARCHAR}
+  		</if>
+	  	<if test="payStatus != null and payStatus != '' ">
+	  		and pay_status = #{payStatus,jdbcType=VARCHAR}
+	  	</if>
+	  	order by o.create_datetime desc LIMIT #{start},#{end}
+    </select>
+  
+  <select id="countOrderyMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
+  	where o.delete_at is null
+  	<if test="orderNumber != null and orderNumber != ''">
+	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="phone != null and phone != ''">
+	  		and o.user_uuid in (
+	  			select user_uuid from users where nickname =CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%') 
+	  		)
+	  	</if>
+	  	<if test="startTime!=null and startTime!=''">
+  			and o.create_datetime &gt; = #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime!=null and endTime!=''">
+  			and o.create_datetime &lt; = #{endTime,jdbcType=VARCHAR}
+  		</if>
+	  	<if test="payStatus != null and payStatus != '' ">
+	  		and pay_status = #{payStatus,jdbcType=VARCHAR}
 	  	</if>
   </select>
   

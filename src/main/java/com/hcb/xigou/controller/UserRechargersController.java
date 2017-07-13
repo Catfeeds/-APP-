@@ -62,17 +62,25 @@ public class UserRechargersController extends BaseController{
 			int start = (pageIndex - 1) * pageSize;
 			map.put("start", start);
 			map.put("end", pageSize);
-			if(bodyInfo.getString("name")!=null&&!"".equals(bodyInfo.getString("name"))){
-				map.put("name", bodyInfo.getString("name"));
+			if(bodyInfo.getString("name")!=null){
+				if(!"".equals(bodyInfo.getString("name"))){
+					map.put("name", bodyInfo.getString("name"));
+				}
 			}
-			if(bodyInfo.getString("nickname")!=null&&!"".equals(bodyInfo.getString("nickname"))){
-				map.put("nickname", bodyInfo.getString("nickname"));
+			if(bodyInfo.getString("nickname")!=null){
+				if(!"".equals(bodyInfo.getString("nickname"))){
+					map.put("nickname", bodyInfo.getString("nickname"));
+				}
 			}
-			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
-				map.put("phone", bodyInfo.getString("phone"));
+			if(bodyInfo.getString("phone")!=null){
+				if(!"".equals(bodyInfo.getString("phone"))){
+					map.put("phone", bodyInfo.getString("phone"));
+				}
 			}
-			if(bodyInfo.getString("third_way")!=null&&!"".equals(bodyInfo.getString("third_way"))){
-				map.put("thirdWay", bodyInfo.getString("third_way"));
+			if(bodyInfo.getString("third_way")!=null){
+				if(!"".equals(bodyInfo.getString("third_way"))){
+					map.put("third_way", bodyInfo.getString("third_way"));
+				}
 			}
 			list = userRechargersService.searchUserRechargersByMap(map);
 			Integer count = 0;

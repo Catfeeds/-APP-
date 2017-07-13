@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.OrdersMapper;
-import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.Orders;
 import com.hcb.xigou.service.IOrdersService;
 

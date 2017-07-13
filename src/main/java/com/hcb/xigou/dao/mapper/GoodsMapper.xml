@@ -80,16 +80,16 @@
   	</if>
    	order by create_datetime desc LIMIT #{start},#{end}
   </select>
-
   
-
-  <select id="selectGoodById" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">
-  	<include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from goods
-  	where 
-  	fake_id = #{fakeId,jdbcType=INTEGER} and delete_at is null
+  <!-- 热销活动内商品 -->
+  <select id="searchGood" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">
+  select 
+  <include refid="Base_Column_List"/>
+    from goods 
+  	where good_uuid in(
+		SELECT good_uuid FROM activity_zones 
+		  where activity_uuid = #{activity_uuid,jdbcType=VARCHAR}
+	)
   </select>
 
   <delete id="deleteByGoodsId" parameterType="java.lang.Integer" >

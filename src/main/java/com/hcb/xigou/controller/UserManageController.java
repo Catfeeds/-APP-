@@ -63,6 +63,7 @@ public class UserManageController extends BaseController{
 			int start = (pageIndex - 1) * pageSize;
 			map.put("start", start);
 			map.put("end", pageSize);
+			
 			if(bodyInfo.get("name")!=null){
 				if(!"".equals(bodyInfo.getString("name"))){
 					map.put("name", bodyInfo.getString("name"));

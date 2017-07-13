@@ -1,7 +1,9 @@
 package com.hcb.xigou.dao.interfaceClass;
 
+import java.util.List;
 import java.util.Map;
 
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
 
 public interface PopularActivityMapper {
@@ -14,4 +16,10 @@ public interface PopularActivityMapper {
 
 	PopularActivity selectByPopularActivityId(String activity_uuid);
 
+	int insertActivity(PopularActivity popAct);
+
+	List<PopularActivity> searchPopularActivityByMap(Map<String, Object> map);
+
+	int countPopularActivityByMap(Map<String, Object> map);
+	
 }

@@ -1,6 +1,7 @@
 package com.hcb.xigou.dto;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Orders {
@@ -8,9 +9,9 @@ public class Orders {
 
     private String orderUuid;
 
-    private Date createDatetime;
+    private String createDatetime;
 
-    private Date updateDatetime;
+    private String updateDatetime;
 
     private String deleteAt;
 
@@ -98,20 +99,24 @@ public class Orders {
         this.orderUuid = orderUuid == null ? null : orderUuid.trim();
     }
 
-    public Date getCreateDatetime() {
+    public String getCreateDatetime() {
         return createDatetime;
     }
 
     public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(createDatetime);
+        this.createDatetime = time;
     }
 
-    public Date getUpdateDatetime() {
+    public String getUpdateDatetime() {
         return updateDatetime;
     }
 
     public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(updateDatetime);
+        this.updateDatetime = time;
     }
 
     public String getDeleteAt() {

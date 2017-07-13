@@ -79,11 +79,12 @@ public class MemberManageController extends BaseController{
 					map.put("phone", bodyInfo.getString("phone"));
 				}
 			}
-			if(bodyInfo.getString("member_card_number")!=null){
+			if(bodyInfo.get("member_card_number")!=null){
 				if(!"".equals(bodyInfo.getString("member_card_number"))){
 					map.put("memberCardNumber", bodyInfo.getString("member_card_number"));
 				}
 			}
+			
 			list = userManageService.searchMemberMagageByMap(map);
 			Integer count = 0;
 			count = userManageService.countMemberMagageByMap(map);
@@ -99,7 +100,7 @@ public class MemberManageController extends BaseController{
 				}
 				model.put("total", total);
 				model.put("page", pageIndex);
-			} else {
+			}else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
 					json.put("result", "1");
@@ -114,7 +115,7 @@ public class MemberManageController extends BaseController{
 		
 		model.put("description", "查询成功");
 		model.put("result",0);
-		model.put("userManagerList", list);
+		model.put("memberManageList", list);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
 		a = a.replace("]\"", "]");

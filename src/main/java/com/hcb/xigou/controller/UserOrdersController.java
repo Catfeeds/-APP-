@@ -63,20 +63,28 @@ public class UserOrdersController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(bodyInfo.getString("order_number")!=null&&!"".equals(bodyInfo.getString("order_number"))){
-				map.put("orderNumber",bodyInfo.getString("order_number"));
+			if(bodyInfo.get("order_number")!=null){
+				if(!"".equals(bodyInfo.getString("order_number"))){
+					map.put("orderNumber",bodyInfo.getString("order_number"));
+				}
 			}
-			if(bodyInfo.getString("phone")!=null&&!"".equals(bodyInfo.getString("phone"))){
-				map.put("phone",bodyInfo.getString("phone"));
+			if(bodyInfo.get("nickname")!=null){
+				if(!"".equals(bodyInfo.getString("nickname"))){
+					map.put("nickname",bodyInfo.getString("nickname"));
+				}
 			}
-			if(bodyInfo.getString("startTime")!=null){
+			if(bodyInfo.get("startTime")!=null){
 				map.put("startTime", bodyInfo.getString("startTime"));
 			}
-			if(bodyInfo.getString("endTime")!=null){
-				map.put("endTime", bodyInfo.getString("endTime"));
+			if(bodyInfo.get("endTime")!=null){
+				if(!"".equals(bodyInfo.getString("endTime"))){
+					map.put("endTime", bodyInfo.getString("endTime"));
+				}
 			}
-			if(bodyInfo.getString("store_uuid")!=null){
-				map.put("storeUuid", bodyInfo.getString("store_uuid"));
+			if(bodyInfo.get("store_uuid")!=null){
+				if(!"".equals(bodyInfo.getString("store_uuid"))){
+					map.put("storeUuid", bodyInfo.getString("store_uuid"));
+				}
 			}
 			
 			list = userOrdersService.searchUsersOrderByMap(map);

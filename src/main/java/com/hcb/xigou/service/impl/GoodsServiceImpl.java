@@ -75,4 +75,16 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.updateByGoodsUuid(record);
 	}
 
+	@Override
+	public Goods selectByActivityGood(String activityUuid) {
+		
+		return goodsMapper.selectByActivityGood(activityUuid);
+	}
+
+	@Override
+	public List<Goods> searchGood(String activity_uuid) {
+		
+		return goodsMapper.searchGood(activity_uuid);
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hcb.xigou.dto.UserActivity;
+import com.hcb.xigou.pojo.Goods;
 
 public interface UserActivityService {
 
@@ -18,5 +19,6 @@ public interface UserActivityService {
 	List<UserActivity> searchUserActivityByMap(Map<String, Object> map);
 
 	int countUserActivityByMap(Map<String, Object> map);
+
 
 }

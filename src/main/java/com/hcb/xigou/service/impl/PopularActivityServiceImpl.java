@@ -1,11 +1,13 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.PopularActivityMapper;
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
 import com.hcb.xigou.service.PopularActivityService;
 
@@ -38,5 +40,22 @@ public class PopularActivityServiceImpl implements PopularActivityService {
 		
 		return PopularActivityMapper.selectByPopularActivityId(activity_uuid);
 	}
-	
+
+	@Override
+	public int insertActivity(PopularActivity popAct) {
+		
+		return PopularActivityMapper.insertActivity(popAct);
+	}
+
+	@Override
+	public List<PopularActivity> searchPopularActivityByMap(Map<String, Object> map) {
+		
+		return PopularActivityMapper.searchPopularActivityByMap(map);
+	}
+
+	@Override
+	public int countPopularActivityByMap(Map<String, Object> map) {
+		
+		return PopularActivityMapper.countPopularActivityByMap(map);
+	}
 }
