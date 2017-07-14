@@ -70,4 +70,16 @@ public class FirstCategorysServiceImpl implements IFirstCategorysService{
 		return firstCategorysMapper.countCategoryByMap(map);
 	}
 
+	@Override
+	public int updateByfirstUuid(FirstCategorys record) {
+		// TODO Auto-generated method stub
+		return firstCategorysMapper.updateByfirstUuid(record);
+	}
+
+	@Override
+	public int deleteByFirstUuids(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return firstCategorysMapper.deleteByFirstUuids(map);
+	}
+
 }

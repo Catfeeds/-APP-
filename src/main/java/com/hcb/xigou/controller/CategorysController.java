@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
-import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.FirstCategorys;
-import com.hcb.xigou.pojo.Goods;
-import com.hcb.xigou.pojo.GoodsWithBLOBs;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
 import com.hcb.xigou.util.MD5Util;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
@@ -148,7 +146,7 @@ public class CategorysController extends BaseController{
 	}
 	
 	
-	/*@RequestMapping("insert")
+	@RequestMapping("insert")
 	@ResponseBody
 	public String insert(){
 		JSONObject json = new JSONObject();
@@ -157,12 +155,10 @@ public class CategorysController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("unit_price")==null||bodyInfo.get("title") == null||
-			bodyInfo.get("second_uuid") == null||bodyInfo.get("first_uuid") == null||
-			bodyInfo.get("category_name") == null||bodyInfo.get("description") == null||
-			bodyInfo.get("photos") == null||bodyInfo.get("cover") == null||
-			bodyInfo.get("poster") == null) {
+		if (bodyInfo.get("category_name")==null||bodyInfo.get("image") == null||
+			headInfo.get("store_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
@@ -175,39 +171,127 @@ public class CategorysController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String goodUuid = "";
+		String firstUuid = "";
 		try {
-			goodUuid = MD5Util.md5Digest(bodyInfo.getString("unit_price") + System.currentTimeMillis() + RandomStringUtils.random(8));
+			firstUuid = MD5Util.md5Digest(bodyInfo.getString("unit_price") + System.currentTimeMillis() + RandomStringUtils.random(8));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 		FirstCategorys first =new FirstCategorys();
-		first.setGoodUuid(goodUuid);
-		first.setSecondCategoryName(bodyInfo.getString("category_name"));
+		first.setFirstUuid(firstUuid);
 		first.setCreateDatetime(createTime);
-		first.setFirstUuid(bodyInfo.getString("first_uuid"));
-		first.setSecondUuid(bodyInfo.getString("second_uuid"));
-		first.setCover(bodyInfo.getString("cover"));
-		BigDecimal unitPrice=new BigDecimal(bodyInfo.getString("unit_price"));
-		first.setUnitPrice(unitPrice);
-		first.setPhotos(bodyInfo.getString("photos"));
-		first.setPoster(bodyInfo.getString("poster"));
-		first.setTitle(bodyInfo.getString("title"));
-		
-		FirstCategorys first = firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
-		first.setFirtCategoryName(first.getCategoryName());
+		first.setCategoryName(bodyInfo.getString("category_name"));
+		first.setImage(bodyInfo.getString("image"));
+		first.setStoreUuid(headInfo.getString("store_uuid"));
 		
 		int rs = 0;
 		rs = firstCategorysService.insertSelective(first);
 		if(rs == 1){
 			json.put("result", 0);
-			json.put("description", "添加商品成功");
+			json.put("description", "添加商品分类成功");
 			return buildReqJsonObject(json);
 		}else{
 			json.put("result", 1);
-			json.put("description", "添加商品失败，请重试");
+			json.put("description", "添加商品分类失败，请重试");
 			return buildReqJsonObject(json);
 		}
-	}*/
+	}
+	
+	
+	@RequestMapping("update")
+	@ResponseBody
+	public String update(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("category_name")==null||bodyInfo.get("image") == null||
+			headInfo.get("store_uuid") == null||bodyInfo.get("first_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date updateTime = new Date();
+		try {
+			String updateAt=null;
+			updateTime = format.parse(updateAt);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		FirstCategorys first =firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
+		if(first !=null){
+			first.setCreateDatetime(updateTime);
+			first.setCategoryName(bodyInfo.getString("category_name"));
+			first.setImage(bodyInfo.getString("image"));
+			first.setStoreUuid(headInfo.getString("store_uuid"));
+			
+			int rs = 0;
+			rs = firstCategorysService.updateByfirstUuid(first);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "编辑商品分类成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "编辑商品分类失败，请重试");
+				return buildReqJsonObject(json);
+			}
+		}else{
+			json.put("result", 1);
+			json.put("description", "查询不到商品，请重试");
+			return buildReqJsonObject(json);
+		}
+		
+	}
+	
+	@RequestMapping("delete")
+	@ResponseBody
+	public String delete(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("first_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		JSONArray jsonArray = bodyInfo.getJSONArray("first_uuid");
+		List<String> firstUuids = new ArrayList<String>();
+		for(int i=0;i<jsonArray.size();i++){
+			firstUuids.add(jsonArray.getString(i));
+		}
+		if(firstUuids.size()>0){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("firstUuids", firstUuids);
+			map.put("deleteAt", new Date());
+			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
+				map.put("storeUuid", headInfo.getString("store_uuid"));
+			}
+			int rs = firstCategorysService.deleteByFirstUuids(map);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "删除成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "请检查参数格式是否正确或者参数是否完整");
+				return buildReqJsonObject(json);
+			}
+		}else{
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+	}
 }

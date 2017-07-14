@@ -23,4 +23,8 @@ public interface FirstCategorysMapper {
     List<FirstCategorys> searchCategoryByMap(Map<String,Object> map);
     
     int countCategoryByMap(Map<String,Object> map);
+    
+    int deleteByFirstUuids(Map<String,Object> map);
+    
+    int updateByfirstUuid(FirstCategorys record);
 }

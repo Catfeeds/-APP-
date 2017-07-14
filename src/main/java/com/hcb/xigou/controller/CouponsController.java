@@ -324,7 +324,7 @@ public class CouponsController  extends BaseController{
 	public String update(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
