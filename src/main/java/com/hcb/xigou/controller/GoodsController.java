@@ -64,12 +64,12 @@ public class GoodsController extends BaseController{
 		if(goodUUids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("goodUUids", "goodUUids");
-			map.put("deleteAt", new Date());
+			map.put("deleteAt", "del");
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
 			int rs = goodsService.deleteByGoodUuids(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "删除成功");
 				return buildReqJsonObject(json);

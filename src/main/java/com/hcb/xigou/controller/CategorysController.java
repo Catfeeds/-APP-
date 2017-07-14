@@ -226,7 +226,7 @@ public class CategorysController extends BaseController{
 		}
 		FirstCategorys first =firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
 		if(first !=null){
-			first.setCreateDatetime(updateTime);
+			first.setUpdateDatetime(updateTime);
 			first.setCategoryName(bodyInfo.getString("category_name"));
 			first.setImage(bodyInfo.getString("image"));
 			first.setStoreUuid(headInfo.getString("store_uuid"));
@@ -274,12 +274,12 @@ public class CategorysController extends BaseController{
 		if(firstUuids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("firstUuids", firstUuids);
-			map.put("deleteAt", new Date());
+			map.put("deleteAt", "del");
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
 			int rs = firstCategorysService.deleteByFirstUuids(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "删除成功");
 				return buildReqJsonObject(json);

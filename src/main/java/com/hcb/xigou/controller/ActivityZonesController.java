@@ -1,5 +1,6 @@
 package com.hcb.xigou.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -91,8 +92,16 @@ public class ActivityZonesController extends BaseController{
 		}
 		ActivityZones activity = activityZonesService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
 		if(activity !=null){
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date updateTime = new Date();
+			try {
+				String updateAt=null;
+				updateTime = format.parse(updateAt);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			activity.setTitle(bodyInfo.getString("title"));
-			activity.setUpdateDatetime(new Date());
+			activity.setUpdateDatetime(updateTime);
 			activity.setImage(bodyInfo.getString("image"));
 			activity.setType("coupon");
 			activity.setStoreUuid(bodyInfo.getString("store_uuid"));
@@ -134,8 +143,16 @@ public class ActivityZonesController extends BaseController{
 		}
 		ActivityZones activity = activityZonesService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
 		if(activity !=null){
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date updateTime = new Date();
+			try {
+				String updateAt=null;
+				updateTime = format.parse(updateAt);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			activity.setUpdateDatetime(updateTime);
 			activity.setIsStop("1");
-			activity.setUpdateDatetime(new Date());
 			int rs = 0;
 			rs = activityZonesService.updateByActivityUuid(activity);
 			if(rs == 1){
@@ -181,11 +198,12 @@ public class ActivityZonesController extends BaseController{
 		if(activityUuids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("activityUuids", activityUuids);
+			map.put("deleteAt", "del");
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
 			int rs = activityZonesService.deleteByActivityUuids(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "删除成功");
 				return buildReqJsonObject(json);

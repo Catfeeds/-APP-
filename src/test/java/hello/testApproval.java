@@ -46,6 +46,9 @@ public class testApproval {
         map.put("head", head);	
         
         HashMap<String, Object> body = new HashMap<String, Object>();
+        JSONArray jsonDp1 = new JSONArray(); 
+        jsonDp1.add(0, "ea3a6d35ae1e989ea4b42cc6eb5ffe17");
+        jsonDp1.add(1, "2d1c701ff70946e5a691358c01d7b030");
       /*  JSONArray jsonDp1 = new JSONArray(); 
         jsonDp1.add(0, "dhhdh");*/
  /*       body.put("merchant_name", "胡巴");
@@ -79,14 +82,17 @@ public class testApproval {
       // body.put("myOrderUuid", "327597acb07002532c561e97ab894058");
         /*body.put("order_uuid", "e9593a58d0397ac0451a0641236fc9d4");
         body.put("purchase_car_uuid", "b1873d210f4161034714eef975693174");
-        body.put("reason", "质量问题");
-        body.put("number", 10);*/
+        body.put("reason", "质量问题");*/
+        body.put("number", 10);
         body.put("amount", "23");
         body.put("grant_time", "2017-06-06");
         body.put("fail_time", "2017-07-07");
         body.put("url", "www.baidu.com");
         body.put("coupon_name", "丰富的");
         body.put("coupon_stock", "12");
+        body.put("coupon_uuid",jsonDp1 );
+        body.put("pageIndex",1 );
+        body.put("pageSize",15);
         map.put("body",body);
   
         
