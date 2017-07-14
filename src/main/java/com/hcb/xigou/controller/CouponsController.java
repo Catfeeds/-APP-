@@ -35,7 +35,7 @@ public class CouponsController  extends BaseController{
 	public String delete(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -76,7 +76,7 @@ public class CouponsController  extends BaseController{
 	public String detail(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -104,25 +104,25 @@ public class CouponsController  extends BaseController{
 	public String search(){
 		JSONObject json = new JSONObject();
 		if (sign == 1) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
 		// 登录认证失败
 		if (sign == 2) {
-			json.put("result", "2");
+			json.put("result", 2);
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "操作失败，请检查输入的参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		if ("".equals(bodyInfo.get("pageIndex")) || "".equals(bodyInfo.get("pageSize"))) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "操作失败，请检查输入的参数是否正确");
 			return buildReqJsonObject(json);
 		}
@@ -132,7 +132,7 @@ public class CouponsController  extends BaseController{
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");
 		if (pageIndex <= 0) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "操作失败，pageIndex不小于0");
 			return buildReqJsonObject(json);
 		} else {
@@ -155,7 +155,7 @@ public class CouponsController  extends BaseController{
 				Integer sign = 0;
 				if (!total.equals(sign)) {
 					if (pageIndex > total) {
-						json.put("result", "1");
+						json.put("result", 1);
 						json.put("description", "操作失败，请求页数大于总页数");
 						return buildReqJsonObject(json);
 					}
@@ -166,7 +166,7 @@ public class CouponsController  extends BaseController{
 			} else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
-					json.put("result", "1");
+					json.put("result", 1);
 					json.put("description", "操作失败，请求页数大于总页数");
 					return buildReqJsonObject(json);
 				}
@@ -177,7 +177,7 @@ public class CouponsController  extends BaseController{
 		}
 		
 		model.put("description", "查询成功");
-		model.put("result", "0");
+		model.put("result", 0);
 		model.put("couponList", list);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
@@ -190,7 +190,7 @@ public class CouponsController  extends BaseController{
 	public String insert(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -249,7 +249,7 @@ public class CouponsController  extends BaseController{
 	public String couponStock(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -287,7 +287,7 @@ public class CouponsController  extends BaseController{
 	public String isGrant(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
