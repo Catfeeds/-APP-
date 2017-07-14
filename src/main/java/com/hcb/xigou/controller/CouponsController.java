@@ -202,15 +202,20 @@ public class CouponsController  extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date createTime = new Date();
-		Date grantTime = new Date();
-		Date failTime = new Date();
 		try {
 			String createAt=null;
 			createTime = format.parse(createAt);
-			grantTime = format.parse(bodyInfo.getString("grant_time"));
-			failTime = format.parse(bodyInfo.getString("fail_time"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		Date grantTime = new Date();
+		Date failTime = new Date();
+		try {
+			grantTime = format1.parse(bodyInfo.getString("grant_time"));
+			failTime = format1.parse(bodyInfo.getString("fail_time"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -331,33 +336,35 @@ public class CouponsController  extends BaseController{
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("amount")==null||bodyInfo.get("grant_time") == null||
 			bodyInfo.get("fail_time") == null||bodyInfo.get("url") == null||
-			bodyInfo.get("coupon_name") == null||bodyInfo.get("type") == null||
-			bodyInfo.get("coupon_stock") == null||bodyInfo.get("coupon_uuid") == null) {
+			bodyInfo.get("coupon_name") == null||bodyInfo.get("coupon_stock") == null||
+			bodyInfo.get("coupon_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		Coupons coupon = couponsService.selectByCouponUuid(bodyInfo.getString("coupon_uuid"));
 		if(coupon != null){
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date updateTime = new Date();
-			Date grantTime = new Date();
-			Date failTime = new Date();
 			try {
 				String updateAt=null;
 				updateTime = format.parse(updateAt);
-				grantTime = format.parse(bodyInfo.getString("grant_time"));
-				failTime = format.parse(bodyInfo.getString("fail_time"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			UUID uuid = UUID.randomUUID();
-			String couponUuid= uuid.toString();
+			SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+			Date grantTime = new Date();
+			Date failTime = new Date();
+			try {
+				grantTime = format1.parse(bodyInfo.getString("grant_time"));
+				failTime = format1.parse(bodyInfo.getString("fail_time"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			coupon.setAmount(bodyInfo.getString("amount"));
 			coupon.setTitle(bodyInfo.getString("coupon_name"));
 			coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
-			coupon.setType(bodyInfo.getString("type"));
-			coupon.setCouponUuid(couponUuid);
+			//coupon.setType(bodyInfo.getString("type"));
 			coupon.setUpdateDatetime(updateTime);
 			coupon.setGrantTime(grantTime);
 			coupon.setFailTime(failTime);

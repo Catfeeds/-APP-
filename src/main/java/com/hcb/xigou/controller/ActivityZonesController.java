@@ -91,9 +91,6 @@ public class ActivityZonesController extends BaseController{
 		}
 		ActivityZones activity = activityZonesService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
 		if(activity !=null){
-			UUID uuid = UUID.randomUUID();
-			String activityUuid= uuid.toString();
-			activity.setActivityUuid(activityUuid);
 			activity.setTitle(bodyInfo.getString("title"));
 			activity.setUpdateDatetime(new Date());
 			activity.setImage(bodyInfo.getString("image"));
