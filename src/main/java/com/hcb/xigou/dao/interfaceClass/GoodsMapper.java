@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hcb.xigou.dto.Banners;
+import com.hcb.xigou.dto.UserActivity;
 import com.hcb.xigou.pojo.Goods;
 
 public interface GoodsMapper {
@@ -33,5 +34,13 @@ public interface GoodsMapper {
 
 	public Goods selectByActivityGood(String activityUuid);
 
-	public List<Goods> searchGood(String activity_uuid);
+	public List<UserActivity> searchGood(String activity_uuid);
+
+	public int updateByPrimaryKeySelective(Goods good);
+
+	public List<Goods> secondUuid(Map<String, Object> map);
+
+	public List<Goods> firstUuid();
+
+	public List<Goods> searchGoodUuid(Map<String, Object> map);
 }

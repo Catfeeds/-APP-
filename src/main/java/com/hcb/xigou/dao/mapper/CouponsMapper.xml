@@ -51,7 +51,7 @@
   	set delete_at = #{deleteAt,jdbcType=VARCHAR}
     where 
 	<if test="couponUuids!='' and couponUuids!=null ">
-		and coupon_uuid in 
+		coupon_uuid in 
 	    <foreach item="item" index="index" collection="couponUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>

@@ -3,9 +3,8 @@ package com.hcb.xigou.service;
 import java.util.List;
 import java.util.Map;
 
-import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
-import com.hcb.xigou.pojo.GoodsWithBLOBs;
+import com.hcb.xigou.pojo.Goods;
 
 public interface PopularActivityService {
 
@@ -22,6 +21,8 @@ public interface PopularActivityService {
 	List<PopularActivity> searchPopularActivityByMap(Map<String, Object> map);
 
 	int countPopularActivityByMap(Map<String, Object> map);
+
+	int updateByPrimaryKeySelective(Goods good);
 
 
 

@@ -1,5 +1,6 @@
 package com.hcb.xigou.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Banners {
@@ -7,9 +8,9 @@ public class Banners {
 
     private String bannerUuid;
 
-    private Date createDatetime;
+    private String createDatetime;
 
-    private Date updateDatetime;
+    private String updateDatetime;
 
     private String deleteAt;
 
@@ -59,20 +60,24 @@ public class Banners {
         this.bannerUuid = bannerUuid == null ? null : bannerUuid.trim();
     }
 
-    public Date getCreateDatetime() {
+    public String getCreateDatetime() {
         return createDatetime;
     }
 
     public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(createDatetime);
+        this.createDatetime = time;
     }
 
-    public Date getUpdateDatetime() {
+    public String getUpdateDatetime() {
         return updateDatetime;
     }
 
     public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(updateDatetime);
+        this.updateDatetime = time;
     }
 
     public String getDeleteAt() {

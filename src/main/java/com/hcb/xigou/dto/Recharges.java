@@ -1,6 +1,7 @@
 package com.hcb.xigou.dto;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Recharges {
@@ -8,9 +9,9 @@ public class Recharges {
 
     private String rechargeUuid;
 
-    private Date createDatetime;
+    private String createDatetime;
 
-    private Date updateDatetime;
+    private String updateDatetime;
 
     private String deleteAt;
 
@@ -22,7 +23,7 @@ public class Recharges {
 
     private String alipayNumber;
 
-    private Date payTime;
+    private String payTime;
 
     private BigDecimal amount;
 
@@ -46,20 +47,24 @@ public class Recharges {
         this.rechargeUuid = rechargeUuid == null ? null : rechargeUuid.trim();
     }
 
-    public Date getCreateDatetime() {
+    public String getCreateDatetime() {
         return createDatetime;
     }
 
     public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(createDatetime);
+        this.createDatetime = time;
     }
 
-    public Date getUpdateDatetime() {
+    public String getUpdateDatetime() {
         return updateDatetime;
     }
 
     public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(updateDatetime);
+        this.updateDatetime = time;
     }
 
     public String getDeleteAt() {
@@ -102,12 +107,14 @@ public class Recharges {
         this.alipayNumber = alipayNumber == null ? null : alipayNumber.trim();
     }
 
-    public Date getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
     public void setPayTime(Date payTime) {
-        this.payTime = payTime;
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String time = format.format(payTime);
+        this.payTime = time;
     }
 
     public BigDecimal getAmount() {

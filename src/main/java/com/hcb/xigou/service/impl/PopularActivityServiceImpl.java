@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.PopularActivityMapper;
-import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
+import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.PopularActivityService;
 
 @Service("PopularActivityService")
@@ -57,5 +57,11 @@ public class PopularActivityServiceImpl implements PopularActivityService {
 	public int countPopularActivityByMap(Map<String, Object> map) {
 		
 		return PopularActivityMapper.countPopularActivityByMap(map);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Goods good) {
+		
+		return PopularActivityMapper.updateByPrimaryKeySelective(good);
 	}
 }

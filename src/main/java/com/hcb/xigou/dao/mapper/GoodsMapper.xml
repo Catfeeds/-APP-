@@ -38,6 +38,34 @@
     poster, photos, models
   </sql>
   
+  <!-- 查询商品的一级类名和一级类uuid -->
+  <select id="firstUuid" resultType="com.hcb.xigou.pojo.Goods">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from goods
+  	where delete_at is null
+  </select>
+  
+  <!-- 查询商品的二级类名和二级类uuid -->
+  <select id="secondUuid"  parameterType="java.util.HashMap" resultType="com.hcb.xigou.pojo.Goods">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from goods
+  	where delete_at is null
+  	<if test=" firstUuid !=null and firstUuid !=''">
+  		and first_uuid = #{firstUuid,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  <!-- 二级分类下的商品 -->
+  <select id="searchGoodUuid" parameterType="java.util.HashMap" resultType="com.hcb.xigou.pojo.Goods">
+  		select 
+  		<include refid="Base_Column_List"/>
+  		from goods
+  		where delete_at is null
+  		<if test="secondUuid != null and secondUuid != ''">
+  			and second_uuid = #{secondUuid,jdbcType=VARCHAR}
+  		</if>
+  </select>
   
   <select id="countGoodsByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
     select  count(1) from goods 
@@ -88,7 +116,7 @@
     from goods 
   	where good_uuid in(
 		SELECT good_uuid FROM activity_zones 
-		  where activity_uuid = #{activity_uuid,jdbcType=VARCHAR}
+		  where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
 	)
   </select>
 
@@ -377,7 +405,7 @@
         models = #{models,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where fake_id = #{fakeId,jdbcType=INTEGER}
+    where good_uuid = #{goodUuid,jdbcType=VARCHAR}
   </update>
   
    <update id="updateByGoodsUuid" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >

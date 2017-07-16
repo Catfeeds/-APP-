@@ -1,16 +1,8 @@
 package hello;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -20,8 +12,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-
 import com.alibaba.fastjson.JSON;
+
+
 
 /**
  * [说明/描述]
@@ -43,7 +36,7 @@ public class testApproval {
         head.put("password", "123456");*/
         head.put("nickname", "admin");
         head.put("password", "123456");
-        map.put("head", head);	
+       // map.put("head", head);	
         
         HashMap<String, Object> body = new HashMap<String, Object>();
       /*  JSONArray jsonDp1 = new JSONArray(); 
@@ -87,6 +80,7 @@ public class testApproval {
 //        body.put("nickname", "");
 //        body.put("phone", "");
 //        body.put("member_card_number", "");
+        //body.put("first_uuid","db4cc5d1bf963f0d241a5e31acf0cd4c");
         map.put("body",body);
   
         

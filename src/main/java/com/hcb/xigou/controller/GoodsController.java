@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,27 +150,27 @@ public class GoodsController extends BaseController{
 			map.put("start", start);
 			map.put("end", pageSize);
 			
-			if(bodyInfo.getString("good_name")!=null){
+			if(bodyInfo.get("good_name")!=null){
 				if(!"".equals(bodyInfo.getString("good_name"))){
 					map.put("goodName",bodyInfo.getString("good_name"));
 				}
 			}
-			if(bodyInfo.getString("firt_category_name")!=null){
+			if(bodyInfo.get("firt_category_name")!=null){
 				if(!"".equals(bodyInfo.getString("good_name"))){
 					map.put("firtCategoryName",bodyInfo.getString("firt_category_name"));
 				}
 			}
-			if(bodyInfo.getString("good_status")!=null){
+			if(bodyInfo.get("good_status")!=null){
 				if(!"".equals(bodyInfo.getString("good_status"))){
 					map.put("goodStatus",bodyInfo.getString("good_status"));
 				}
 			}
-			if(bodyInfo.getString("minPrice")!=null){
+			if(bodyInfo.get("minPrice")!=null){
 				if(!"".equals(bodyInfo.getString("minPrice"))){
 					map.put("minPrice",bodyInfo.getString("minPrice"));
 				}
 			}
-			if(bodyInfo.getString("maxPrice")!=null){
+			if(bodyInfo.get("maxPrice")!=null){
 				if(!"".equals(bodyInfo.getString("maxPrice"))){
 					map.put("maxPrice",bodyInfo.getString("maxPrice"));
 				}
@@ -200,6 +199,7 @@ public class GoodsController extends BaseController{
 				}
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count", count);
 			}
 		}
 		

@@ -45,7 +45,7 @@ public class UserActivityController extends BaseController{
 			return buildReqJsonInteger(2, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
+	/*	if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
 			json.put("description", "操作失败，请检查输入的参数是否完整");
 			return buildReqJsonObject(json);
@@ -54,10 +54,11 @@ public class UserActivityController extends BaseController{
 			json.put("result", "1");
 			json.put("description", "操作失败，请检查输入的参数是否正确");
 			return buildReqJsonObject(json);
-		}
+		}*/
 		ModelMap model = new ModelMap();
 
 		List<UserActivity> list = new ArrayList<UserActivity>();
+		List<Map<String,Goods>> listGood = new ArrayList<Map<String,Goods>>();
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");
 		if (pageIndex <= 0) {
@@ -66,10 +67,16 @@ public class UserActivityController extends BaseController{
 			return buildReqJsonObject(json);
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> mapGood = new HashMap<String, Object>();
 			int start = (pageIndex - 1) * pageSize;
 			map.put("start", start);
 			map.put("end", pageSize);
+			
 			list = userActivityService.searchUserActivityByMap(map);
+			//map.put(key, value)
+			/*for(int i = 0;i<list.size();i++){
+				listGood.add((Map<String,Goods>)mapGood.put(list.get(i).getActivityUuid(),goodsService.searchGood(list.get(i).getActivityUuid())));
+			}*/
 			Integer count = 0;
 			count = userActivityService.countUserActivityByMap(map);
 			if (count % pageSize == 0) {
@@ -93,19 +100,104 @@ public class UserActivityController extends BaseController{
 				}
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count", count);
 			}
 		}
 		
 		model.put("description", "查询成功");
 		model.put("result",0);
 		model.put("userActivityList", list);
+		//model.put("listGood", listGood);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
 		a = a.replace("]\"", "]");
 		return a;
 	}
+	/*
+	 * 一级分类
+	 * */
+	@RequestMapping("searchfirstUuid")
+	@ResponseBody
+	public String firstUuid(){
+		JSONObject json = new JSONObject();
+		List<Goods> firstUuidList = new ArrayList<Goods>();
+		firstUuidList = goodsService.firstUuid();
+		if(firstUuidList!=null){
+			json.put("result", 0);
+			json.put("description", "查詢成功");
+			json.put("firstUuidList", firstUuidList);
+			return buildReqJsonObject(json);
+		}else{
+			json.put("result", 1);
+			json.put("description", "未查询到goods信息");
+			return buildReqJsonObject(json);
+		}
+	}
+	/*
+	 * 二级分类
+	 * */
+	@RequestMapping("searchsecondUuid")
+	@ResponseBody
+	public String secondUuid() {
+		JSONObject json = new JSONObject();
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if(bodyInfo.get("first_uuid")!=null){
+			List<Goods> secondUuidList = new ArrayList<Goods>();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("firstUuid", bodyInfo.getString("first_uuid"));
+			secondUuidList = goodsService.secondUuid(map);
+			if(secondUuidList!=null){
+				json.put("result", 0);
+				json.put("description", "查詢成功");
+				json.put("secondUuidList", secondUuidList);
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "未查询到goods信息");
+				return buildReqJsonObject(json);
+			}
+		}else{
+			List<Goods> firstUuidList = new ArrayList<Goods>();
+			firstUuidList = goodsService.firstUuid();
+			if(firstUuidList!=null){
+				json.put("result", 0);
+				json.put("description", "查詢成功");
+				json.put("firstUuidList", firstUuidList);
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "未查询到goods信息");
+				return buildReqJsonObject(json);
+			}
+		}
+	}
 	
+	/*
+	 * 查询二级分类下的商品
+	 * 
+	 * */
+	@RequestMapping("searchGoodUuid")
+	@ResponseBody
+	public String searchGoodUuid(){
+		JSONObject json = new JSONObject();
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		List<Goods> searchGoodUuidList = new ArrayList<Goods>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("secondUuid", bodyInfo.getString("second_uuid"));
+		searchGoodUuidList = goodsService.searchGoodUuid(map);
+		if(searchGoodUuidList!=null){
+			json.put("result", 0);
+			json.put("description", "查詢成功");
+			json.put("searchGoodUuidList", searchGoodUuidList);
+			return buildReqJsonObject(json);
+		}else{
+			json.put("result", 1);
+			json.put("description", "未查询到goods信息");
+			return buildReqJsonObject(json);
+		}
+	}
 	
+/*
 	@RequestMapping("searchGood")
 	@ResponseBody
 	public String searchGood(){
@@ -123,6 +215,14 @@ public class UserActivityController extends BaseController{
 		}
 		ModelMap model = new ModelMap();
 		List<Goods> list = new ArrayList<Goods>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(bodyInfo.get("phone")!=null){
+			if(!"".equals(bodyInfo.getString("phone"))){
+				map.put("phone",bodyInfo.getString("phone"));
+			}
+		}
+		
 		list =  goodsService.searchGood(bodyInfo.getString("activity_uuid"));
 		if(list!=null){
 			model.put("description", "查询成功");
@@ -140,7 +240,7 @@ public class UserActivityController extends BaseController{
 		}
 		
 	}
-	
+	*/
 	@RequestMapping("delete")
 	@ResponseBody
 	public String delete(){
@@ -169,7 +269,7 @@ public class UserActivityController extends BaseController{
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
 			int rs = userActivityService.deleteByActivityUuid(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "删除成功");
 				return buildReqJsonObject(json);
@@ -208,7 +308,7 @@ public class UserActivityController extends BaseController{
 			map.put("updateDatetime",new Date());
 			int rs = 0;
 			rs = userActivityService.updateByActivityAndGoods(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "更改Activity状态成功");
 				return buildReqJsonObject(json);
@@ -242,7 +342,7 @@ public class UserActivityController extends BaseController{
 		UserActivity userActivity =  userActivityService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
 		if(userActivity!=null){
 			json.put("result", 0);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			json.put("description", "查詢成功");
 			json.put("userActivity", userActivity);
 			return buildReqJsonObject(json);
 		}else{
@@ -251,6 +351,10 @@ public class UserActivityController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 	}
+	
+	
+	
+	
 	
 	
 	@RequestMapping("insert")
@@ -269,6 +373,7 @@ public class UserActivityController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
+		
 		JSONArray jsonArray = bodyInfo.getJSONArray("good_uuid");
 		List<String> goodUuids = new ArrayList<String>();
 		for(int i=0;i<jsonArray.size();i++){

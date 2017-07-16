@@ -71,7 +71,10 @@
     </set>
     where good_uuid = (
     select good_uuid from activity_zones 
-      where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+      <if test="activityUuid != null and activityUuid != ''">
+      	where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+      </if>
+      
     )
   </update>
   

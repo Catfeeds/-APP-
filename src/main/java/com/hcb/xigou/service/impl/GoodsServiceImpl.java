@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.GoodsMapper;
+import com.hcb.xigou.dto.UserActivity;
 import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.GoodsService;
 
@@ -82,9 +83,33 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public List<Goods> searchGood(String activity_uuid) {
+	public List<UserActivity> searchGood(String activity_uuid) {
 		
 		return goodsMapper.searchGood(activity_uuid);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Goods good) {
+		
+		return goodsMapper.updateByPrimaryKeySelective(good);
+	}
+
+	@Override
+	public List<Goods> secondUuid(Map<String, Object> map) {
+		
+		return goodsMapper.secondUuid(map);
+	}
+
+	@Override
+	public List<Goods> firstUuid() {
+		
+		return goodsMapper.firstUuid();
+	}
+
+	@Override
+	public List<Goods> searchGoodUuid(Map<String, Object> map) {
+		
+		return goodsMapper.searchGoodUuid(map);
 	}
 
 }

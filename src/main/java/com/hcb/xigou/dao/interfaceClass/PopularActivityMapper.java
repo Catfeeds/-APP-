@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
+import com.hcb.xigou.pojo.Goods;
 
 public interface PopularActivityMapper {
 
@@ -21,5 +22,7 @@ public interface PopularActivityMapper {
 	List<PopularActivity> searchPopularActivityByMap(Map<String, Object> map);
 
 	int countPopularActivityByMap(Map<String, Object> map);
+
+	int updateByPrimaryKeySelective(Goods good);
 	
 }

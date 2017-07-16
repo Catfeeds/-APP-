@@ -54,8 +54,9 @@ public class CouponsController  extends BaseController{
 		if(couponUuids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("couponUuids", couponUuids);
+			map.put("deleteAt", "del");
 			int rs = couponsService.deleteByCouponUuids(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "删除优惠券成功");
 				return buildReqJsonObject(json);
@@ -229,8 +230,8 @@ public class CouponsController  extends BaseController{
 		//coupon.setType(bodyInfo.getString("type"));
 		coupon.setCouponUuid(couponUuid);
 		coupon.setCreateDatetime(createTime);
-		coupon.setGrantTime(grantTime);
-		coupon.setFailTime(failTime);
+		coupon.setGrantTime(bodyInfo.getString("grant_time"));
+		coupon.setFailTime(bodyInfo.getString("fail_time"));
 		coupon.setIsGrant("1");
 		int rs = 0;
 		rs = couponsService.insertSelective(coupon);
@@ -345,8 +346,8 @@ public class CouponsController  extends BaseController{
 		coupon.setType(bodyInfo.getString("type"));
 		coupon.setCouponUuid(couponUuid);
 		coupon.setUpdateDatetime(updateTime);
-		coupon.setGrantTime(grantTime);
-		coupon.setFailTime(failTime);
+		coupon.setGrantTime(bodyInfo.getString("grant_time"));
+		coupon.setFailTime(bodyInfo.getString("fail_time"));
 		coupon.setIsGrant("1");
 		int rs = 0;
 		rs = couponsService.updateByCouponUuid(coupon);

@@ -31,7 +31,9 @@
   
   
   <select id="searchPopularActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
-	  	select * FROM goods g ,banners b , activity_zones az  
+	  	select 
+	    <include refid="Base_Column_List"/>
+	  	FROM goods g ,banners b , activity_zones az  
 		where az.delete_at is null and
 		g.good_uuid and g.good_uuid = az.good_uuid
 	  	order by az.create_datetime desc LIMIT #{start},#{end}
@@ -84,6 +86,8 @@
   		and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   	</if>
   </select>
+  
+   
   
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
