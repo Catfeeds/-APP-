@@ -229,7 +229,6 @@ public class CategorysController extends BaseController{
 			first.setUpdateDatetime(updateTime);
 			first.setCategoryName(bodyInfo.getString("category_name"));
 			first.setImage(bodyInfo.getString("image"));
-			first.setStoreUuid(headInfo.getString("store_uuid"));
 			
 			int rs = 0;
 			rs = firstCategorysService.updateByfirstUuid(first);

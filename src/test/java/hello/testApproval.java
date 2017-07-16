@@ -85,13 +85,12 @@ public class testApproval {
         body.put("reason", "质量问题");*/
         body.put("number", 10);
         body.put("amount", "23");
-        body.put("grant_time", "2017-06-06");
-        body.put("fail_time", "2017-07-07");
+        body.put("grant_time", "2017-05-06");
+        body.put("fail_time", "2017-08-07");
         body.put("url", "www.baidu.com");
         body.put("coupon_name", "丰富的");
         body.put("coupon_stock", "12");
-        body.put("coupon_uuid",jsonDp1 );
-        body.put("pageIndex",1 );
+        body.put("type","1" );
         body.put("pageSize",15);
         map.put("body",body);
   

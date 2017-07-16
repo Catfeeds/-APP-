@@ -1,5 +1,7 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +52,7 @@ public class SecondCategorysServiceImpl implements ISecondCategorysService{
 	}
 
 	@Override
-	public SecondCategorys selectAll() {
+	public List<SecondCategorys> selectAll() {
 		// TODO Auto-generated method stub
 		return secondCategorysMapper.selectAll();
 	}

@@ -83,9 +83,10 @@ public class ActivityZonesController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("title")==null||bodyInfo.get("activity_uuid")==null||
-			bodyInfo.get("image") == null||bodyInfo.get("store_uuid") == null) {
+			bodyInfo.get("image") == null||headInfo.get("store_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
@@ -104,7 +105,6 @@ public class ActivityZonesController extends BaseController{
 			activity.setUpdateDatetime(updateTime);
 			activity.setImage(bodyInfo.getString("image"));
 			activity.setType("coupon");
-			activity.setStoreUuid(bodyInfo.getString("store_uuid"));
 			activity.setIsStop("2");
 			int rs = 0;
 			rs = activityZonesService.updateByActivityUuid(activity);

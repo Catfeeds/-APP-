@@ -213,12 +213,13 @@ public class GoodsController extends BaseController{
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("good_uuid") == null) {
+		/*if (bodyInfo.get("good_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
-		}
-		SecondCategorys second = secondCategorysService.selectAll();
+		}*/
+		List<SecondCategorys> second = new ArrayList<SecondCategorys>();
+		second=	secondCategorysService.selectAll();
 		if(second!=null){
 			json.put("result", 0);
 			json.put("description", "查询成功");

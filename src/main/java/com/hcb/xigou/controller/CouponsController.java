@@ -198,8 +198,8 @@ public class CouponsController  extends BaseController{
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("amount")==null||bodyInfo.get("grant_time") == null||
 			bodyInfo.get("fail_time") == null||bodyInfo.get("url") == null||
-			bodyInfo.get("coupon_name") == null||bodyInfo.get("coupon_stock") == null
-			||bodyInfo.get("type") == null) {
+			bodyInfo.get("coupon_name") == null||bodyInfo.get("coupon_stock") == null||
+			bodyInfo.get("type") == null){
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
@@ -349,7 +349,6 @@ public class CouponsController  extends BaseController{
 		if (bodyInfo.get("amount")==null||bodyInfo.get("grant_time") == null||
 			bodyInfo.get("fail_time") == null||bodyInfo.get("url") == null||
 			bodyInfo.get("coupon_name") == null||bodyInfo.get("coupon_stock") == null||
-			bodyInfo.get("url") == null||
 			bodyInfo.get("coupon_uuid") == null||bodyInfo.get("type") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
