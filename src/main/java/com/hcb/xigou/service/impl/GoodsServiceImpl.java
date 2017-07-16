@@ -101,4 +101,10 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.secondUuid(map);
 	}
 
+	@Override
+	public List<Goods> searchGoodUuid(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return goodsMapper.searchGoodUuid(map);
+	}
+
 }

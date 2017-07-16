@@ -44,31 +44,10 @@
   from goods
   </select>
   
+ 
   
-  <!-- 查询商品的一级类名和一级类uuid -->
-  <select id="firstUuid" resultType="com.hcb.xigou.dto.Goods">
-  	select 
-  	<include refid="Base_Column_List" />
-  	from goods
-  	where delete_at is null
-  	and first_uuid  in (
-		select first_uuid from goods
-	)
-  </select>
   
-  <!-- 查询商品的二级类名和二级类uuid -->
-  <select id="secondUuid"  parameterType="java.util.HashMap" resultType="com.hcb.xigou.dto.Goods">
-  	select 
-  	<include refid="Base_Column_List"/>
-  	from goods
-  	where delete_at is null
-  	<if test="firstUuid !=null and firstUuid !=''">
-  		and first_uuid = #{firstUuid,jdbcType=VARCHAR}
-  	</if>
-  	and second_uuid  in (
-		select second_uuid from goods
-	)
-  </select>
+
   <!-- 二级分类下的商品 -->
   <select id="searchGoodUuid" parameterType="java.util.HashMap" resultType="com.hcb.xigou.dto.Goods">
   		select 

@@ -40,4 +40,6 @@ public interface GoodsMapper {
 
 	public List<Goods> secondUuid(Map<String, Object> map);
 
+	public List<Goods> searchGoodUuid(Map<String, Object> map);
+
 }
