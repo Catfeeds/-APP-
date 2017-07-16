@@ -3,6 +3,7 @@ package com.hcb.xigou.dao.interfaceClass;
 import java.util.List;
 
 import com.hcb.xigou.dto.Goods;
+
 import com.hcb.xigou.dto.SecondCategorys;
 
 public interface SecondCategorysMapper {
@@ -17,8 +18,8 @@ public interface SecondCategorysMapper {
     int updateByPrimaryKeySelective(SecondCategorys record);
 
     int updateByPrimaryKey(SecondCategorys record);
-    
-    SecondCategorys selectAll();
 
 	List<Goods> secondUuid(String firstUuid);
+
+    List<SecondCategorys> selectAll();
 }

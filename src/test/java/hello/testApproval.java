@@ -39,6 +39,9 @@ public class testApproval {
         map.put("head", head);	
         
         HashMap<String, Object> body = new HashMap<String, Object>();
+        JSONArray jsonDp1 = new JSONArray(); 
+        jsonDp1.add(0, "ea3a6d35ae1e989ea4b42cc6eb5ffe17");
+        jsonDp1.add(1, "2d1c701ff70946e5a691358c01d7b030");
       /*  JSONArray jsonDp1 = new JSONArray(); 
         jsonDp1.add(0, "dhhdh");*/
  /*       body.put("merchant_name", "胡巴");
@@ -72,10 +75,15 @@ public class testApproval {
       // body.put("myOrderUuid", "327597acb07002532c561e97ab894058");
         /*body.put("order_uuid", "e9593a58d0397ac0451a0641236fc9d4");
         body.put("purchase_car_uuid", "b1873d210f4161034714eef975693174");
+<<<<<<< HEAD
         body.put("reason", "质量问题");
         body.put("number", 10);*/
         body.put("pageIndex", "1");
         body.put("pageSize", "10");
+=======
+        body.put("reason", "质量问题");*/
+        body.put("number", 10);
+>>>>>>> yxd
         body.put("amount", "23");
         body.put("grant_time", "2017-05-06");
         body.put("fail_time", "2017-08-07");
@@ -83,11 +91,15 @@ public class testApproval {
         body.put("coupon_name", "丰富的");
         body.put("coupon_stock", "12");
         body.put("type","1" );
+<<<<<<< HEAD
 //        body.put("name", "");
 //        body.put("nickname", "");
 //        body.put("phone", "");
 //        body.put("member_card_number", "");
         //body.put("first_uuid","db4cc5d1bf963f0d241a5e31acf0cd4c");
+=======
+        body.put("pageSize",15);
+>>>>>>> yxd
         map.put("body",body);
   
         
@@ -97,8 +109,12 @@ public class testApproval {
    	    //查找案件主办律师
    	    //新建审批条目 在审批信息表 approval_inner_base_infos中0558
    	    //返回审批uuid
+<<<<<<< HEAD
    	    String url = "http://localhost:8080/xigou-api/userActivity/searchfirstUuid";
    	// String url = "http://localhost:8080/xigou-api/coupons/insert";
+=======
+   	    String url = "http://localhost/xigou-api/coupons/insert";
+>>>>>>> yxd
    	    // String url = "192.168.1.101:8080/apparel/alipay/confirm";
       // String url = "http://test.appring.cn:8080/fastask/question/show"; /* * * * * * root wget http://test.appring.cn:8080/fastask/energy/timing -q -O /usr/local/time/timelog
  	    HttpPost httpPost = new HttpPost(url);

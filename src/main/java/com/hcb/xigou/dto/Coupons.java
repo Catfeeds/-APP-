@@ -1,6 +1,5 @@
 package com.hcb.xigou.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Coupons {
@@ -104,10 +103,10 @@ public class Coupons {
 
     public void setGoodUuid(String goodUuid) {
         this.goodUuid = goodUuid == null ? null : goodUuid.trim();
-    }
-    
+    }   
+
     public String getGrantTime() {
-		return grantTime.substring(0, 10);
+		return grantTime.substring(0,10);
 	}
 
 	public void setGrantTime(String grantTime) {
@@ -119,7 +118,7 @@ public class Coupons {
     }
 
     public void setFailTime(String failTime) {
-        this.failTime = grantTime;
+        this.failTime = failTime;
     }
 
     public String getFirstUuid() {

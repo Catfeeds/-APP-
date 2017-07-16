@@ -18,7 +18,7 @@ public interface ISecondCategorysService {
 
     int updateByPrimaryKey(SecondCategorys record);
     
-    SecondCategorys selectAll();
-
 	List<Goods> secondUuid(String firstUuid);
+	
+    List<SecondCategorys> selectAll();
 }

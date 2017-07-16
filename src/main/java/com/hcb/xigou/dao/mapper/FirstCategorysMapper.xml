@@ -34,6 +34,41 @@
     from first_categorys
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
+  
+  <select id="searchCategoryByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from first_categorys
+    where delete_at is null
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="countCategoryByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+   select count(1) from first_categorys
+    where delete_at is null
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+    <update id="deleteByFirstUuids" parameterType="java.util.HashMap" >
+   update first_categorys
+  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
+    where 
+    <if test="storeUuid!='' and storeUuid!=null ">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if >
+	<if test="FirstUuids!='' and FirstUuids!=null ">
+		and first_uuid in 
+	    <foreach item="item" index="index" collection="FirstUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </update>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from first_categorys
     where fake_id = #{fakeId,jdbcType=INTEGER}
@@ -128,6 +163,32 @@
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
+  
+    <update id="updateByfirstUuid" parameterType="com.hcb.xigou.dto.FirstCategorys" >
+    update first_categorys
+    <set >
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where first_uuid = #{firstUuid,jdbcType=VARCHAR}
+  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.FirstCategorys" >
     update first_categorys
     set first_uuid = #{firstUuid,jdbcType=VARCHAR},

@@ -45,7 +45,7 @@ public class GoodsController extends BaseController{
 	public String delete(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -64,12 +64,12 @@ public class GoodsController extends BaseController{
 		if(goodUUids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("goodUUids", "goodUUids");
-			map.put("deleteAt", new Date());
+			map.put("deleteAt", "del");
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
 			int rs = goodsService.deleteByGoodUuids(map);
-			if(rs == 1){
+			if(rs >= 1){
 				json.put("result", 0);
 				json.put("description", "删除成功");
 				return buildReqJsonObject(json);
@@ -89,8 +89,8 @@ public class GoodsController extends BaseController{
 	@ResponseBody
 	public String selectGoodid(){
 		JSONObject json = new JSONObject();
-		if(sign == 1||sign == 2) {
-			json.put("result", "1");
+		if (sign == 1||sign == 2) {
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -117,23 +117,23 @@ public class GoodsController extends BaseController{
 	public String search(){
 		JSONObject json = new JSONObject();
 		if (sign == 1) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
 		if (sign == 2) {
-			json.put("result", "2");
+			json.put("result", 2);
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "操作失败，请检查输入的参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		if ("".equals(bodyInfo.get("pageIndex")) || "".equals(bodyInfo.get("pageSize"))) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "操作失败，请检查输入的参数是否正确");
 			return buildReqJsonObject(json);
 		}
@@ -142,7 +142,7 @@ public class GoodsController extends BaseController{
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");
 		if (pageIndex <= 0) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "操作失败，pageIndex不小于0");
 			return buildReqJsonObject(json);
 		} else {
@@ -184,7 +184,7 @@ public class GoodsController extends BaseController{
 				Integer sign = 0;
 				if (!total.equals(sign)) {
 					if (pageIndex > total) {
-						json.put("result", "1");
+						json.put("result", 1);
 						json.put("description", "操作失败，请求页数大于总页数");
 						return buildReqJsonObject(json);
 					}
@@ -194,7 +194,7 @@ public class GoodsController extends BaseController{
 			} else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
-					json.put("result", "1");
+					json.put("result", 1);
 					json.put("description", "操作失败，请求页数大于总页数");
 					return buildReqJsonObject(json);
 				}
@@ -218,17 +218,18 @@ public class GoodsController extends BaseController{
 	public String selectgood(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("good_uuid") == null) {
+		/*if (bodyInfo.get("good_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
-		}
-		SecondCategorys second = secondCategorysService.selectAll();
+		}*/
+		List<SecondCategorys> second = new ArrayList<SecondCategorys>();
+		second=	secondCategorysService.selectAll();
 		if(second!=null){
 			json.put("result", 0);
 			json.put("description", "查询成功");
@@ -247,7 +248,7 @@ public class GoodsController extends BaseController{
 	public String insert(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -271,11 +272,12 @@ public class GoodsController extends BaseController{
 		}
 		String goodUuid = "";
 		try {
-			goodUuid = MD5Util.md5Digest(bodyInfo.getString("amount") + System.currentTimeMillis() + RandomStringUtils.random(8));
+
+			goodUuid = MD5Util.md5Digest(bodyInfo.getString("unit_price") + System.currentTimeMillis() + RandomStringUtils.random(8));
 		} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		}
+			e.printStackTrace();
+		}	
+
 		GoodsWithBLOBs goods =new GoodsWithBLOBs();
 		goods.setGoodUuid(goodUuid);
 		goods.setSecondCategoryName(bodyInfo.getString("category_name"));
@@ -310,7 +312,7 @@ public class GoodsController extends BaseController{
 	public String update(){
 		JSONObject json = new JSONObject();
 		if (sign == 1||sign == 2) {
-			json.put("result", "1");
+			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
@@ -333,31 +335,38 @@ public class GoodsController extends BaseController{
 			e.printStackTrace();
 		}
 		GoodsWithBLOBs goods =(GoodsWithBLOBs) goodsService.selectByGoodUuid(bodyInfo.getString("good_uuid"));
-		goods.setSecondCategoryName(bodyInfo.getString("category_name"));
-		goods.setUpdateDatetime(updateTime);
-		goods.setFirstUuid(bodyInfo.getString("first_uuid"));
-		goods.setSecondUuid(bodyInfo.getString("second_uuid"));
-		goods.setCover(bodyInfo.getString("cover"));
-		BigDecimal unitPrice=new BigDecimal(bodyInfo.getString("unit_price"));
-		goods.setUnitPrice(unitPrice);
-		goods.setPhotos(bodyInfo.getString("photos"));
-		goods.setPoster(bodyInfo.getString("poster"));
-		goods.setTitle(bodyInfo.getString("title"));
-		
-		FirstCategorys first = firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
-		goods.setFirtCategoryName(first.getCategoryName());
-		
-		int rs = 0;
-		rs = goodsService.updateByGoodsUuid(goods);
-		if(rs == 1){
-			json.put("result", 0);
-			json.put("description", "编辑商品成功");
-			return buildReqJsonObject(json);
+		if(goods !=null){
+			goods.setSecondCategoryName(bodyInfo.getString("category_name"));
+			goods.setUpdateDatetime(updateTime);
+			goods.setFirstUuid(bodyInfo.getString("first_uuid"));
+			goods.setSecondUuid(bodyInfo.getString("second_uuid"));
+			goods.setCover(bodyInfo.getString("cover"));
+			BigDecimal unitPrice=new BigDecimal(bodyInfo.getString("unit_price"));
+			goods.setUnitPrice(unitPrice);
+			goods.setPhotos(bodyInfo.getString("photos"));
+			goods.setPoster(bodyInfo.getString("poster"));
+			goods.setTitle(bodyInfo.getString("title"));
+			
+			FirstCategorys first = firstCategorysService.selectByFirstUuid(bodyInfo.getString("first_uuid"));
+			goods.setFirtCategoryName(first.getCategoryName());
+			
+			int rs = 0;
+			rs = goodsService.updateByGoodsUuid(goods);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "编辑商品成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "编辑商品失败，请重试");
+				return buildReqJsonObject(json);
+			}
 		}else{
 			json.put("result", 1);
-			json.put("description", "编辑商品失败，请重试");
+			json.put("description", "查询不到商品，请重试");
 			return buildReqJsonObject(json);
 		}
+		
 	}
 	
 }

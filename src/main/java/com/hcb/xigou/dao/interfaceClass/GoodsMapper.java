@@ -4,7 +4,6 @@ package com.hcb.xigou.dao.interfaceClass;
 import java.util.List;
 import java.util.Map;
 
-import com.hcb.xigou.dto.FirstCategorys;
 import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.UserActivity;
 

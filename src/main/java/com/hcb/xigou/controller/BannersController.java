@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.service.IBannersService;
+import com.hcb.xigou.util.MD5Util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -49,7 +51,7 @@ public class BannersController extends BaseController{
 		}
 		if(bannerUuids.size()>0){
 			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("bannerUuids", "bannerUuids");
+			map.put("bannerUuids", bannerUuids);
 			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
 				map.put("storeUuid", headInfo.getString("store_uuid"));
 			}
@@ -266,13 +268,21 @@ public class BannersController extends BaseController{
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("currentIndex")==null||bodyInfo.get("banner_uuid") == null||
+		if (bodyInfo.get("currentIndex")==null||
 				bodyInfo.get("banner_name") == null||bodyInfo.get("url") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		Banners banner = new Banners();
+		String bannerUuid = "";
+		try {
+			bannerUuid = MD5Util.md5Digest(bodyInfo.getString("banner_name") + System.currentTimeMillis() + RandomStringUtils.random(8));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		banner.setBannerUuid(bannerUuid);
 		banner.setCreateDatetime(new Date());
 		banner.setUpdateDatetime(new Date());
 		banner.setType(bodyInfo.getString("type"));

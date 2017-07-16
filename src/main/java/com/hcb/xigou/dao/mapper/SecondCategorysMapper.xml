@@ -37,7 +37,7 @@
     select 
     <include refid="Base_Column_List" />
     from second_categorys
-    where delete_at = null
+    where delete_at is null
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from second_categorys
