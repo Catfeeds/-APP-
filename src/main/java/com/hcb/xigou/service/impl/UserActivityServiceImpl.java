@@ -52,5 +52,11 @@ public class UserActivityServiceImpl implements UserActivityService {
 
 		return userActivityMapper.countUserActivityByMap(map);
 	}
+
+	@Override
+	public List<UserActivity> selectAll() {
+		// TODO Auto-generated method stub
+		return userActivityMapper.selectAll();
+	}
 	
 }

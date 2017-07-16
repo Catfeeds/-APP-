@@ -1,5 +1,8 @@
 package com.hcb.xigou.dao.interfaceClass;
 
+import java.util.List;
+
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.SecondCategorys;
 
 public interface SecondCategorysMapper {
@@ -16,4 +19,6 @@ public interface SecondCategorysMapper {
     int updateByPrimaryKey(SecondCategorys record);
     
     SecondCategorys selectAll();
+
+	List<Goods> secondUuid(String firstUuid);
 }

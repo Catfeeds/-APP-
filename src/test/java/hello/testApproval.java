@@ -36,7 +36,7 @@ public class testApproval {
         head.put("password", "123456");*/
         head.put("nickname", "admin");
         head.put("password", "123456");
-       // map.put("head", head);	
+        map.put("head", head);	
         
         HashMap<String, Object> body = new HashMap<String, Object>();
       /*  JSONArray jsonDp1 = new JSONArray(); 
@@ -76,6 +76,13 @@ public class testApproval {
         body.put("number", 10);*/
         body.put("pageIndex", "1");
         body.put("pageSize", "10");
+        body.put("amount", "23");
+        body.put("grant_time", "2017-05-06");
+        body.put("fail_time", "2017-08-07");
+        body.put("url", "www.baidu.com");
+        body.put("coupon_name", "丰富的");
+        body.put("coupon_stock", "12");
+        body.put("type","1" );
 //        body.put("name", "");
 //        body.put("nickname", "");
 //        body.put("phone", "");
@@ -90,7 +97,8 @@ public class testApproval {
    	    //查找案件主办律师
    	    //新建审批条目 在审批信息表 approval_inner_base_infos中0558
    	    //返回审批uuid
-   	    String url = "http://localhost:8080/xigou-api/userActivity/search";
+   	    String url = "http://localhost:8080/xigou-api/userActivity/searchfirstUuid";
+   	// String url = "http://localhost:8080/xigou-api/coupons/insert";
    	    // String url = "192.168.1.101:8080/apparel/alipay/confirm";
       // String url = "http://test.appring.cn:8080/fastask/question/show"; /* * * * * * root wget http://test.appring.cn:8080/fastask/energy/timing -q -O /usr/local/time/timelog
  	    HttpPost httpPost = new HttpPost(url);

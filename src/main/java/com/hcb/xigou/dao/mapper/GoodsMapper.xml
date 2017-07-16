@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hcb.xigou.dao.interfaceClass.GoodsMapper" >
-  <resultMap id="BaseResultMap" type="com.hcb.xigou.pojo.Goods" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Goods" >
     <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
     <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
     <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
@@ -24,7 +24,7 @@
     <result column="good_code" property="goodCode" jdbcType="VARCHAR" />
     <result column="good_status" property="goodStatus" jdbcType="CHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.pojo.GoodsWithBLOBs" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.GoodsWithBLOBs" extends="BaseResultMap" >
     <result column="poster" property="poster" jdbcType="LONGVARCHAR" />
     <result column="photos" property="photos" jdbcType="LONGVARCHAR" />
     <result column="models" property="models" jdbcType="LONGVARCHAR" />
@@ -32,32 +32,45 @@
   <sql id="Base_Column_List" >
     fake_id, good_uuid, create_datetime, update_datetime, delete_at, merchant_uuid, good_name, 
     description, title, cover, unit_price, numbers, classifier, first_uuid, firt_category_name, 
-    second_uuid, second_category_name, store_uuid, address, good_code,good_status
+    second_uuid, second_category_name, store_uuid, address, good_code, good_status
   </sql>
   <sql id="Blob_Column_List" >
     poster, photos, models
   </sql>
   
+  <select id="selectAll" resultType="com.hcb.xigou.dto.Goods">
+  select 
+  <include refid="Base_Column_List"></include>
+  from goods
+  </select>
+  
+  
   <!-- 查询商品的一级类名和一级类uuid -->
-  <select id="firstUuid" resultType="com.hcb.xigou.pojo.Goods">
+  <select id="firstUuid" resultType="com.hcb.xigou.dto.Goods">
   	select 
-  	<include refid="Base_Column_List"/>
+  	<include refid="Base_Column_List" />
   	from goods
   	where delete_at is null
+  	and first_uuid  in (
+		select first_uuid from goods
+	)
   </select>
   
   <!-- 查询商品的二级类名和二级类uuid -->
-  <select id="secondUuid"  parameterType="java.util.HashMap" resultType="com.hcb.xigou.pojo.Goods">
+  <select id="secondUuid"  parameterType="java.util.HashMap" resultType="com.hcb.xigou.dto.Goods">
   	select 
   	<include refid="Base_Column_List"/>
   	from goods
   	where delete_at is null
-  	<if test=" firstUuid !=null and firstUuid !=''">
+  	<if test="firstUuid !=null and firstUuid !=''">
   		and first_uuid = #{firstUuid,jdbcType=VARCHAR}
   	</if>
+  	and second_uuid  in (
+		select second_uuid from goods
+	)
   </select>
   <!-- 二级分类下的商品 -->
-  <select id="searchGoodUuid" parameterType="java.util.HashMap" resultType="com.hcb.xigou.pojo.Goods">
+  <select id="searchGoodUuid" parameterType="java.util.HashMap" resultType="com.hcb.xigou.dto.Goods">
   		select 
   		<include refid="Base_Column_List"/>
   		from goods
@@ -110,7 +123,7 @@
   </select>
   
   <!-- 热销活动内商品 -->
-  <select id="searchGood" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">
+  <select id="searchGood" parameterType="java.lang.Integer" resultType="com.hcb.xigou.dto.Goods">
   select 
   <include refid="Base_Column_List"/>
     from goods 
@@ -120,68 +133,49 @@
 	)
   </select>
 
-  <delete id="deleteByGoodsId" parameterType="java.lang.Integer" >
+  <!-- <delete id="deleteByGoodsId" parameterType="java.lang.Integer" >
   	delete from goods
   	where fake_id in
   	<foreach item="fakeIdItem" collection="array" open="(" separator="," close=")">
             #{fakeId,jdbcType=INTEGER}
         </foreach>
   </delete>
+   -->
   
   
-  
-   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from goods
-    where fake_id = #{fakeId,jdbcType=INTEGER} and delete_at is null
+    where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
-  
-  <select id="selectGoodByGoodUuid" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from goods
-    where good_uuid = #{goodUuid,jdbcType=VARCHAR} and delete_at is null
-  </select>
-  
-  <update id="deleteByGoodUuids" parameterType="java.util.HashMap" >
-   update goods
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
-    <if test="storeUuid!='' and storeUuid!=null ">
-		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
-	</if >
-	<if test="goodUuids!='' and goodUuids!=null ">
-		and good_uuid in 
-	    <foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
-		  #{item}  
-		</foreach>
-	</if>
-  </update>
-  
-  <insert id="insert" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from goods
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.GoodsWithBLOBs" >
     insert into goods (fake_id, good_uuid, create_datetime, 
       update_datetime, delete_at, merchant_uuid, 
       good_name, description, title, 
       cover, unit_price, numbers, 
       classifier, first_uuid, firt_category_name, 
       second_uuid, second_category_name, store_uuid, 
-      address, good_code, good_status,poster, 
-      photos, models)
+      address, good_code, good_status, 
+      poster, photos, models
+      )
     values (#{fakeId,jdbcType=INTEGER}, #{goodUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{merchantUuid,jdbcType=VARCHAR}, 
       #{goodName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{cover,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, #{numbers,jdbcType=INTEGER}, 
       #{classifier,jdbcType=CHAR}, #{firstUuid,jdbcType=VARCHAR}, #{firtCategoryName,jdbcType=VARCHAR}, 
       #{secondUuid,jdbcType=VARCHAR}, #{secondCategoryName,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}, #{goodStatus,jdbcType=VARCHAR}, #{poster,jdbcType=LONGVARCHAR}, 
-      #{photos,jdbcType=LONGVARCHAR}, #{models,jdbcType=LONGVARCHAR})
+      #{address,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}, #{goodStatus,jdbcType=CHAR}, 
+      #{poster,jdbcType=LONGVARCHAR}, #{photos,jdbcType=LONGVARCHAR}, #{models,jdbcType=LONGVARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.GoodsWithBLOBs" >
     insert into goods
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -319,7 +313,7 @@
         #{goodCode,jdbcType=VARCHAR},
       </if>
       <if test="goodStatus != null" >
-        #{goodStatus,jdbcType=INTEGER},
+        #{goodStatus,jdbcType=CHAR},
       </if>
       <if test="poster != null" >
         #{poster,jdbcType=LONGVARCHAR},
@@ -332,7 +326,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.GoodsWithBLOBs" >
     update goods
     <set >
       <if test="goodUuid != null" >
@@ -393,7 +387,7 @@
         good_code = #{goodCode,jdbcType=VARCHAR},
       </if>
       <if test="goodStatus != null" >
-        good_status = #{goodStatus,jdbcType=INTEGER},
+        good_status = #{goodStatus,jdbcType=CHAR},
       </if>
       <if test="poster != null" >
         poster = #{poster,jdbcType=LONGVARCHAR},
@@ -405,83 +399,9 @@
         models = #{models,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where good_uuid = #{goodUuid,jdbcType=VARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
-  
-   <update id="updateByGoodsUuid" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
-    update goods
-    <set >
-      <if test="createDatetime != null" >
-        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDatetime != null" >
-        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleteAt != null" >
-        delete_at = #{deleteAt,jdbcType=VARCHAR},
-      </if>
-      <if test="merchantUuid != null" >
-        merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
-      </if>
-      <if test="goodName != null" >
-        good_name = #{goodName,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="cover != null" >
-        cover = #{cover,jdbcType=VARCHAR},
-      </if>
-      <if test="unitPrice != null" >
-        unit_price = #{unitPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="numbers != null" >
-        numbers = #{numbers,jdbcType=INTEGER},
-      </if>
-      <if test="classifier != null" >
-        classifier = #{classifier,jdbcType=CHAR},
-      </if>
-      <if test="firstUuid != null" >
-        first_uuid = #{firstUuid,jdbcType=VARCHAR},
-      </if>
-      <if test="firtCategoryName != null" >
-        firt_category_name = #{firtCategoryName,jdbcType=VARCHAR},
-      </if>
-      <if test="secondUuid != null" >
-        second_uuid = #{secondUuid,jdbcType=VARCHAR},
-      </if>
-      <if test="secondCategoryName != null" >
-        second_category_name = #{secondCategoryName,jdbcType=VARCHAR},
-      </if>
-      <if test="storeUuid != null" >
-        store_uuid = #{storeUuid,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="goodCode != null" >
-        good_code = #{goodCode,jdbcType=VARCHAR},
-      </if>
-      <if test="goodStatus != null" >
-        good_status = #{goodStatus,jdbcType=INTEGER},
-      </if>
-      <if test="poster != null" >
-        poster = #{poster,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="photos != null" >
-        photos = #{photos,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="models != null" >
-        models = #{models,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where good_uuid = #{goodUuid,jdbcType=VARCHAR}
-  </update>
-  
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hcb.xigou.dto.GoodsWithBLOBs" >
     update goods
     set good_uuid = #{goodUuid,jdbcType=VARCHAR},
       create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
@@ -502,13 +422,13 @@
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       good_code = #{goodCode,jdbcType=VARCHAR},
-      good_status = #{goodStatus,jdbcType=INTEGER},
+      good_status = #{goodStatus,jdbcType=CHAR},
       poster = #{poster,jdbcType=LONGVARCHAR},
       photos = #{photos,jdbcType=LONGVARCHAR},
       models = #{models,jdbcType=LONGVARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.pojo.Goods" >
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Goods" >
     update goods
     set good_uuid = #{goodUuid,jdbcType=VARCHAR},
       create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
@@ -529,7 +449,7 @@
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       good_code = #{goodCode,jdbcType=VARCHAR},
-      good_status = #{goodStatus,jdbcType=INTEGER}
+      good_status = #{goodStatus,jdbcType=CHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

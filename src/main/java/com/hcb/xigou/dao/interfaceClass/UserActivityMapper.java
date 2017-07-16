@@ -18,5 +18,7 @@ public interface UserActivityMapper {
 	List<UserActivity> searchUserActivityByMap(Map<String, Object> map);
 
 	int countUserActivityByMap(Map<String, Object> map);
+
+	List<UserActivity> selectAll();
 	
 }

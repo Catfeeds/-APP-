@@ -1,4 +1,4 @@
-package com.hcb.xigou.pojo;
+package com.hcb.xigou.dto;
 
 public class GoodsWithBLOBs extends Goods {
     private String poster;

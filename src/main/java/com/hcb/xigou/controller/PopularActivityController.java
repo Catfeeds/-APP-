@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.FirstCategorys;
+import com.hcb.xigou.dto.Goods;
+import com.hcb.xigou.dto.GoodsWithBLOBs;
 import com.hcb.xigou.dto.PopularActivity;
 import com.hcb.xigou.dto.SecondCategorys;
-import com.hcb.xigou.pojo.Goods;
-import com.hcb.xigou.pojo.GoodsWithBLOBs;
+
 import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;

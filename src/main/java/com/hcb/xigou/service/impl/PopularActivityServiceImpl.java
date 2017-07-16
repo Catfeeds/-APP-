@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.PopularActivityMapper;
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.PopularActivity;
-import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.PopularActivityService;
 
 @Service("PopularActivityService")

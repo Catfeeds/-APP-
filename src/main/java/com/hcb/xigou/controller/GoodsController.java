@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.FirstCategorys;
+import com.hcb.xigou.dto.Goods;
+import com.hcb.xigou.dto.GoodsWithBLOBs;
 import com.hcb.xigou.dto.SecondCategorys;
-import com.hcb.xigou.pojo.Goods;
-import com.hcb.xigou.pojo.GoodsWithBLOBs;
+
 import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
@@ -88,7 +89,7 @@ public class GoodsController extends BaseController{
 	@ResponseBody
 	public String selectGoodid(){
 		JSONObject json = new JSONObject();
-		if (sign == 1||sign == 2) {
+		if(sign == 1||sign == 2) {
 			json.put("result", "1");
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);

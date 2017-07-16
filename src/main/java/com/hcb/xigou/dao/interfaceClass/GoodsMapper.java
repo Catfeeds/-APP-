@@ -4,9 +4,9 @@ package com.hcb.xigou.dao.interfaceClass;
 import java.util.List;
 import java.util.Map;
 
-import com.hcb.xigou.dto.Banners;
+import com.hcb.xigou.dto.FirstCategorys;
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.UserActivity;
-import com.hcb.xigou.pojo.Goods;
 
 public interface GoodsMapper {
 
@@ -40,7 +40,4 @@ public interface GoodsMapper {
 
 	public List<Goods> secondUuid(Map<String, Object> map);
 
-	public List<Goods> firstUuid();
-
-	public List<Goods> searchGoodUuid(Map<String, Object> map);
 }

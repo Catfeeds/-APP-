@@ -1,5 +1,7 @@
 package com.hcb.xigou.dao.interfaceClass;
 
+import java.util.List;
+
 import com.hcb.xigou.dto.FirstCategorys;
 
 public interface FirstCategorysMapper {
@@ -16,4 +18,6 @@ public interface FirstCategorysMapper {
     int updateByPrimaryKey(FirstCategorys record);
     
     FirstCategorys selectByFirstUuid(String firstUuid);
+
+	List<FirstCategorys> firstUuid();
 }

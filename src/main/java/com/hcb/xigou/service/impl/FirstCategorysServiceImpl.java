@@ -1,5 +1,7 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,12 @@ public class FirstCategorysServiceImpl implements IFirstCategorysService{
 	public FirstCategorys selectByFirstUuid(String firstUuid) {
 		// TODO Auto-generated method stub
 		return firstCategorysMapper.selectByFirstUuid(firstUuid);
+	}
+
+	@Override
+	public List<FirstCategorys> firstUuid() {
+		// TODO Auto-generated method stub
+		return firstCategorysMapper.firstUuid();
 	}
 
 }

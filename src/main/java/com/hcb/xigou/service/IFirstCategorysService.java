@@ -1,5 +1,7 @@
 package com.hcb.xigou.service;
 
+import java.util.List;
+
 import com.hcb.xigou.dto.FirstCategorys;
 
 public interface IFirstCategorysService {
@@ -16,4 +18,6 @@ public interface IFirstCategorysService {
     int updateByPrimaryKey(FirstCategorys record);
     
     FirstCategorys selectByFirstUuid(String firstUuid);
+
+	List<FirstCategorys> firstUuid();
 }

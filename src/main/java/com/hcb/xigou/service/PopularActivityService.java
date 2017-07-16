@@ -3,8 +3,8 @@ package com.hcb.xigou.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.PopularActivity;
-import com.hcb.xigou.pojo.Goods;
 
 public interface PopularActivityService {
 

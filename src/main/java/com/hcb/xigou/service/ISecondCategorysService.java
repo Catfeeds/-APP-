@@ -1,5 +1,8 @@
 package com.hcb.xigou.service;
 
+import java.util.List;
+
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.SecondCategorys;
 
 public interface ISecondCategorysService {
@@ -16,4 +19,6 @@ public interface ISecondCategorysService {
     int updateByPrimaryKey(SecondCategorys record);
     
     SecondCategorys selectAll();
+
+	List<Goods> secondUuid(String firstUuid);
 }

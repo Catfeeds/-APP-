@@ -17,6 +17,16 @@
     fake_id, second_uuid, create_datetime, update_datetime, delete_at, first_uuid, category_name, 
     image, store_uuid, banner
   </sql>
+  <select id="secondUuid" parameterType="java.lang.String" resultType="com.hcb.xigou.dto.SecondCategorys">
+  	select 
+  	<include refid=""/>
+  	from second_categorys
+  	where delete_at is null
+  	<if test="firstUuid != null and firstUuid != ''">
+  	 	and first_uuid = #{firstUuid,,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

@@ -1,7 +1,6 @@
-package com.hcb.xigou.pojo;
+package com.hcb.xigou.dto;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Goods {
@@ -9,9 +8,9 @@ public class Goods {
 
     private String goodUuid;
 
-    private String createDatetime;
+    private Date createDatetime;
 
-    private String updateDatetime;
+    private Date updateDatetime;
 
     private String deleteAt;
 
@@ -44,18 +43,10 @@ public class Goods {
     private String address;
 
     private String goodCode;
-    
-    private Integer goodStatus;
 
-    public Integer getGoodStatus() {
-		return goodStatus;
-	}
+    private String goodStatus;
 
-	public void setGoodStatus(Integer goodStatus) {
-		this.goodStatus = goodStatus;
-	}
-
-	public Integer getFakeId() {
+    public Integer getFakeId() {
         return fakeId;
     }
 
@@ -71,24 +62,20 @@ public class Goods {
         this.goodUuid = goodUuid == null ? null : goodUuid.trim();
     }
 
-    public String getCreateDatetime() {
+    public Date getCreateDatetime() {
         return createDatetime;
     }
 
     public void setCreateDatetime(Date createDatetime) {
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    	String time = format.format(createDatetime);
-        this.createDatetime = time;
+        this.createDatetime = createDatetime;
     }
 
-    public String getUpdateDatetime() {
+    public Date getUpdateDatetime() {
         return updateDatetime;
     }
 
     public void setUpdateDatetime(Date updateDatetime) {
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    	String time = format.format(updateDatetime);
-        this.updateDatetime = time;
+        this.updateDatetime = updateDatetime;
     }
 
     public String getDeleteAt() {
@@ -139,7 +126,6 @@ public class Goods {
         this.cover = cover == null ? null : cover.trim();
     }
 
-    
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -218,5 +204,13 @@ public class Goods {
 
     public void setGoodCode(String goodCode) {
         this.goodCode = goodCode == null ? null : goodCode.trim();
+    }
+
+    public String getGoodStatus() {
+        return goodStatus;
+    }
+
+    public void setGoodStatus(String goodStatus) {
+        this.goodStatus = goodStatus == null ? null : goodStatus.trim();
     }
 }

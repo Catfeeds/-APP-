@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
+import com.hcb.xigou.dto.FirstCategorys;
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.UserActivity;
-import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.GoodsService;
+import com.hcb.xigou.service.IFirstCategorysService;
+import com.hcb.xigou.service.ISecondCategorysService;
 import com.hcb.xigou.service.UserActivityService;
 
 import net.sf.json.JSONArray;
@@ -28,7 +31,31 @@ public class UserActivityController extends BaseController{
 	@Autowired
 	UserActivityService userActivityService;
 	@Autowired
+	IFirstCategorysService firstCategorysServiceImpl;
+	@Autowired
+	ISecondCategorysService secondCategorysService;
+	@Autowired
 	GoodsService goodsService;
+	
+	
+	@RequestMapping("selectAll")
+	@ResponseBody
+	public String selectAll(){
+		JSONObject json = new JSONObject();
+		List<UserActivity> firstUuidList = new ArrayList<UserActivity>();
+		firstUuidList = userActivityService.selectAll();
+		if(firstUuidList!=null){
+			json.put("result", 0);
+			json.put("description", "查詢成功");
+			json.put("firstUuidList", firstUuidList);
+			return buildReqJsonObject(json);
+		}else{
+			json.put("result", 1);
+			json.put("description", "未查询到goods信息");
+			return buildReqJsonObject(json);
+		}
+	}
+	
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -45,7 +72,7 @@ public class UserActivityController extends BaseController{
 			return buildReqJsonInteger(2, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-	/*	if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
+		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
 			json.put("description", "操作失败，请检查输入的参数是否完整");
 			return buildReqJsonObject(json);
@@ -54,7 +81,7 @@ public class UserActivityController extends BaseController{
 			json.put("result", "1");
 			json.put("description", "操作失败，请检查输入的参数是否正确");
 			return buildReqJsonObject(json);
-		}*/
+		}
 		ModelMap model = new ModelMap();
 
 		List<UserActivity> list = new ArrayList<UserActivity>();
@@ -120,8 +147,8 @@ public class UserActivityController extends BaseController{
 	@ResponseBody
 	public String firstUuid(){
 		JSONObject json = new JSONObject();
-		List<Goods> firstUuidList = new ArrayList<Goods>();
-		firstUuidList = goodsService.firstUuid();
+		List<FirstCategorys> firstUuidList = new ArrayList<FirstCategorys>();
+		firstUuidList = firstCategorysServiceImpl.firstUuid();
 		if(firstUuidList!=null){
 			json.put("result", 0);
 			json.put("description", "查詢成功");
@@ -133,43 +160,30 @@ public class UserActivityController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 	}
+
 	/*
 	 * 二级分类
-	 * */
+	 */
 	@RequestMapping("searchsecondUuid")
 	@ResponseBody
 	public String secondUuid() {
 		JSONObject json = new JSONObject();
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if(bodyInfo.get("first_uuid")!=null){
-			List<Goods> secondUuidList = new ArrayList<Goods>();
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("firstUuid", bodyInfo.getString("first_uuid"));
-			secondUuidList = goodsService.secondUuid(map);
-			if(secondUuidList!=null){
-				json.put("result", 0);
-				json.put("description", "查詢成功");
-				json.put("secondUuidList", secondUuidList);
-				return buildReqJsonObject(json);
-			}else{
-				json.put("result", 1);
-				json.put("description", "未查询到goods信息");
-				return buildReqJsonObject(json);
-			}
-		}else{
-			List<Goods> firstUuidList = new ArrayList<Goods>();
-			firstUuidList = goodsService.firstUuid();
-			if(firstUuidList!=null){
-				json.put("result", 0);
-				json.put("description", "查詢成功");
-				json.put("firstUuidList", firstUuidList);
-				return buildReqJsonObject(json);
-			}else{
-				json.put("result", 1);
-				json.put("description", "未查询到goods信息");
-				return buildReqJsonObject(json);
-			}
+		List<Goods> secondUuidList = new ArrayList<Goods>();
+		/*Map<String, Object> map = new HashMap<String, Object>();
+		map.put("firstUuid", bodyInfo.getString("first_uuid"));*/
+		secondUuidList = secondCategorysService.secondUuid(bodyInfo.getString(bodyInfo.getString("first_uuid")));
+		if (secondUuidList != null) {
+			json.put("result", 0);
+			json.put("description", "查詢成功");
+			json.put("secondUuidList", secondUuidList);
+			return buildReqJsonObject(json);
+		} else {
+			json.put("result", 1);
+			json.put("description", "未查询到goods信息");
+			return buildReqJsonObject(json);
 		}
+
 	}
 	
 	/*
@@ -196,6 +210,53 @@ public class UserActivityController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 	}
+	/*
+	 *添加活动内商品
+	 */
+	@RequestMapping("insert")
+	@ResponseBody
+	public String insertActivity(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("store_uuid")==null||bodyInfo.get("banner") == null||
+				bodyInfo.get("good_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		JSONArray jsonArray = bodyInfo.getJSONArray("good_uuid");
+		List<String> goodUuids = new ArrayList<String>();
+		for(int i=0;i<jsonArray.size();i++){
+			goodUuids.add(jsonArray.getString(i));
+		}
+		if(goodUuids.size()>0){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("goodUuids", "goodUuids");
+			map.put("banner",bodyInfo.getString("banner"));
+			map.put("storeUuid",bodyInfo.getString("store_uuid"));
+			
+			int rs = userActivityService.insertByActivityUuids(map);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "添加成功");
+				return buildReqJsonObject(json);
+			}else{
+				json.put("result", 1);
+				json.put("description", "请检查参数格式是否正确或者参数是否完整");
+				return buildReqJsonObject(json);
+			}
+		}else{
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+	}
+	
 	
 /*
 	@RequestMapping("searchGood")
@@ -357,50 +418,6 @@ public class UserActivityController extends BaseController{
 	
 	
 	
-	@RequestMapping("insert")
-	@ResponseBody
-	public String insertActivity(){
-		JSONObject json = new JSONObject();
-		if (sign == 1||sign == 2) {
-			json.put("result", "1");
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
-			return buildReqJsonInteger(1, json);
-		}
-		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("store_uuid")==null||bodyInfo.get("banner") == null||
-				bodyInfo.get("good_uuid") == null) {
-			json.put("result", 1);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
-			return buildReqJsonObject(json);
-		}
-		
-		JSONArray jsonArray = bodyInfo.getJSONArray("good_uuid");
-		List<String> goodUuids = new ArrayList<String>();
-		for(int i=0;i<jsonArray.size();i++){
-			goodUuids.add(jsonArray.getString(i));
-		}
-		if(goodUuids.size()>0){
-			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("goodUuids", "goodUuids");
-			map.put("banner",bodyInfo.getString("banner"));
-			map.put("storeUuid",bodyInfo.getString("store_uuid"));
-			
-			int rs = userActivityService.insertByActivityUuids(map);
-			if(rs == 1){
-				json.put("result", 0);
-				json.put("description", "添加成功");
-				return buildReqJsonObject(json);
-			}else{
-				json.put("result", 1);
-				json.put("description", "请检查参数格式是否正确或者参数是否完整");
-				return buildReqJsonObject(json);
-			}
-		}else{
-			json.put("result", 1);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
-			return buildReqJsonObject(json);
-		}
-	}
 	
 	
 	

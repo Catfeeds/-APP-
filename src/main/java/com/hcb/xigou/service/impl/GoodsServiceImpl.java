@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.GoodsMapper;
+import com.hcb.xigou.dto.FirstCategorys;
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.UserActivity;
-import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.GoodsService;
 
 @Service("GoodsService")
@@ -98,18 +99,6 @@ public class GoodsServiceImpl implements GoodsService {
 	public List<Goods> secondUuid(Map<String, Object> map) {
 		
 		return goodsMapper.secondUuid(map);
-	}
-
-	@Override
-	public List<Goods> firstUuid() {
-		
-		return goodsMapper.firstUuid();
-	}
-
-	@Override
-	public List<Goods> searchGoodUuid(Map<String, Object> map) {
-		
-		return goodsMapper.searchGoodUuid(map);
 	}
 
 }

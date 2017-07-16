@@ -1,9 +1,12 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.SecondCategorysMapper;
+import com.hcb.xigou.dto.Goods;
 import com.hcb.xigou.dto.SecondCategorys;
 import com.hcb.xigou.service.ISecondCategorysService;
 
@@ -53,6 +56,12 @@ public class SecondCategorysServiceImpl implements ISecondCategorysService{
 	public SecondCategorys selectAll() {
 		// TODO Auto-generated method stub
 		return secondCategorysMapper.selectAll();
+	}
+
+	@Override
+	public List<Goods> secondUuid(String firstUuid) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.secondUuid(firstUuid);
 	}
 
 }

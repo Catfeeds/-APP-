@@ -74,14 +74,13 @@
       <if test="activityUuid != null and activityUuid != ''">
       	where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
       </if>
-      
     )
   </update>
   
   
   <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
   	<foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
-		   insert into  activity_zones 
+		  insert into  activity_zones 
 		  (good_uuid,type,banner,store_uuid) 
 		  values 
 		  (#{item},'selling',#{banner,jdbcType=VARCHAR},#{storeUuid,jdbcType=VARCHAR})
