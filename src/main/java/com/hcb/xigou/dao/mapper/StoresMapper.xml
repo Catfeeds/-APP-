@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.StoresMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Stores" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="store_address" property="storeAddress" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, store_uuid, create_datetime, update_datetime, delete_at, image, store_name, 
+    store_address, latitude, longitude
+  </sql>
+  
+  <!-- 所有门店 -->
+  <select id="selectStoreAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from stores
+  </select>
+  <!-- 根据订单的store_uuid返回门店 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from stores
+    where store_uuid = #{storeUuid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from stores
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.Stores" >
+    insert into stores (fake_id, store_uuid, create_datetime, 
+      update_datetime, delete_at, image, 
+      store_name, store_address, latitude, 
+      longitude)
+    values (#{fakeId,jdbcType=INTEGER}, #{storeUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
+      #{storeName,jdbcType=VARCHAR}, #{storeAddress,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Stores" >
+    insert into stores
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="storeAddress != null" >
+        store_address,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="storeUuid != null" >
+        #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeAddress != null" >
+        #{storeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.Stores" >
+    update stores
+    <set >
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeAddress != null" >
+        store_address = #{storeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Stores" >
+    update stores
+    set store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      store_address = #{storeAddress,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>
