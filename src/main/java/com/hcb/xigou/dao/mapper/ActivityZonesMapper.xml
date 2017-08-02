@@ -100,7 +100,7 @@
   
   
   <delete id="deleteByPopular">
-	  delete activity_zones
+	  delete from activity_zones
 	  where 1=1
 	  and activity_uuid in 
 	  <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  

@@ -88,6 +88,7 @@ public class MemberManageController extends BaseController{
 			
 			list = userManageService.searchMemberMagageByMap(map);
 			Integer count = 0;
+			int usernum = userManageService.countMemberUsers(map);
 			count = userManageService.countMemberMagageByMap(map);
 			
 			if (count % pageSize == 0) {
@@ -100,8 +101,10 @@ public class MemberManageController extends BaseController{
 						return buildReqJsonObject(json);
 					}
 				}
-				model.put("total", total);
+				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count",count);
+				model.put("usernum",usernum);
 			}else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
@@ -112,7 +115,9 @@ public class MemberManageController extends BaseController{
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
 				model.put("count",count);
+				model.put("usernum",usernum);
 			}
+			
 		}
 		
 		model.put("description", "查询成功");
@@ -162,7 +167,7 @@ public class MemberManageController extends BaseController{
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
 			int start = (pageIndex - 1) * pageSize;
-			map.put("start",start);
+			map.put("start", start);
 			map.put("end", pageSize);
 			
 			if(bodyInfo.get("name")!=null){
@@ -174,7 +179,6 @@ public class MemberManageController extends BaseController{
 				if(!"".equals(bodyInfo.getString("nickname"))){
 					map.put("nickname", bodyInfo.getString("nickname"));
 				}
-				
 			}
 			if(bodyInfo.get("phone")!=null){
 				if(!"".equals(bodyInfo.getString("phone"))){
@@ -189,6 +193,7 @@ public class MemberManageController extends BaseController{
 			
 			list = userManageService.searchMemberMagageByMap(map);
 			Integer count = 0;
+			int usernum = userManageService.countMemberUsers(map);
 			count = userManageService.countMemberMagageByMap(map);
 			
 			if (count % pageSize == 0) {
@@ -201,8 +206,10 @@ public class MemberManageController extends BaseController{
 						return buildReqJsonObject(json);
 					}
 				}
-				model.put("total", total);
+				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count",count);
+				model.put("usernum",usernum);
 			}else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
@@ -213,7 +220,9 @@ public class MemberManageController extends BaseController{
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
 				model.put("count",count);
+				model.put("usernum",usernum);
 			}
+			
 		}
 		
 		model.put("description", "查询成功");
@@ -224,6 +233,7 @@ public class MemberManageController extends BaseController{
 		a = a.replace("]\"", "]");
 		return a;
 	}
+	
 	@RequestMapping("delete")
 	@ResponseBody
 	public String delete(){

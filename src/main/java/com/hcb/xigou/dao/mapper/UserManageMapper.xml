@@ -47,7 +47,7 @@
   	select 
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where u.delete_at is null
+  	where 1=1
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -62,7 +62,7 @@
   <select id="countUserMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where u.delete_at is null
+  	where 1=1
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -73,15 +73,27 @@
   		and u.phone = #{phone,jdbcType=VARCHAR}
   	</if>
   </select>
-  
+   <select id="countUsers" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from users  
+  	where 1=1
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  </select>
   
   
   <select id="searchMemberMagageByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where u.delete_at is null
-  	and u.user_uuid not in(
+  	where  u.user_uuid not in(
 		SELECT user_uuid from users 
 			where member_card_number is null
 	)
@@ -102,8 +114,7 @@
   <select id="countMemberMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where u.delete_at is null
-  	and u.user_uuid not in(
+  	where  u.user_uuid not in(
 		SELECT user_uuid from users 
 			where member_card_number is null
 	)
@@ -120,7 +131,26 @@
   		and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
   	</if>
   </select>
-  
+  <select id="countMemberUsers" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from users  
+  	where user_uuid not in(
+		SELECT user_uuid from users 
+			where member_card_number is null
+	)
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	</if>
+  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

@@ -28,6 +28,7 @@
   	<include refid="Base_Column_List" />
   	from recharges r  LEFT JOIN users u on r.user_uuid = u.user_uuid
   	where r.delete_at is null
+  	and status = '1'
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
   	</if>
@@ -46,6 +47,7 @@
   	select count(1)
   	from recharges r LEFT JOIN users u  on u.user_uuid = r.user_uuid
   	where r.delete_at is null
+  	and status = '1'
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
   	</if>

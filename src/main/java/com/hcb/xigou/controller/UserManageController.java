@@ -82,6 +82,7 @@ public class UserManageController extends BaseController{
 			}
 			list = userManageService.searchUserMagageByMap(map);
 			Integer count = 0;
+			int usernum = userManageService.countUsers(map);
 			count = userManageService.countUserMagageByMap(map);
 			if (count % pageSize == 0) {
 				Integer total = count / pageSize;
@@ -93,8 +94,10 @@ public class UserManageController extends BaseController{
 						return buildReqJsonObject(json);
 					}
 				}
-				model.put("total", total);
+				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count",count);
+				model.put("usernum",usernum);
 			} else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
@@ -105,6 +108,7 @@ public class UserManageController extends BaseController{
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
 				model.put("count",count);
+				model.put("usernum",usernum);
 			}
 		}
 		
@@ -132,16 +136,6 @@ public class UserManageController extends BaseController{
 			return buildReqJsonInteger(2, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		/*if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
-			json.put("result", "1");
-			json.put("description", "操作失败，请检查输入的参数是否完整");
-			return buildReqJsonObject(json);
-		}
-		if ("".equals(bodyInfo.get("pageIndex")) || "".equals(bodyInfo.get("pageSize"))) {
-			json.put("result", "1");
-			json.put("description", "操作失败，请检查输入的参数是否正确");
-			return buildReqJsonObject(json);
-		}*/
 		ModelMap model = new ModelMap();
 
 		List<UserManage> list = new ArrayList<UserManage>();
@@ -175,6 +169,7 @@ public class UserManageController extends BaseController{
 			}
 			list = userManageService.searchUserMagageByMap(map);
 			Integer count = 0;
+			int usernum = userManageService.countUsers(map);
 			count = userManageService.countUserMagageByMap(map);
 			if (count % pageSize == 0) {
 				Integer total = count / pageSize;
@@ -186,8 +181,10 @@ public class UserManageController extends BaseController{
 						return buildReqJsonObject(json);
 					}
 				}
-				model.put("total", total);
+				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count",count);
+				model.put("usernum",usernum);
 			} else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
@@ -198,6 +195,7 @@ public class UserManageController extends BaseController{
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
 				model.put("count",count);
+				model.put("usernum",usernum);
 			}
 		}
 		

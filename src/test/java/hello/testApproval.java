@@ -91,11 +91,11 @@ public class testApproval {
 //        body.put("coupon_name", "丰富的");
 //        body.put("coupon_stock", "12");
 //        body.put("coupon_uuid",jsonDp1 );
-//        body.put("pageIndex",1 );
-//        body.put("pageSize",15);
+        body.put("pageIndex",1 );
+        body.put("pageSize",10);
 //        
-        String[] s={"ec973cf99e76696d1f357ab79fd601c9"}; 
-        body.put("good_uuid",s);
+//        String[] s={"ec973cf99e76696d1f357ab79fd601c9"}; 
+//        body.put("good_uuid",s);
         map.put("body",body);
   
         
@@ -105,7 +105,7 @@ public class testApproval {
    	    //查找案件主办律师
    	    //新建审批条目 在审批信息表 approval_inner_base_infos中0558
    	    //返回审批uuid
-   	    String url = "http://localhost:8080/xigou-api/goods/delete";
+   	    String url = "http://localhost:8080/xigou-api/userManage/search";
    	    // String url = "192.168.1.101:8080/apparel/alipay/confirm";
       // String url = "http://test.appring.cn:8080/fastask/question/show"; /* * * * * * root wget http://test.appring.cn:8080/fastask/energy/timing -q -O /usr/local/time/timelog
  	    HttpPost httpPost = new HttpPost(url);
