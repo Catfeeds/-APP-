@@ -15,6 +15,16 @@
     fake_id, first_uuid, create_datetime, update_datetime, delete_at, category_name, 
     image, store_uuid
   </sql>
+  
+  <select id="firstUuid"  resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from first_categorys
+  	where delete_at is null
+  	group by category_name
+  </select>
+  
+  
   <select id="selectByFirstUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -47,20 +57,16 @@
 	</if>
   </select>
   
-    <update id="deleteByFirstUuids" parameterType="java.util.HashMap" >
-   update first_categorys
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
-    <if test="storeUuid!='' and storeUuid!=null ">
-		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
-	</if >
-	<if test="FirstUuids!='' and FirstUuids!=null ">
+    <delete id="deleteByFirstUuids" parameterType="java.util.HashMap" >
+   delete from first_categorys
+    where 1=1
+	<if test="firstUuids !=null ">
 		and first_uuid in 
-	    <foreach item="item" index="index" collection="FirstUuids" open="(" separator="," close=")">  
+	    <foreach item="item" index="index" collection="firstUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
-  </update>
+  </delete>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from first_categorys
@@ -160,12 +166,6 @@
     <update id="updateByfirstUuid" parameterType="com.hcb.xigou.dto.FirstCategorys" >
     update first_categorys
     <set >
-      <if test="createDatetime != null" >
-        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDatetime != null" >
-        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
-      </if>
       <if test="deleteAt != null" >
         delete_at = #{deleteAt,jdbcType=VARCHAR},
       </if>

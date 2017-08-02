@@ -46,17 +46,16 @@
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </delete>
   
-  <update id="deleteByCouponUuids" parameterType="java.util.HashMap" >
-   update coupons
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
+  <delete id="deleteByCouponUuids" parameterType="java.util.HashMap" >
+   delete from  coupons
+    where 1 = 1
 	<if test="couponUuids!='' and couponUuids!=null ">
-		coupon_uuid in 
+		and coupon_uuid in 
 	    <foreach item="item" index="index" collection="couponUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
-  </update>
+  </delete>
   
   <select id="searchCouponByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 

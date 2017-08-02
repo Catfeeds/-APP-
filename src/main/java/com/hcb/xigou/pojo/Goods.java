@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Goods {
-    private Integer fakeId;
+    private int fakeId;
 
     private String goodUuid;
 
@@ -26,7 +26,7 @@ public class Goods {
 
     private BigDecimal unitPrice;
 
-    private Integer numbers;
+    private int numbers;
 
     private String classifier;
 
@@ -44,25 +44,25 @@ public class Goods {
 
     private String goodCode;
     
-    private Integer goodStatus;
+    private String goodStatus;
 
-    public Integer getGoodStatus() {
+    public int getFakeId() {
+		return fakeId;
+	}
+
+	public void setFakeId(int fakeId) {
+		this.fakeId = fakeId;
+	}
+
+	public String getGoodStatus() {
 		return goodStatus;
 	}
 
-	public void setGoodStatus(Integer goodStatus) {
+	public void setGoodStatus(String goodStatus) {
 		this.goodStatus = goodStatus;
 	}
 
-	public Integer getFakeId() {
-        return fakeId;
-    }
-
-    public void setFakeId(Integer fakeId) {
-        this.fakeId = fakeId;
-    }
-
-    public String getGoodUuid() {
+	public String getGoodUuid() {
         return goodUuid;
     }
 
@@ -143,11 +143,11 @@ public class Goods {
         this.unitPrice = unitPrice;
     }
 
-    public Integer getNumbers() {
+    public int getNumbers() {
         return numbers;
     }
 
-    public void setNumbers(Integer numbers) {
+    public void setNumbers(int numbers) {
         this.numbers = numbers;
     }
 

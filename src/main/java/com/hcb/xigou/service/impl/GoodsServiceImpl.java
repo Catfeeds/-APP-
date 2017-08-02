@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.GoodsMapper;
 import com.hcb.xigou.pojo.Goods;
+import com.hcb.xigou.pojo.GoodsWithBLOBs;
 import com.hcb.xigou.service.GoodsService;
 
 @Service("GoodsService")
@@ -47,7 +48,7 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public List<Goods> searchGoodsByMap(Map<String, Object> map) {
+	public List<GoodsWithBLOBs> searchGoodsByMap(Map<String, Object> map) {
 		
 		return goodsMapper.searchGoodsByMap(map);
 	}
@@ -70,9 +71,33 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public int updateByGoodsUuid(Goods record) {
+	public int updateByGoodsUuid(GoodsWithBLOBs record) {
 		// TODO Auto-generated method stub
 		return goodsMapper.updateByGoodsUuid(record);
+	}
+
+	@Override
+	public int updateByGoodsStatus(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return goodsMapper.updateByGoodsStatus(map);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Goods good) {
+		// TODO Auto-generated method stub
+		return goodsMapper.updateByPrimaryKeySelective(good);
+	}
+
+	@Override
+	public List<Goods> searchGoodUuid(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return goodsMapper.searchGoodUuid(map);
+	}
+
+	@Override
+	public List<Goods> searchActivityGood(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return goodsMapper.searchActivityGood(map);
 	}
 
 }

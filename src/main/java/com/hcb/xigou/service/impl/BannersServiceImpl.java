@@ -70,4 +70,10 @@ public class BannersServiceImpl implements IBannersService{
 	public int insertByBanner(Banners banner) {
 		return bannersMapper.insertByBanner(banner);
 	}
+
+	@Override
+	public int selectByBannerStatus() {
+		// TODO Auto-generated method stub
+		return bannersMapper.selectByBannerStatus();
+	}
 }

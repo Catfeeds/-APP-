@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hcb.xigou.pojo.Goods;
+import com.hcb.xigou.pojo.GoodsWithBLOBs;
 
 public interface GoodsMapper {
 
@@ -20,7 +21,7 @@ public interface GoodsMapper {
 	
 	int deleteByGoodUuids(Map<String,Object> map);
 
-	public List<Goods> searchGoodsByMap(Map<String, Object> map);
+	public List<GoodsWithBLOBs> searchGoodsByMap(Map<String, Object> map);
 
 	public int countGoodsByMap(Map<String, Object> map);
 	
@@ -28,5 +29,13 @@ public interface GoodsMapper {
 	
 	Goods selectByGoodUuid(String goodUuid);
 	
-	int updateByGoodsUuid(Goods record);
+	int updateByGoodsUuid(GoodsWithBLOBs record);
+
+	public int updateByGoodsStatus(Map<String, Object> map);
+
+	public int updateByPrimaryKeySelective(Goods good);
+
+	public List<Goods> searchGoodUuid(Map<String, Object> map);
+
+	public List<Goods> searchActivityGood(Map<String, Object> map);
 }

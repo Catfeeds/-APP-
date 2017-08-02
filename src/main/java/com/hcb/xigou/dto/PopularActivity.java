@@ -7,6 +7,17 @@ public class PopularActivity extends ActivityZones{
 	private String goodName;
 	
 	private String bannerUuid;
+	
+	private String cover;
+	
+	
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
 
 	public String getGoodName() {
         return goodName;

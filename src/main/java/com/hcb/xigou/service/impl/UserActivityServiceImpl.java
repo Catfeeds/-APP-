@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.UserActivityMapper;
+import com.hcb.xigou.dto.ActivityZones;
 import com.hcb.xigou.dto.UserActivity;
 import com.hcb.xigou.service.UserActivityService;
 
@@ -36,9 +37,9 @@ public class UserActivityServiceImpl implements UserActivityService {
 	}
 
 	@Override
-	public int insertByActivityUuids(Map<String, Object> map) {
+	public int insertByActivityUuids(List<ActivityZones> listAct) {
 		
-		return userActivityMapper.insertByActivityUuids(map);
+		return userActivityMapper.insertByActivityUuids(listAct);
 	}
 
 	@Override
@@ -51,6 +52,30 @@ public class UserActivityServiceImpl implements UserActivityService {
 	public int countUserActivityByMap(Map<String, Object> map) {
 
 		return userActivityMapper.countUserActivityByMap(map);
+	}
+
+	@Override
+	public int updateByActivity(UserActivity userActivity) {
+		// TODO Auto-generated method stub
+		return userActivityMapper.updateByActivity(userActivity);
+	}
+
+	@Override
+	public int deleteByActivityGoodUuid(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userActivityMapper.deleteByActivityGoodUuid(map);
+	}
+
+	@Override
+	public UserActivity selectGroupsMax() {
+		// TODO Auto-generated method stub
+		return userActivityMapper.selectGroupsMax();
+	}
+
+	@Override
+	public int selectByActiviAndGood(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userActivityMapper.selectByActiviAndGood(map);
 	}
 	
 }

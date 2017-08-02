@@ -19,6 +19,15 @@
     fake_id, banner_uuid, create_datetime, update_datetime, delete_at, type, url, store_uuid, 
     good_uuid, currentIndex,banner_status,banner_name
   </sql>
+  
+  <!-- 统计正在使用的banner个数，限制使用状态最多为四张 -->
+  <select id="selectByBannerStatus" resultType="java.lang.Integer">
+  	select count(1) from banners
+	where banner_status = 1
+	and delete_at is null
+  </select>
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -39,7 +48,7 @@
     from banners
     where delete_at is null
     <if test="bannerName !='' and bannerName != null">
-		banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
+		and banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
 	</if>
 	<if test="storeUuid !='' and storeUuid != null">
 		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
@@ -51,43 +60,25 @@
    select count(1) from banners
     where delete_at is null
     <if test="bannerName !='' and bannerName != null">
-		banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
+		and banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
 	</if>
 	<if test="storeUuid !='' and storeUuid != null">
 		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if>
   </select>
   
-  <update id="deleteByBannerUuids" parameterType="java.util.HashMap" >
-   update banners
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
-    <if test="storeUuid!='' and storeUuid!=null ">
-			and store_uuid = #{storeUuid,jdbcType=VARCHAR}
-	</if >
+  <delete id="deleteByBannerUuids" parameterType="java.util.HashMap" >
+   delete from banners
+    where 1=1
 	<if test="bannerUuids!='' and bannerUuids!=null ">
 		and banner_uuid in 
 	    <foreach item="item" index="index" collection="bannerUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
-  </update>
-  
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from banners
-    where fake_id = #{fakeId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.hcb.xigou.dto.Banners" >
-    insert into banners (fake_id, banner_uuid, create_datetime, 
-      update_datetime, delete_at, type, 
-      url, store_uuid, good_uuid, 
-      currentIndex,banner_status,banner_name)
-    values (#{fakeId,jdbcType=INTEGER}, #{bannerUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
-      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{url,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, 
-      #{currentindex,jdbcType=INTEGER},  #{bannerStatus,jdbcType=INTEGER}, #{bannerName,jdbcType=VARCHAR})
-  </insert>
-  
+
+
   
   <insert id="insertByBanner" parameterType="com.hcb.xigou.dto.Banners" >
     insert into banners
@@ -205,7 +196,7 @@
          banner_name = #{bannerName,jdbcType=VARCHAR},
       </if>
     </set>
-    where fake_id = #{fakeId,jdbcType=INTEGER}
+    where banner_uuid = #{bannerUuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Banners" >
     update banners

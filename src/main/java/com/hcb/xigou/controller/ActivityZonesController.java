@@ -1,3 +1,4 @@
+
 package com.hcb.xigou.controller;
 
 import java.text.SimpleDateFormat;
@@ -6,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import com.hcb.xigou.util.MD5Util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 @Controller
 @RequestMapping("activityZones/")
 public class ActivityZonesController extends BaseController{
@@ -39,19 +38,19 @@ public class ActivityZonesController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("title")==null||
-			bodyInfo.get("image") == null||bodyInfo.get("store_uuid") == null) {
+		if (bodyInfo.get("title")==null||bodyInfo.get("image") == null||
+			headInfo.get("store_uuid") == null) {
 			json.put("result", 1);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			json.put("description", "title，image，store_uuid参数不完整");
 			return buildReqJsonObject(json);
 		}
 		ActivityZones activity = new ActivityZones();
 		String activityUuid = "";
 		try {
-			activityUuid = MD5Util.md5Digest(bodyInfo.getString("store_uuid") + System.currentTimeMillis() + RandomStringUtils.random(8));
+			activityUuid = MD5Util.md5Digest(bodyInfo.getString("title") + System.currentTimeMillis() + RandomStringUtils.random(8));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 		activity.setActivityUuid(activityUuid);
@@ -59,7 +58,7 @@ public class ActivityZonesController extends BaseController{
 		activity.setCreateDatetime(new Date());
 		activity.setImage(bodyInfo.getString("image"));
 		activity.setType("coupon");
-		activity.setStoreUuid(bodyInfo.getString("store_uuid"));
+		activity.setStoreUuid(headInfo.getString("store_uuid"));
 		activity.setIsStop("2");
 		int rs = 0;
 		rs = activityZonesService.insertSelective(activity);
@@ -83,9 +82,10 @@ public class ActivityZonesController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("title")==null||bodyInfo.get("activity_uuid")==null||
-			bodyInfo.get("image") == null||bodyInfo.get("store_uuid") == null) {
+			bodyInfo.get("image") == null||headInfo.get("store_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
@@ -104,7 +104,6 @@ public class ActivityZonesController extends BaseController{
 			activity.setUpdateDatetime(updateTime);
 			activity.setImage(bodyInfo.getString("image"));
 			activity.setType("coupon");
-			activity.setStoreUuid(bodyInfo.getString("store_uuid"));
 			activity.setIsStop("2");
 			int rs = 0;
 			rs = activityZonesService.updateByActivityUuid(activity);
@@ -152,16 +151,21 @@ public class ActivityZonesController extends BaseController{
 				e.printStackTrace();
 			}
 			activity.setUpdateDatetime(updateTime);
-			activity.setIsStop("1");
+			if(activity.getIsStop().equals("2")){
+				activity.setIsStop("1");
+			}else{
+				activity.setIsStop("2");
+			}
+			
 			int rs = 0;
 			rs = activityZonesService.updateByActivityUuid(activity);
 			if(rs == 1){
 				json.put("result", 0);
-				json.put("description", "展示优惠活动成功");
+				json.put("description", "修改展示优惠活动成功");
 				return buildReqJsonObject(json);
 			}else{
 				json.put("result", 1);
-				json.put("description", "展示优惠活动失败，请重试");
+				json.put("description", "修改展示优惠活动失败，请重试");
 				return buildReqJsonObject(json);
 			}
 		}else{
@@ -185,9 +189,9 @@ public class ActivityZonesController extends BaseController{
 		}
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("banner_uuid") == null) {
+		if (bodyInfo.get("activity_uuid") == null) {
 			json.put("result", 1);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			json.put("description", "activity_uuid为空");
 			return buildReqJsonObject(json);
 		}
 		JSONArray jsonArray = bodyInfo.getJSONArray("activity_uuid");
@@ -205,11 +209,11 @@ public class ActivityZonesController extends BaseController{
 			int rs = activityZonesService.deleteByActivityUuids(map);
 			if(rs >= 1){
 				json.put("result", 0);
-				json.put("description", "删除成功");
+				json.put("description", "删除优惠活动成功");
 				return buildReqJsonObject(json);
 			}else{
 				json.put("result", 1);
-				json.put("description", "请检查参数格式是否正确或者参数是否完整");
+				json.put("description", "删除优惠活动失败，请重试");
 				return buildReqJsonObject(json);
 			}
 		}else{
@@ -237,7 +241,7 @@ public class ActivityZonesController extends BaseController{
 		ActivityZones activity = activityZonesService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
 		if(activity!=null){
 			json.put("result", 0);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			json.put("description", "查询成功");
 			json.put("activity", activity);
 			return buildReqJsonObject(json);
 		}else{
@@ -311,6 +315,7 @@ public class ActivityZonesController extends BaseController{
 				}
 				model.put("total", total);
 				model.put("page", pageIndex);
+				model.put("count", count);
 			} else {
 				Integer total = count / pageSize + 1;
 				if (pageIndex > total) {
@@ -320,6 +325,7 @@ public class ActivityZonesController extends BaseController{
 				}
 				model.put("total", total);// 页码总数
 				model.put("page", pageIndex);
+				model.put("count", count);
 			}
 		}
 		
@@ -332,3 +338,4 @@ public class ActivityZonesController extends BaseController{
 		return a;
 	}
 }
+

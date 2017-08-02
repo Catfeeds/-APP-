@@ -35,4 +35,10 @@ public class UserManageServiceImpl implements UserManageService {
 		return userManageMapper.countMemberMagageByMap(map);
 	}
 
+	@Override
+	public int deleteByUsersUuids(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userManageMapper.deleteByUsersUuids(map);
+	}
+
 }

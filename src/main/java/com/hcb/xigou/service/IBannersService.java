@@ -27,4 +27,6 @@ public interface IBannersService {
     int countBannerByMap(Map<String,Object> map);
 
 	int insertByBanner(Banners banner);
+
+	int selectByBannerStatus();
 }

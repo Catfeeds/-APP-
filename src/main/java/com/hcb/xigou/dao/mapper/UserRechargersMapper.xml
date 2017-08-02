@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hcb.xigou.dao.interfaceClass.RechargesMapper" >
-  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Recharges" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.UserRechargersMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.UserRechargers" >
     <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
     <result column="recharge_uuid" property="rechargeUuid" jdbcType="VARCHAR" />
     <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />

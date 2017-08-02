@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.ActivityZonesMapper;
 import com.hcb.xigou.dto.ActivityZones;
+import com.hcb.xigou.dto.PopularActivity;
 import com.hcb.xigou.service.IActivityZonesService;
 
 @Service("ActivityZonesService")
@@ -80,6 +81,60 @@ public class ActivityZonesServiceImpl implements IActivityZonesService{
 	public int updateByActivityUuid(ActivityZones record) {
 		// TODO Auto-generated method stub
 		return activityZonesMapper.updateByActivityUuid(record);
+	}
+
+	@Override
+	public List<PopularActivity> searchPopularByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.searchPopularByMap(map);
+	}
+
+	@Override
+	public int countPopularByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.countPopularByMap(map);
+	}
+
+	@Override
+	public int deleteByPopular(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.deleteByPopular(map);
+	}
+
+	@Override
+	public ActivityZones selectByPopularId(String activityUuid) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.selectByPopularId(activityUuid);
+	}
+
+	@Override
+	public List<ActivityZones> searchActivityList(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.searchActivityList(map);
+	}
+
+	@Override
+	public int countActivityInt(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.countActivityInt(map);
+	}
+
+	@Override
+	public ActivityZones selectByActivity(String activityUuid) {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.selectByActivity(activityUuid);
+	}
+
+	@Override
+	public int selectByActivityCount() {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.selectByActivityCount();
+	}
+
+	@Override
+	public int selectByActivitySellingCount() {
+		// TODO Auto-generated method stub
+		return activityZonesMapper.selectByActivitySellingCount();
 	}
 
 

@@ -81,6 +81,10 @@
   	<include refid="Base_Column_List" />
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
   	where u.delete_at is null
+  	and u.user_uuid not in(
+		SELECT user_uuid from users 
+			where member_card_number is null
+	)
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -99,6 +103,10 @@
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
   	where u.delete_at is null
+  	and u.user_uuid not in(
+		SELECT user_uuid from users 
+			where member_card_number is null
+	)
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -120,5 +128,20 @@
     from users
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
+
+ 
+  <update id="deleteByUsersUuids" parameterType="java.util.HashMap" >
+   update users
+  	set delete_at = 'del'
+    where delete_at is null
+	<if test="userUuids !=null ">
+		and user_uuid in 
+	    <foreach item="item" index="index" collection="userUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </update>
+ 
+ 
  
 </mapper>

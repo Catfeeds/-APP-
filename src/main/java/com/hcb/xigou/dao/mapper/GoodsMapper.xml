@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hcb.xigou.dao.interfaceClass.GoodsMapper" >
-  <resultMap id="BaseResultMap" type="com.hcb.xigou.pojo.Goods" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.pojo.GoodsWithBLOBs" >
     <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
     <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
     <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
@@ -22,7 +22,7 @@
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="good_code" property="goodCode" jdbcType="VARCHAR" />
-    <result column="good_status" property="goodStatus" jdbcType="CHAR" />
+    <result column="good_status" property="goodStatus" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.pojo.GoodsWithBLOBs" extends="BaseResultMap" >
     <result column="poster" property="poster" jdbcType="LONGVARCHAR" />
@@ -38,45 +38,82 @@
     poster, photos, models
   </sql>
   
+  <update id="updateByGoodsStatus" parameterType="java.util.HashMap">
+  	update goods
+  	set good_status = #{goodStatus,jdbcType=VARCHAR}
+  	where good_uuid in
+  	<foreach  index="index" item="item" collection="goodUuids" open="(" separator="," close=")">
+         #{item}
+    </foreach>
+  </update>
   
-  <select id="countGoodsByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  
+  <!-- 二级分类下的商品 -->
+  <select id="searchGoodUuid" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  		select 
+  		<include refid="Base_Column_List"/>
+  		from goods
+  		where delete_at is null
+  		<if test="secondUuid != null and secondUuid != ''">
+  			and second_uuid = #{secondUuid,jdbcType=VARCHAR}
+  		</if>
+  </select>
+  
+  
+  <select id="searchActivityGood"  parameterType="java.util.HashMap" resultMap="ResultMapWithBLOBs">
+ 	select  
+ 	fake_id, good_uuid, create_datetime, update_datetime, delete_at, merchant_uuid, good_name, 
+    description, title, cover, unit_price, numbers, classifier, first_uuid, firt_category_name, 
+    second_uuid, second_category_name, store_uuid, address, good_code
+ 	from goods where  good_uuid in (
+ 		select good_uuid from  activity_zones 
+ 		where delete_at is null
+ 			and groups = #{groups,jdbcType=VARCHAR}
+ 	)
+ </select>
+  
+ 
+   <select id="countGoodsByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
     select  count(1) from goods 
   	where delete_at is null
-  	<if test="goodName != null and goodName != ''">
-  		and good_name like %#{goodName,jdbcType=VARCHAR}%
+  	<if test="goodName !=null and goodName !='' ">
+  		and good_name like CONCAT(CONCAT('%', #{goodName,jdbcType=VARCHAR}), '%')
   	</if>
-  	<if test="firtCategoryName != null firtCategoryName != ''">
+  	<if test="firtCategoryName != null and firtCategoryName != ''">
   		and firt_category_name= #{firtCategoryName,jdbcType=VARCHAR}
   	</if>
-  	<if test="goodStatus ！ = null and goodStatus != ''">
-  		and good_status = #{goodStatus,jdbcType=VARCHAR}
+  	<if test="minPrice != null and minPrice != 0">
+  		and unit_price &gt;=#{minPrice,jdbcType=DECIMAL}
   	</if>
-  	<if test="minPrice != null and minPrice != null">
-  		and unit_price &gt;=#{minPrice,jdbcType=VARCHAR}
+  	<if test="maxPrice !=null and maxPrice != 0">
+  		and unit_price &lt;=#{maxPrice,jdbcType=DECIMAL}
   	</if>
-  	<if test="maxPrice ! null and maxPrice != ''">
-  		and unit_price &lt;=#{maxPrice,jdbcType=VARCHAR}
+  	<if test="goodStatus !=null">
+  		and good_status =#{goodStatus,jdbcType=DECIMAL}
   	</if>
   </select>
+  
   <select id="searchGoodsByMap" parameterType="java.util.HashMap" resultMap="BaseResultMap"> 
   	select  
   	<include refid="Base_Column_List" />
+  	,
+  	<include refid="Blob_Column_List"/>
   	from goods 
   	where delete_at is null
   	<if test="goodName != null and goodName != ''">
-  		and good_name like %#{goodName,jdbcType=VARCHAR}%
+  		and good_name like CONCAT(CONCAT('%', #{goodName,jdbcType=VARCHAR}), '%')
   	</if>
-  	<if test="firtCategoryName != null firtCategoryName != ''">
+  	<if test="firtCategoryName != null and firtCategoryName != ''">
   		and firt_category_name= #{firtCategoryName,jdbcType=VARCHAR}
   	</if>
-  	<if test="goodStatus ！ = null and goodStatus != ''">
+  	<if test="goodStatus != null">
   		and good_status = #{goodStatus,jdbcType=VARCHAR}
   	</if>
-  	<if test="minPrice != null and minPrice != null">
-  		and unit_price &gt;=#{minPrice,jdbcType=VARCHAR}
+  	<if test="minPrice != null and minPrice != 0">
+  		and unit_price &gt;=#{minPrice,jdbcType=DECIMAL}
   	</if>
-  	<if test="maxPrice ! null and maxPrice != ''">
-  		and unit_price &lt;=#{maxPrice,jdbcType=VARCHAR}
+  	<if test="maxPrice !=null and maxPrice != 0">
+  		and unit_price &lt;=#{maxPrice,jdbcType=DECIMAL}
   	</if>
    	order by create_datetime desc LIMIT #{start},#{end}
   </select>
@@ -120,39 +157,18 @@
     where good_uuid = #{goodUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
-  <update id="deleteByGoodUuids" parameterType="java.util.HashMap" >
-   update goods
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
-    <if test="storeUuid!='' and storeUuid!=null ">
-		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
-	</if >
-	<if test="goodUuids!='' and goodUuids!=null ">
+  <delete id="deleteByGoodUuids" parameterType="java.util.HashMap" >
+   delete from goods
+    where 1=1
+	<if test="goodUuids!=null ">
 		and good_uuid in 
 	    <foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
-  </update>
+  </delete>
   
-  <insert id="insert" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
-    insert into goods (fake_id, good_uuid, create_datetime, 
-      update_datetime, delete_at, merchant_uuid, 
-      good_name, description, title, 
-      cover, unit_price, numbers, 
-      classifier, first_uuid, firt_category_name, 
-      second_uuid, second_category_name, store_uuid, 
-      address, good_code, good_status,poster, 
-      photos, models)
-    values (#{fakeId,jdbcType=INTEGER}, #{goodUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
-      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{merchantUuid,jdbcType=VARCHAR}, 
-      #{goodName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{cover,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, #{numbers,jdbcType=INTEGER}, 
-      #{classifier,jdbcType=CHAR}, #{firstUuid,jdbcType=VARCHAR}, #{firtCategoryName,jdbcType=VARCHAR}, 
-      #{secondUuid,jdbcType=VARCHAR}, #{secondCategoryName,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}, #{goodStatus,jdbcType=VARCHAR}, #{poster,jdbcType=LONGVARCHAR}, 
-      #{photos,jdbcType=LONGVARCHAR}, #{models,jdbcType=LONGVARCHAR})
-  </insert>
+  
   <insert id="insertSelective" parameterType="com.hcb.xigou.pojo.GoodsWithBLOBs" >
     insert into goods
     <trim prefix="(" suffix=")" suffixOverrides="," >

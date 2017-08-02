@@ -1,6 +1,10 @@
 package com.hcb.xigou.dao.interfaceClass;
 
+import java.util.List;
+import java.util.Map;
+
 import com.hcb.xigou.dto.SecondCategorys;
+import com.hcb.xigou.pojo.Goods;
 
 public interface SecondCategorysMapper {
     int deleteByPrimaryKey(Integer fakeId);
@@ -15,5 +19,17 @@ public interface SecondCategorysMapper {
 
     int updateByPrimaryKey(SecondCategorys record);
     
-    SecondCategorys selectAll();
+    List<SecondCategorys> selectAll();
+
+	List<SecondCategorys> searchCategoryByMap(Map<String, Object> map);
+
+	int countCategoryByMap(Map<String, Object> map);
+
+	SecondCategorys selectBySecondUuid(String secondUuid);
+
+	int updateBySecondUuid(SecondCategorys second);
+
+	int deleteBySecondUuids(Map<String, Object> map);
+
+	List<Goods> secondUuid(Map<String, Object> map);
 }

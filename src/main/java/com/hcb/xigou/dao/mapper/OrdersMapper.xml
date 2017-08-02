@@ -15,8 +15,8 @@
     <result column="fraction" property="fraction" jdbcType="INTEGER" />
     <result column="paid_money" property="paidMoney" jdbcType="DECIMAL" />
     <result column="numbers" property="numbers" jdbcType="INTEGER" />
-    <result column="pay_status" property="payStatus" jdbcType="CHAR" />
-    <result column="pay_way" property="payWay" jdbcType="CHAR" />
+    <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
+    <result column="pay_way" property="payWay" jdbcType="VARCHAR" />
     <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
     <result column="alipay_number" property="alipayNumber" jdbcType="VARCHAR" />
     <result column="wechat_number" property="wechatNumber" jdbcType="VARCHAR" />
@@ -37,9 +37,9 @@
     <result column="voucher" property="voucher" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
-    <result column="is_sign" property="isSign" jdbcType="CHAR" />
+    <result column="is_sign" property="isSign" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.Orders" extends="BaseResultMap" >
     <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />

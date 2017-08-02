@@ -14,34 +14,113 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="open_time" property="openTime" jdbcType="TIMESTAMP" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="sign" property="sign" jdbcType="CHAR" />
     <result column="groups" property="groups" jdbcType="CHAR" />
     <result column="banner" property="banner" jdbcType="VARCHAR" />
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
-    <result column="is_stop" property="isStop" jdbcType="CHAR" />
+    <result column="is_stop" property="isStop" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="TINYINT" />
+    <result column="is_open" property="isOpen" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
-    image, title, description, start_time, end_time, type, sign, groups, banner, store_uuid, 
-    is_stop
+    image, title, description, start_time, end_time, open_time, type, sign, groups, banner, 
+    store_uuid, is_stop, position, is_open, url
   </sql>
+  
+  
+  <!--统计所有活动的上架数量 ，所有活动上架个数不能超过4个-->
+  <select id="selectByActivityCount" resultType="java.lang.Integer">
+  	select count(1) from activity_zones
+	where type = 'activity'
+	and is_stop = '1'
+	and delete_at is null
+  </select>
+  
+  
+  <!-- 活动管理 -->
+  <select id="searchActivityList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from activity_zones
+  	where delete_at is null
+  	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	and type = 'activity'
+  	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="countActivityInt" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+  	select count(1) from  activity_zones
+  	where delete_at is null
+  	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	and type = 'activity'
+  </select>
+  
+  
+  
+  
+  <!-- 活动管理 -->
+  
+
+  <select id="selectByPopularId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from activity_zones
+  	where 
+  	activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="searchPopularByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from activity_zones
+  	where delete_at is null
+  	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	and type = 'host'
+  	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  <select id="countPopularByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+  	select count(1) from  activity_zones
+  	where delete_at is null
+  	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	and type = 'host'
+  </select>
+  
+  
+  <delete id="deleteByPopular">
+	  delete activity_zones
+	  where 1=1
+	  and activity_uuid in 
+	  <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
+		 #{item}  
+	  </foreach>
+  </delete>
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from activity_zones
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from activity_zones
-    where fake_id = #{fakeId,jdbcType=INTEGER}
-  </delete>
   
-    <select id="selectByActivityUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   <select id="selectByActivityUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from activity_zones
-    where activity_uuid = #{activityUuid,jdbcType=VARCHAR} and delete_at is null
+    where  activity_uuid = #{activityUuid,jdbcType=VARCHAR} 
   </select>
   
   <select id="searchActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
@@ -52,6 +131,7 @@
 	<if test="storeUuid !='' and storeUuid != null">
 		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if>
+	and type = 'coupon'
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
@@ -61,37 +141,23 @@
 	<if test="storeUuid !='' and storeUuid != null">
 		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if>
+	and type = 'coupon'
   </select>
   
-  <update id="deleteByActivityUuids" parameterType="java.util.HashMap" >
-   update activity_zones
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
-    <if test="storeUuid!='' and storeUuid!=null ">
-			and store_uuid = #{storeUuid,jdbcType=VARCHAR}
-	</if >
+  <delete id="deleteByActivityUuids" parameterType="java.util.HashMap" >
+   delete from activity_zones
+    where 1=1
 	<if test="activityUuids!='' and activityUuids!=null ">
 		and activity_uuid in 
 	    <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
 		  #{item}  
 		</foreach>
 	</if>
-  </update>
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+  </delete>
   
-  <insert id="insert" parameterType="com.hcb.xigou.dto.ActivityZones" >
-    insert into activity_zones (fake_id, activity_uuid, create_datetime, 
-      update_datetime, delete_at, good_uuid, 
-      merchant_uuid, image, title, 
-      description, start_time, end_time, 
-      type, sign, groups, banner, 
-      store_uuid, is_stop)
-    values (#{fakeId,jdbcType=INTEGER}, #{activityUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
-      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, 
-      #{merchantUuid,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{type,jdbcType=CHAR}, #{sign,jdbcType=CHAR}, #{groups,jdbcType=CHAR}, #{banner,jdbcType=VARCHAR}, 
-      #{storeUuid,jdbcType=VARCHAR}, #{isStop,jdbcType=CHAR})
-  </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.ActivityZones" >
     insert into activity_zones
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -131,6 +197,9 @@
       <if test="endTime != null" >
         end_time,
       </if>
+      <if test="openTime != null" >
+        open_time,
+      </if>
       <if test="type != null" >
         type,
       </if>
@@ -148,6 +217,15 @@
       </if>
       <if test="isStop != null" >
         is_stop,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="isOpen != null" >
+        is_open,
+      </if>
+      <if test="url != null" >
+        url,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -187,6 +265,9 @@
       <if test="endTime != null" >
         #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="openTime != null" >
+        #{openTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="type != null" >
         #{type,jdbcType=CHAR},
       </if>
@@ -205,10 +286,19 @@
       <if test="isStop != null" >
         #{isStop,jdbcType=CHAR},
       </if>
+      <if test="position != null" >
+        #{position,jdbcType=TINYINT},
+      </if>
+      <if test="isOpen != null" >
+        #{isOpen,jdbcType=CHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.ActivityZones" >
-    update activity_zones
+     update activity_zones
     <set >
       <if test="activityUuid != null" >
         activity_uuid = #{activityUuid,jdbcType=VARCHAR},
@@ -243,6 +333,9 @@
       <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="openTime != null" >
+        open_time = #{openTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
       </if>
@@ -261,8 +354,17 @@
       <if test="isStop != null" >
         is_stop = #{isStop,jdbcType=CHAR},
       </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=TINYINT},
+      </if>
+      <if test="isOpen != null" >
+        is_open = #{isOpen,jdbcType=CHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
     </set>
-    where fake_id = #{fakeId,jdbcType=INTEGER}
+    where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </update>
   
   <update id="updateByActivityUuid" parameterType="com.hcb.xigou.dto.ActivityZones" >
@@ -301,6 +403,9 @@
       <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="openTime != null" >
+        open_time = #{openTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
       </if>
@@ -318,6 +423,15 @@
       </if>
       <if test="isStop != null" >
         is_stop = #{isStop,jdbcType=CHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=TINYINT},
+      </if>
+      <if test="isOpen != null" >
+        is_open = #{isOpen,jdbcType=CHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
       </if>
     </set>
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}

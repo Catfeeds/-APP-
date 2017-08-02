@@ -19,93 +19,165 @@
     <result column="groups" property="groups" jdbcType="CHAR" />
     <result column="banner" property="banner" jdbcType="VARCHAR" />
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
-    <result column="is_stop" property="isStop" jdbcType="CHAR" />
-    <result column="good_status" property="goodStatus" jdbcType="CHAR" />
-    <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+    <result column="is_stop" property="isStop" jdbcType="VARCHAR" />
+    <result column="good_status" property="goodStatus" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
-    image, title, description, start_time, end_time, type, sign, groups, banner, store_uuid,good_status,good_name
+    image, title, description, start_time, end_time, type, sign, groups, banner, store_uuid, 
+    is_stop
   </sql>
+  <sql id="Base_Column_List_G" >
+    az.fake_id, az.activity_uuid, az.create_datetime, az.update_datetime, az.delete_at, az.good_uuid, az.merchant_uuid,      
+	az.image, az.title, az.description, az.start_time, az.end_time, az.type, az.sign, az.groups, az.banner, az.store_uuid
+  </sql>
+  <!-- 限制在同一个活动内添加相同的商品 -->
+  <select id="selectByActiviAndGood" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+  	select count(1) from activity_zones
+	where delete_at is NULL
+	and type = 'selling'
+	and groups = #{groups,jdbcType=VARCHAR}
+	and good_uuid in
+	<foreach item="item" index="index" collection="listAct" separator =",">  
+		  (#{item.goodUuid,jdbcType=VARCHAR})
+	</foreach>
+  </select>
   
   
-  <update id="deleteByActivityUuid" parameterType="java.util.HashMap" >
-   update activity_zones
-  	set delete_at = #{deleteAt,jdbcType=VARCHAR}
-    where 
-    <if test="storeUuid!='' and storeUuid!=null ">
-		store_uuid = #{storeUuid,jdbcType=VARCHAR}
-	</if >
-	<if test="bannerUuids!='' and bannerUuids!=null ">
-		and banner_uuid in 
-	    <foreach item="item" index="index" collection="activityUuids" open="(" separator="," close=")">  
-		  #{item}  
-		</foreach>
-	</if>
+  <delete id="deleteByActivityUuid" parameterType="java.util.HashMap" >
+   delete from activity_zones 
+ 	where activity_uuid in(
+     	select az.activity_uuid from (             
+        select  * from activity_zones           
+        where groups = #{groups,jdbcType=VARCHAR}           
+     ) az
+   )
+  </delete>
+  
+  
+  <update id="deleteByActivityGoodUuid" parameterType="java.util.HashMap" >
+   delete from  activity_zones 
+ 	where groups = #{groups,jdbcType=VARCHAR}
+ 	and
+ 	good_uuid = #{goodUuid,jdbcType=VARCHAR}
   </update>
   
   
   <select id="selectByActivityUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select 
-  	<include refid="Base_Column_List" />
-  	from activity_zones
-  	where delete_at is null 
-  	and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  	<include refid="Base_Column_List_G" />
+  	from activity_zones az 
+  	where az.delete_at is null 
+  	and az.activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </select>
   
   <update id="updateByActivityAndGoods" parameterType="java.util.HashMap">
-  	update goods
-  	<set >
-      <if test="updateDatetime != null" >
-        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+  	update activity_zones
+      <if test="isStop == 1" >
+       set is_stop = '2'
       </if>
-      <if test="goodStatus == up" >
-        good_status = down,
+      <if test="isStop == 2" >
+       set is_stop = '1'
       </if>
-      <if test="goodStatus == down" >
-        good_status = up,
-      </if>
-    </set>
-    where good_uuid = (
-    select good_uuid from activity_zones 
-      where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
-    )
+      where groups = #{groups,jdbcType=VARCHAR}
+      and type = 'selling'
   </update>
   
   
-  <insert id="insertByActivityUuids" parameterType="java.util.HashMap">
-  	<foreach item="item" index="index" collection="goodUuids" open="(" separator="," close=")">  
-		   insert into  activity_zones 
-		  (good_uuid,type,banner,store_uuid) 
-		  values 
-		  (#{item},'selling',#{banner,jdbcType=VARCHAR},#{storeUuid,jdbcType=VARCHAR})
+  <insert id="insertByActivityUuids" parameterType="java.util.List">
+ 	<selectKey resultType ="java.lang.Integer" keyProperty= "fakeId" order= "AFTER">
+       SELECT LAST_INSERT_ID()
+    </selectKey >
+ 	insert into  activity_zones (activity_uuid,good_uuid,title,groups,type,banner,store_uuid) values 
+  	<foreach item="item" index="index" collection="list" separator =",">  
+		(#{item.activityUuid,jdbcType=VARCHAR},#{item.goodUuid,jdbcType=VARCHAR},#{item.title,jdbcType=VARCHAR},#{item.groups,jdbcType=VARCHAR},'selling',#{item.banner,jdbcType=VARCHAR},#{item.storeUuid,jdbcType=VARCHAR})
 	</foreach>
   </insert>
+  
+  
+  
+  <select id="selectGroupsMax" resultType="com.hcb.xigou.dto.UserActivity" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+	where  type = 'selling'
+	GROUP BY  groups+0 DESC
+	LIMIT 0,1
+  </select>
   
   
   <select id="searchUserActivityByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
     <include refid="Base_Column_List" />
-    from activity_zones az LEFT JOIN goods g  
-	on g.good_uuid = az.good_uuid
-    where az.delete_at is null
-    and az.type = 'selling'
-	order by az.create_datetime desc LIMIT #{start},#{end}
+    from activity_zones 
+    where delete_at is null
+    and type = 'selling'
+    group by groups
+	order by create_datetime desc LIMIT #{start},#{end}
   </select>
-
+	
   <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
-    select count(1) from activity_zones
-    where az.delete_at is null
-    and az.type = 'selling'
-    group by az.banner
-  </select>
-  
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from activity_zones
-    where fake_id = #{fakeId,jdbcType=INTEGER}
+    select count(az.banner) from (
+		select banner from activity_zones
+    	where delete_at is null
+    	and type = 'selling'
+			group by groups 
+	) az
   </select>
 
+<update id="updateByActivity" parameterType="com.hcb.xigou.dto.UserActivity" >
+    update activity_zones
+    <set >
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantUuid != null" >
+        merchant_uuid = #{merchantUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null" >
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        groups = #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="banner != null" >
+        banner = #{banner,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="isStop != null" >
+        is_stop = #{isStop,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where groups = #{groups,jdbcType=VARCHAR}
+  </update>
 
 </mapper>

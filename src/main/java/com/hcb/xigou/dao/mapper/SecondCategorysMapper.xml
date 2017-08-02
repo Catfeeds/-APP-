@@ -17,6 +17,47 @@
     fake_id, second_uuid, create_datetime, update_datetime, delete_at, first_uuid, category_name, 
     image, store_uuid, banner
   </sql>
+  
+  <select id="searchCategoryByMap" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+    select 
+  	<include refid="Base_Column_List"/>
+  	from second_categorys
+  	where delete_at is null
+	<if test="firstUuid != null and firstUuid != ''">
+  	 	and first_uuid = #{firstUuid,jdbcType=VARCHAR}
+  	</if>
+	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  <select id="countCategoryByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+   select count(1) from second_categorys
+  	where delete_at is null
+	<if test="firstUuid != null and firstUuid != ''">
+  	 	and first_uuid = #{firstUuid,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  
+  <delete id="deleteBySecondUuids" parameterType="java.util.HashMap" >
+   delete from second_categorys
+    where 1=1
+	<if test="secondUuids !='' and secondUuids !=null ">
+		and second_uuid in 
+	    <foreach item="item" index="index" collection="secondUuids" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>
+	</if>
+  </delete>
+  
+  <select id="secondUuid" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from second_categorys
+  	where delete_at is null
+  	<if test="firstUuid != null and firstUuid != ''">
+  	 	and first_uuid = #{firstUuid,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -110,18 +151,9 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.SecondCategorys" >
+  <update id="updateBySecondUuid" parameterType="com.hcb.xigou.dto.SecondCategorys" >
     update second_categorys
     <set >
-      <if test="secondUuid != null" >
-        second_uuid = #{secondUuid,jdbcType=VARCHAR},
-      </if>
-      <if test="createDatetime != null" >
-        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDatetime != null" >
-        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
-      </if>
       <if test="deleteAt != null" >
         delete_at = #{deleteAt,jdbcType=VARCHAR},
       </if>
@@ -141,7 +173,7 @@
         banner = #{banner,jdbcType=VARCHAR},
       </if>
     </set>
-    where fake_id = #{fakeId,jdbcType=INTEGER}
+    where second_uuid = #{secondUuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.SecondCategorys" >
     update second_categorys

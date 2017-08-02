@@ -27,4 +27,6 @@ public interface IFirstCategorysService {
     int deleteByFirstUuids(Map<String,Object> map);
     
     int updateByfirstUuid(FirstCategorys record);
+
+	List<FirstCategorys> firstUuid();
 }

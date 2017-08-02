@@ -82,4 +82,10 @@ public class FirstCategorysServiceImpl implements IFirstCategorysService{
 		return firstCategorysMapper.deleteByFirstUuids(map);
 	}
 
+	@Override
+	public List<FirstCategorys> firstUuid() {
+		// TODO Auto-generated method stub
+		return firstCategorysMapper.firstUuid();
+	}
+
 }

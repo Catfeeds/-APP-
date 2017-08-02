@@ -1,10 +1,14 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.SecondCategorysMapper;
 import com.hcb.xigou.dto.SecondCategorys;
+import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.service.ISecondCategorysService;
 
 @Service("SecondCategorysService")
@@ -50,9 +54,45 @@ public class SecondCategorysServiceImpl implements ISecondCategorysService{
 	}
 
 	@Override
-	public SecondCategorys selectAll() {
+	public List<SecondCategorys> selectAll() {
 		// TODO Auto-generated method stub
 		return secondCategorysMapper.selectAll();
+	}
+
+	@Override
+	public List<SecondCategorys> searchCategoryByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.searchCategoryByMap(map);
+	}
+
+	@Override
+	public int countCategoryByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.countCategoryByMap(map);
+	}
+
+	@Override
+	public SecondCategorys selectBySecondUuid(String secondUuid) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.selectBySecondUuid(secondUuid);
+	}
+
+	@Override
+	public int updateBySecondUuid(SecondCategorys second) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.updateBySecondUuid(second);
+	}
+
+	@Override
+	public int deleteBySecondUuids(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.deleteBySecondUuids(map);
+	}
+
+	@Override
+	public List<Goods> secondUuid(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return secondCategorysMapper.secondUuid(map);
 	}
 
 }

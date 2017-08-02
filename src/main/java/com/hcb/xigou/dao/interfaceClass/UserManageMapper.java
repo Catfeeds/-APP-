@@ -15,4 +15,6 @@ public interface UserManageMapper {
 
 	int countMemberMagageByMap(Map<String, Object> map);
 
+	int deleteByUsersUuids(Map<String, Object> map);
+
 }

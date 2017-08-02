@@ -39,7 +39,33 @@ public class ActivityZones {
 
     private String isStop;
 
-    public Integer getFakeId() {
+    private Byte position;
+
+    private String isOpen;
+
+    private String url;
+    
+    private Date openTime;
+    
+    private String surplusTime;
+    
+    public Date getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Date openTime) {
+        this.openTime = openTime;
+    }
+
+    public String getSurplusTime() {
+		return surplusTime;
+	}
+
+	public void setSurplusTime(String str) {
+		this.surplusTime = str;
+	}
+
+	public Integer getFakeId() {
         return fakeId;
     }
 
@@ -181,5 +207,29 @@ public class ActivityZones {
 
     public void setIsStop(String isStop) {
         this.isStop = isStop == null ? null : isStop.trim();
+    }
+
+    public Byte getPosition() {
+        return position;
+    }
+
+    public void setPosition(Byte position) {
+        this.position = position;
+    }
+
+    public String getIsOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(String isOpen) {
+        this.isOpen = isOpen == null ? null : isOpen.trim();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
     }
 }
