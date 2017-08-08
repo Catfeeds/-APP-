@@ -66,6 +66,8 @@ public class Users {
     private String storeUuid;
 
     private String memberCardNumber;
+    
+    private Date registerTime;
 
     public Integer getFakeId() {
         return fakeId;
@@ -316,4 +318,12 @@ public class Users {
     public void setMemberCardNumber(String memberCardNumber) {
         this.memberCardNumber = memberCardNumber == null ? null : memberCardNumber.trim();
     }
+
+	public Date getRegisterTime() {
+		return registerTime;
+	}
+
+	public void setRegisterTime(Date registerTime) {
+		this.registerTime = registerTime;
+	}
 }

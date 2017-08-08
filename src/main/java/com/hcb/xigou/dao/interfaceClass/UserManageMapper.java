@@ -20,5 +20,5 @@ public interface UserManageMapper {
 	int countUsers(Map<String, Object> map);
 
 	int countMemberUsers(Map<String, Object> map);
-
+	
 }

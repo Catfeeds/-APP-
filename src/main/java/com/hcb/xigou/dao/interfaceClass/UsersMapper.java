@@ -8,5 +8,5 @@ public interface UsersMapper {
 
 	public Users selectByUserAndPassword(Map<String, Object> map);
 	
-	
+	Integer registerCount(Map<String, Object> map);
 }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.UserStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.UserStatistics" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="statistic_uuid" property="statisticUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="user_uuid" property="userUuid" jdbcType="VARCHAR" />
+    <result column="today" property="today" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, statistic_uuid, create_datetime, update_datetime, delete_at, user_uuid, 
+    today
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_statistics
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  <!-- 今日登陆人数 -->
+   <select id="loginCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from user_statistics  
+  	where today = #{today,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_statistics
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.UserStatistics" >
+    insert into user_statistics (fake_id, statistic_uuid, create_datetime, 
+      update_datetime, delete_at, user_uuid, 
+      today)
+    values (#{fakeId,jdbcType=INTEGER}, #{statisticUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
+      #{today,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.UserStatistics" >
+    insert into user_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="statisticUuid != null" >
+        statistic_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="userUuid != null" >
+        user_uuid,
+      </if>
+      <if test="today != null" >
+        today,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="statisticUuid != null" >
+        #{statisticUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="today != null" >
+        #{today,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.UserStatistics" >
+    update user_statistics
+    <set >
+      <if test="statisticUuid != null" >
+        statistic_uuid = #{statisticUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        user_uuid = #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="today != null" >
+        today = #{today,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.UserStatistics" >
+    update user_statistics
+    set statistic_uuid = #{statisticUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      user_uuid = #{userUuid,jdbcType=VARCHAR},
+      today = #{today,jdbcType=VARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>

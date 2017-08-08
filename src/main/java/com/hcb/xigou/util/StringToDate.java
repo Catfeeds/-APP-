@@ -77,4 +77,11 @@ public class StringToDate {
 		return rcreate;
 
 	}
+	
+	public static String dateToString(Date date) {
+		SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
+		String str = null;
+		str = time.format(date);
+		return str;
+	}
 }

@@ -20,4 +20,6 @@ public interface UserManageService {
 	int countUsers(Map<String, Object> map);
 
 	int countMemberUsers(Map<String, Object> map);
+	
+	Integer registerCount(Map<String, Object> map);
 }

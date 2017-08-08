@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcb.xigou.dao.interfaceClass.UserManageMapper;
+import com.hcb.xigou.dao.interfaceClass.UsersMapper;
 import com.hcb.xigou.dto.UserManage;
 import com.hcb.xigou.service.UserManageService;
 
@@ -14,6 +15,8 @@ import com.hcb.xigou.service.UserManageService;
 public class UserManageServiceImpl implements UserManageService {
 	@Autowired
 	UserManageMapper userManageMapper;
+	@Autowired
+	UsersMapper usersMapper;
 	
 	@Override
 	public List<UserManage> searchUserMagageByMap(Map<String, Object> map) {
@@ -37,20 +40,22 @@ public class UserManageServiceImpl implements UserManageService {
 
 	@Override
 	public int deleteByUsersUuids(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return userManageMapper.deleteByUsersUuids(map);
 	}
 
 	@Override
 	public int countUsers(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return userManageMapper.countUsers(map);
 	}
 
 	@Override
 	public int countMemberUsers(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return userManageMapper.countMemberUsers(map);
+	}
+
+	@Override
+	public Integer registerCount(Map<String, Object> map) {
+		return usersMapper.registerCount(map);
 	}
 
 }
