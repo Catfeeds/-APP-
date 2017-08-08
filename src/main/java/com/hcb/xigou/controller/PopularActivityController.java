@@ -1,7 +1,10 @@
 package com.hcb.xigou.controller;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +13,17 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
+import com.hcb.xigou.dto.FirstCategorys;
 import com.hcb.xigou.dto.ActivityZones;
 import com.hcb.xigou.dto.PopularActivity;
 import com.hcb.xigou.dto.SecondCategorys;
-
+import com.hcb.xigou.pojo.Goods;
+import com.hcb.xigou.pojo.GoodsWithBLOBs;
 import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IActivityZonesService;
 import com.hcb.xigou.service.IFirstCategorysService;
@@ -29,11 +35,12 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
+@CrossOrigin
 @RequestMapping("popularActivity/")
 public class PopularActivityController extends BaseController{
 	
 	@Autowired
-	IActivityZonesService activityZonesService;
+	PopularActivityService  popularActivityService;
 	@Autowired
 	GoodsService goodsService;
 	@Autowired
@@ -41,7 +48,8 @@ public class PopularActivityController extends BaseController{
 	@Autowired
 	IFirstCategorysService firstCategorysService;
 	@Autowired
-	PopularActivityService popularActivityService;
+	IActivityZonesService activityZonesService; 
+	
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -49,48 +57,47 @@ public class PopularActivityController extends BaseController{
 		JSONObject json = new JSONObject();
 		if (sign == 1) {
 			json.put("result", "1");
-			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
+		// 登录认证失败
 		if (sign == 2) {
 			json.put("result", "2");
-			json.put("description", "验证失败，user_uuid或密码不正确2");
+			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
-			json.put("description", "操作失败，请检查输入的参数是否完整3");
+			json.put("description", "操作失败，请检查输入的参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		if ("".equals(bodyInfo.get("pageIndex")) || "".equals(bodyInfo.get("pageSize"))) {
 			json.put("result", "1");
-			json.put("description", "操作失败，请检查输入的参数是否正确4");
+			json.put("description", "操作失败，请检查输入的参数是否正确");
 			return buildReqJsonObject(json);
 		}
-		
 		ModelMap model = new ModelMap();
+
 		List<PopularActivity> list = new ArrayList<PopularActivity>();
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");
-		
 		if (pageIndex <= 0) {
 			json.put("result", "1");
 			json.put("description", "操作失败，pageIndex不小于0");
 			return buildReqJsonObject(json);
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
-			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
-				map.put("storeUuid", headInfo.getString("store_uuid"));
-			}
-			
 			int start = (pageIndex - 1) * pageSize;
 			map.put("start", start);
 			map.put("end", pageSize);
-			list = popularActivityService.searchPopularByMap(map);
-			int count = 0;
-			count = activityZonesService.countPopularByMap(map);
+			if(headInfo.getString("store_uuid")!=null&&!"".equals(headInfo.getString("store_uuid"))){
+				map.put("storeUuid", headInfo.getString("store_uuid"));
+			}
+			list = popularActivityService.searchPopularActivityByMap(map);
+			Integer count = 0;
+			count = popularActivityService.countPopularActivityByMap(map);
 			if (count % pageSize == 0) {
 				Integer total = count / pageSize;
 				Integer sign = 0;
@@ -184,39 +191,51 @@ public class PopularActivityController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		ActivityZones  activityZones = new ActivityZones();
-		
-		activityZones.setActivityUuid( bodyInfo.getString("activity_uuid"));
-		if("1".equals(bodyInfo.getString("is_stop"))){
-			activityZones.setIsStop("2");
-		}
-		if("2".equals(bodyInfo.getString("is_stop"))){
-			activityZones.setIsStop("1");
-		}
-		int rs = 0;
-		/*int num1 = activityZonesService.selectByActivityCount();
-		int num2 = activityZonesService.selectByActivitySellingCount();
-		if((num1+num2)>4){
-			json.put("result", -1);
-			json.put("descrsiption", "修改活动状态失败，超过可上架活动数量限制");
-			return buildReqJsonObject(json);
-		}else{*/
-			rs = activityZonesService.updateByPrimaryKeySelective(activityZones);
-			if (rs >= 1) {
+		PopularActivity popularActivity = popularActivityService
+				.selectByPopularActivityUuid(bodyInfo.getString("activity_uuid"));
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (popularActivity != null) {
+			map.put("activityUuid", bodyInfo.getString("activity_uuid"));
+			map.put("isStop", bodyInfo.getString("is_stop"));
+			map.put("updateDatetime", new Date());
+			int rs = 0;
+			rs = popularActivityService.updateByPopularActivityIsSTop(map);
+			if (rs == 1) {
 				json.put("result", 0);
-				json.put("description", "更改Activity状态成功");
-				return buildReqJsonObject(json);
-			} else {
-				json.put("result", 1);
-				json.put("description", "更改Activity状态失败，请重试");
-				return buildReqJsonObject(json);
+
+				ActivityZones activityZones = new ActivityZones();
+
+				activityZones.setActivityUuid(bodyInfo.getString("activity_uuid"));
+				if ("1".equals(bodyInfo.getString("is_stop"))) {
+					activityZones.setIsStop("2");
+				}
+				if ("2".equals(bodyInfo.getString("is_stop"))) {
+					activityZones.setIsStop("1");
+				}
+				/*
+				 * int num1 = activityZonesService.selectByActivityCount(); int
+				 * num2 = activityZonesService.selectByActivitySellingCount();
+				 * if((num1+num2)>4){ json.put("result", -1);
+				 * json.put("descrsiption", "修改活动状态失败，超过可上架活动数量限制"); return
+				 * buildReqJsonObject(json); }else{
+				 */
+				rs = activityZonesService.updateByPrimaryKeySelective(activityZones);
+				if (rs >= 1) {
+					json.put("result", 0);
+					json.put("description", "更改Activity状态成功");
+				} else {
+					json.put("result", 1);
+					json.put("description", "更改Activity状态失败，请重试");
+					return buildReqJsonObject(json);
+				}
 			}
-		//}
+		}
+		return buildReqJsonObject(json);
 	}
 	
 	@RequestMapping("update")
 	@ResponseBody
-	public String updatePopular() {
+	public String updateOfPopular() {
 		JSONObject json = new JSONObject();
 		if (sign == 1 || sign == 2) {
 			json.put("result", "1");
@@ -275,6 +294,55 @@ public class PopularActivityController extends BaseController{
 		}
 	}
 	
+	
+	@RequestMapping("update_PopularActivity")
+	@ResponseBody
+	public String updatePopular(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		//category_name分类类名称
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("unit_price")==null||bodyInfo.get("title") == null||
+			bodyInfo.get("category_name") == null||bodyInfo.get("description") == null||
+			bodyInfo.get("cover") == null||bodyInfo.get("good_uuid")==null
+			) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date createTime = new Date();
+		try {
+			String createAt=null;
+			createTime = format.parse(createAt);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Goods good = new Goods();
+		good.setGoodUuid(bodyInfo.getString("good_uuid"));
+		good.setTitle(bodyInfo.getString("title"));
+		good.setCover(bodyInfo.getString("cover"));
+		good.setSecondCategoryName(bodyInfo.getString("category_name"));
+		good.setDescription(bodyInfo.getString("description"));
+		good.setUpdateDatetime(createTime);
+		BigDecimal unitPrice=new BigDecimal(bodyInfo.getString("unit_price"));
+		good.setUnitPrice(unitPrice);
+		int rs = 0;
+		rs = goodsService.updateByPrimaryKeySelective(good);
+		if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "修改品成功");
+			return buildReqJsonObject(json);
+		}else{
+			json.put("result", 1);
+			json.put("description", "修改商品失败，请重试");
+			return buildReqJsonObject(json);
+		}
+	}
 	
 	@RequestMapping("selectgood")
 	@ResponseBody
@@ -351,5 +419,4 @@ public class PopularActivityController extends BaseController{
 		}
 		
 	}
-	
 }
