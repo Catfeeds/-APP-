@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,6 +19,7 @@ import com.hcb.xigou.service.UserRechargersService;
 import net.sf.json.JSONObject;
 
 @Controller
+@CrossOrigin
 @RequestMapping("userRechargers/")
 public class UserRechargersController extends BaseController{
 	@Autowired
@@ -180,6 +182,12 @@ public class UserRechargersController extends BaseController{
 				if(!"".equals(bodyInfo.getString("third_way"))){
 					map.put("thirdWay", bodyInfo.getString("third_way"));
 				}
+			}
+			if(bodyInfo.get("startTime") != null){
+				map.put("startTime", bodyInfo.getString("startTime"));
+			}
+			if(bodyInfo.get("endTime") != null){
+				map.put("endTime", bodyInfo.getString("endTime"));
 			}
 			list = userRechargersService.searchUserRechargersByMap(map);
 			Integer count = 0;

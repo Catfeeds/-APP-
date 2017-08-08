@@ -28,6 +28,17 @@
 			<version>3.8.1</version>
 			<scope>compile</scope>
 		</dependency>
+		  <!--excle导出  -->
+        <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.15-beta2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.15-beta2</version>
+		</dependency>
 		<!-- 微信支付 -->
 		<dependency>
         <groupId>com.aliyun</groupId>
