@@ -25,4 +25,14 @@ public class UserServiceImpl implements IUserService{
 	public Integer totalCount(Map<String, Object> map) {
 		return usersMapper.totalCount(map);
 	}
+
+	@Override
+	public List<Users> selectByUserList(Map<String, Object> map) {
+		return usersMapper.selectByUserList(map);
+	}
+
+	@Override
+	public Integer totalCountUserList(Map<String, Object> map) {
+		return usersMapper.totalCountUserList(map);
+	}
 }

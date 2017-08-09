@@ -14,4 +14,8 @@ public interface UsersMapper {
 	List<Users> selectByPaging(Map<String,Object> map);
 
     Integer totalCount(Map<String,Object> map);
+    
+    List<Users> selectByUserList(Map<String,Object> map);
+	
+    Integer totalCountUserList(Map<String,Object> map);
 }

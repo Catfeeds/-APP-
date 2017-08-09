@@ -10,4 +10,8 @@ public interface IUserService {
 	public List<Users> selectByPaging(Map<String,Object> map);
 
 	public Integer totalCount(Map<String,Object> map);
+	
+	public List<Users> selectByUserList(Map<String,Object> map);
+	
+	public Integer totalCountUserList(Map<String,Object> map);
 }

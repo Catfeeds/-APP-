@@ -35,12 +35,16 @@
     <result column="member_card_number" property="memberCardNumber" jdbcType="VARCHAR" />
     <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
     <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="order_number" property="orderNumber" jdbcType="INTEGER" />
+    <result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
+    <result column="lately_time" property="latelyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, user_uuid, create_datetime, update_datetime, delete_at, password, userId, 
     phone, nickname, headimgurl, sex, birthday, country, province, city, unionid, openid, 
     balance, coupons, coins, fraction, grade, codes, client_id, device_token, name, device_name, 
-    device_osver, app_version, store_uuid, member_card_number,register_time,address
+    device_osver, app_version, store_uuid, member_card_number,register_time,address,order_number,
+    total_money,lately_time
   </sql>
   
   <!-- 登陆 -->
@@ -100,6 +104,68 @@
   		and grade = #{grade,jdbcType=VARCHAR}
   	</if>
   </select>
+  <!-- 用戶列表 -->
+  <select id="selectByUserList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from users
+  	where delete_at is null
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+    <if test="firstDay != null and lastDay != null">
+  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
+  	</if>
+  	<if test="numberStart != null and numberStart != ''">
+  		and order_number &gt;= #{numberStart,jdbcType=INTEGER}
+  	</if>
+  	<if test="numberEnd != null and numberEnd != ''">
+  		and order_number &lt;= #{numberEnd,jdbcType=INTEGER}
+  	</if>
+    <if test="moneyStart != null and moneyStart != ''">
+  		and total_money &gt;= #{moneyStart,jdbcType=VARCHAR}
+  	</if>
+  	<if test="moneyEnd != null and moneyEnd != ''">
+  		and total_money &lt;= #{moneyEnd,jdbcType=VARCHAR}
+  	</if>
+  	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  <select id="totalCountUserList" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from users
+  	where delete_at is null
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="firstDay != null and lastDay != null">
+  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
+  	</if>
+  		<if test="numberStart != null and numberStart != ''">
+  		and order_number &gt;= #{numberStart,jdbcType=INTEGER}
+  	</if>
+  	<if test="numberEnd != null and numberEnd != ''">
+  		and order_number &lt;= #{numberEnd,jdbcType=INTEGER}
+  	</if>
+    <if test="moneyStart != null and moneyStart != ''">
+  		and total_money &gt;= #{moneyStart,jdbcType=VARCHAR}
+  	</if>
+  	<if test="moneyEnd != null and moneyEnd != ''">
+  		and total_money &lt;= #{moneyEnd,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
   
   
   
@@ -124,7 +190,8 @@
       grade, codes, client_id, 
       device_token, name, device_name, 
       device_osver, app_version, store_uuid, 
-      member_card_number,register_time,address
+      member_card_number,register_time,address,
+      order_number,total_money,lately_time
       )
     values (#{fakeId,jdbcType=INTEGER}, #{userUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
@@ -136,7 +203,8 @@
       #{grade,jdbcType=CHAR}, #{codes,jdbcType=VARCHAR}, #{clientId,jdbcType=VARCHAR}, 
       #{deviceToken,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{deviceName,jdbcType=VARCHAR}, 
       #{deviceOsver,jdbcType=VARCHAR}, #{appVersion,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
-      #{memberCardNumber,jdbcType=VARCHAR},#{registerTime,jdbcType=TIMESTAMP},#{address,jdbcType=VARCHAR}
+      #{memberCardNumber,jdbcType=VARCHAR},#{registerTime,jdbcType=TIMESTAMP},#{address,jdbcType=VARCHAR},
+      #{orderNumber,jdbcType=INTEGER}, #{totalMoney,jdbcType=DECIMAL},#{latelyTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.pojo.Users" >
@@ -241,6 +309,15 @@
       <if test="address != null" >
         address,
       </if>
+      <if test="orderNumber != null" >
+        order_number,
+      </if>
+      <if test="totalMoney != null" >
+        total_money,
+      </if>
+      <if test="latelyTime != null" >
+        lately_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -341,6 +418,15 @@
       </if>
       <if test="address != null" >
         #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalMoney != null" >
+        #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="latelyTime != null" >
+        #{latelyTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -444,6 +530,15 @@
       <if test="address != null" >
         address = #{address,jdbcType=VARCHAR},
       </if>
+      <if test="orderNumber != null" >
+        order_number = #{orderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalMoney != null" >
+        total_money = #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="latelyTime != null" >
+        lately_time = #{latelyTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -480,7 +575,10 @@
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       member_card_number = #{memberCardNumber,jdbcType=VARCHAR},
       register_time = #{registerTime,jdbcType=TIMESTAMP},
-      address = #{address,jdbcType=VARCHAR}
+      address = #{address,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=INTEGER},
+      total_money = #{totalMoney,jdbcType=DECIMAL},
+      lately_time = #{latelyTime,jdbcType=TIMESTAMP}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

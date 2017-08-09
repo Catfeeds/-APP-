@@ -70,6 +70,12 @@ public class Users {
     private Date registerTime;
     
     private String address;
+    
+    private Integer orderNumber;
+    
+    private BigDecimal totalMoney;
+    
+    private Date latelyTime;
 
     public Integer getFakeId() {
         return fakeId;
@@ -335,5 +341,29 @@ public class Users {
 
 	public void setAddress(String address) {
 		this.address = address == null ? null : address.trim();
+	}
+
+	public Integer getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(Integer orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public BigDecimal getTotalMoney() {
+		return totalMoney;
+	}
+
+	public void setTotalMoney(BigDecimal totalMoney) {
+		this.totalMoney = totalMoney;
+	}
+
+	public Date getLatelyTime() {
+		return latelyTime;
+	}
+
+	public void setLatelyTime(Date latelyTime) {
+		this.latelyTime = latelyTime;
 	}
 }
