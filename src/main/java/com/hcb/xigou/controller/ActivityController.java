@@ -45,7 +45,8 @@ public class ActivityController extends BaseController{
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("start_time")==null||bodyInfo.get("end_time")==null||
 				bodyInfo.get("position")==null||bodyInfo.get("url")==null||	
-				bodyInfo.get("image") == null||headInfo.get("store_uuid") == null) {
+				bodyInfo.get("image") == null||headInfo.get("store_uuid") == null ||
+				bodyInfo.get("description") == null) {
 			json.put("result", 1);
 			json.put("description", "参数不完整");
 			return buildReqJsonObject(json);
@@ -90,6 +91,7 @@ public class ActivityController extends BaseController{
 		activity.setImage(bodyInfo.getString("image"));
 		activity.setType("activity");
 		activity.setStoreUuid(headInfo.getString("store_uuid"));
+		activity.setDescription(bodyInfo.getString("description"));
 		int rs = 0;
 		rs = activityZonesService.insertSelective(activity);
 		if(rs == 1){

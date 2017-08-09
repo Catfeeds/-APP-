@@ -215,10 +215,19 @@ public class UserManageController extends BaseController{
 				model.put("usernum",usernum);
 			}
 		}
+		Map<String, Object> mtp1 = new HashMap<String, Object>();
+		mtp1.put("firstDay", StringToDate.dateToString(Timestamp.from(Instant.now()))+" "+"00:00:00");
+		mtp1.put("lastDay", StringToDate.dateToString(Timestamp.from(Instant.now()))+" "+"23:59:59");
+		Integer register_count = userManageService.registerCount(mtp1);
+		Map<String, Object> mtp2 = new HashMap<String, Object>();
+		mtp2.put("today",StringToDate.dateToString(Timestamp.from(Instant.now())));
+		Integer login_count = userStatisticsService.loginCount(mtp2);
 		
 		model.put("description", "查询成功");
 		model.put("result",0);
 		model.put("userManagerList", list);
+		model.put("register_count", register_count);
+		model.put("login_count", login_count);
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
 		a = a.replace("]\"", "]");

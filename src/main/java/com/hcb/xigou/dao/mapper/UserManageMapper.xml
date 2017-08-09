@@ -92,11 +92,8 @@
   <select id="searchMemberMagageByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
-  	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where  u.user_uuid not in(
-		SELECT user_uuid from users 
-			where member_card_number is null
-	)
+  	from users u
+  	where  u.grade IS NOT NULL
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -108,16 +105,16 @@
   	</if>
   	<if test="memberCardNumber != null and memberCardNumber != ''">
   		and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	</if>
+  	<if test="grade != null and grade != ''">
+  		and u.grade = #{grade,jdbcType=VARCHAR}
   	</if>
   	order by u.create_datetime desc LIMIT #{start},#{end}
   </select>
   <select id="countMemberMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
-  	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid
-  	where  u.user_uuid not in(
-		SELECT user_uuid from users 
-			where member_card_number is null
-	)
+  	from users u
+  	where u.grade IS NOT NULL
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -130,14 +127,14 @@
   	<if test="memberCardNumber != null and memberCardNumber != ''">
   		and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
   	</if>
+    <if test="grade != null and grade != ''">
+  		and u.grade = #{grade,jdbcType=VARCHAR}
+  	</if>
   </select>
   <select id="countMemberUsers" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users  
-  	where user_uuid not in(
-		SELECT user_uuid from users 
-			where member_card_number is null
-	)
+  	where grade IS NOT NULL
   	<if test="name != null and name != ''">
   		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
@@ -149,6 +146,9 @@
   	</if>
   	<if test="memberCardNumber != null and memberCardNumber != ''">
   		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	</if>
+  	<if test="grade != null and grade != ''">
+  		and grade = #{grade,jdbcType=VARCHAR}
   	</if>
   </select>
   

@@ -192,6 +192,9 @@ public class MemberManageController extends BaseController{
 					map.put("memberCardNumber", bodyInfo.getString("member_card_number"));
 				}
 			}
+			if (bodyInfo.get("grade") != null) {
+				map.put("grade", bodyInfo.getString("grade"));
+			}
 			
 			list = userManageService.searchMemberMagageByMap(map);
 			Integer count = 0;
