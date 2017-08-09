@@ -404,7 +404,9 @@ public class PopularActivityController extends BaseController{
 			activityZones.setTitle(bodyInfo.getString("title"));
 			activityZones.setType("host");
 			activityZones.setStoreUuid(headInfo.getString("store_uuid"));
-			
+			if(bodyInfo.get("currentIndex") != null){
+				activityZones.setCurrentIndex(bodyInfo.getInt("currentIndex"));
+			}
 			int rs = 0;
 			rs = activityZonesService.insertSelective(activityZones);
 			if (rs >= 1) {

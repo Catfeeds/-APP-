@@ -112,7 +112,7 @@
      <if test="storeUuid != null and storeUuid != ''">
   		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
   	</if>
-  	order by a.create_datetime desc LIMIT #{start},#{end}
+  	order by a.currentIndex asc LIMIT #{start},#{end}
   </select>
   <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
