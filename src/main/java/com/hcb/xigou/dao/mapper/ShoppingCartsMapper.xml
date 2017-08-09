@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.ShoppingCartsMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.ShoppingCarts" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="car_uuid" property="carUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="user_uuid" property="userUuid" jdbcType="VARCHAR" />
+    <result column="good_image" property="goodImage" jdbcType="VARCHAR" />
+    <result column="good_uuid" property="goodUuid" jdbcType="VARCHAR" />
+    <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="DECIMAL" />
+    <result column="numbers" property="numbers" jdbcType="INTEGER" />
+    <result column="classifier" property="classifier" jdbcType="CHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="car_status" property="carStatus" jdbcType="CHAR" />
+    <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, car_uuid, create_datetime, update_datetime, delete_at, user_uuid, good_image, 
+    good_uuid, good_name, unit_price, numbers, classifier, amount, car_status, store_uuid, 
+    type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from shopping_carts
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  <!-- caruuuid -->
+  <select id="selectByCarUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from shopping_carts
+    where car_uuid = #{carUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shopping_carts
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.ShoppingCarts" >
+    insert into shopping_carts (fake_id, car_uuid, create_datetime, 
+      update_datetime, delete_at, user_uuid, 
+      good_image, good_uuid, good_name, 
+      unit_price, numbers, classifier, 
+      amount, car_status, store_uuid, 
+      type)
+    values (#{fakeId,jdbcType=INTEGER}, #{carUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
+      #{goodImage,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, #{goodName,jdbcType=VARCHAR}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{numbers,jdbcType=INTEGER}, #{classifier,jdbcType=CHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{carStatus,jdbcType=CHAR}, #{storeUuid,jdbcType=VARCHAR}, 
+      #{type,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.ShoppingCarts" >
+    insert into shopping_carts
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="carUuid != null" >
+        car_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="userUuid != null" >
+        user_uuid,
+      </if>
+      <if test="goodImage != null" >
+        good_image,
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid,
+      </if>
+      <if test="goodName != null" >
+        good_name,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="numbers != null" >
+        numbers,
+      </if>
+      <if test="classifier != null" >
+        classifier,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="carStatus != null" >
+        car_status,
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="carUuid != null" >
+        #{carUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodImage != null" >
+        #{goodImage,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodName != null" >
+        #{goodName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="numbers != null" >
+        #{numbers,jdbcType=INTEGER},
+      </if>
+      <if test="classifier != null" >
+        #{classifier,jdbcType=CHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="carStatus != null" >
+        #{carStatus,jdbcType=CHAR},
+      </if>
+      <if test="storeUuid != null" >
+        #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.ShoppingCarts" >
+    update shopping_carts
+    <set >
+      <if test="carUuid != null" >
+        car_uuid = #{carUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        user_uuid = #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodImage != null" >
+        good_image = #{goodImage,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodName != null" >
+        good_name = #{goodName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="numbers != null" >
+        numbers = #{numbers,jdbcType=INTEGER},
+      </if>
+      <if test="classifier != null" >
+        classifier = #{classifier,jdbcType=CHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="carStatus != null" >
+        car_status = #{carStatus,jdbcType=CHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.ShoppingCarts" >
+    update shopping_carts
+    set car_uuid = #{carUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      user_uuid = #{userUuid,jdbcType=VARCHAR},
+      good_image = #{goodImage,jdbcType=VARCHAR},
+      good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      good_name = #{goodName,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      numbers = #{numbers,jdbcType=INTEGER},
+      classifier = #{classifier,jdbcType=CHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      car_status = #{carStatus,jdbcType=CHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>

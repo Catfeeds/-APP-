@@ -67,7 +67,15 @@
     delete from orders
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </delete>
-  
+  <!-- 根据订单号 -->
+  <select id="selectByOrderNumber" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from orders
+    where order_number = #{orderNumber,jdbcType=VARCHAR} and delete_at is null
+  </select>
   
   <select id="searchOrderByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
   	select 

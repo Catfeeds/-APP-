@@ -10,5 +10,7 @@ public interface IOrdersService {
 	List<Orders> searchOrderByMap(Map<String, Object> map);
 
 	int countOrderyMap(Map<String, Object> map);
+	
+	public Orders selectByOrderNumber(String orderNumber);
 
 }

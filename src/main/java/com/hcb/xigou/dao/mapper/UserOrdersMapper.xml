@@ -41,6 +41,7 @@
     <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
     <result column="is_sign" property="isSign" jdbcType="CHAR" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="member_card_number" property="member_card_number" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.Orders" extends="BaseResultMap" >
     <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />
@@ -51,7 +52,7 @@
     o.pay_way, o.order_number, o.alipay_number, o.wechat_number, o.pay_time, o.fail_time, o.collect_time, 
     o.comment_time, o.return_time, o.address_uuid, o.delivery_time, o.give_status, o.sign_time, o.courier_uuid, 
     o.scaner_uuid, o.remarks, o.store_uuid, o.daily_sign, o.voucher, o.content, o.code, o.type, o.bar_code, 
-    o.is_sign,u.nickname
+    o.is_sign,u.nickname,u.member_card_number
   </sql>
   <sql id="Blob_Column_List" >
     car_uuids

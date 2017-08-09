@@ -25,6 +25,9 @@ public class OrdersServiceImpl implements IOrdersService {
 	public int countOrderyMap(Map<String, Object> map) {
 		return ordersMapper.countOrderyMap(map);
 	}
-	
-	
+
+	@Override
+	public Orders selectByOrderNumber(String orderNumber) {
+		return ordersMapper.selectByOrderNumber(orderNumber);
+	}
 }

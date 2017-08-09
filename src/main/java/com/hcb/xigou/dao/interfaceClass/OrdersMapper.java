@@ -14,5 +14,6 @@ public interface OrdersMapper {
 	List<Orders> searchOrderByMap(Map<String, Object> map);
 
 	int countOrderyMap(Map<String, Object> map);
-    
+	
+	Orders selectByOrderNumber(String orderNumber);
 }
