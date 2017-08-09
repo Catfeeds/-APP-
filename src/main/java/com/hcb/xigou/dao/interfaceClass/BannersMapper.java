@@ -30,5 +30,5 @@ public interface BannersMapper {
 
 	int selectByBannerStatus();
 	
-	Banners selectByCurrentindex(Integer currentindex);
+	Banners selectByCurrentindex(Map<String, Object> map);
 }

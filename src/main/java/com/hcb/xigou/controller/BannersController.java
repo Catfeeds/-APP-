@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
@@ -149,7 +150,7 @@ public class BannersController extends BaseController{
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("banner_uuid") == null ||
-				bodyInfo.getString("banner_uuid") ==null) {
+				bodyInfo.get("banner_status") ==null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整2");
 			return buildReqJsonObject(json);
@@ -185,7 +186,10 @@ public class BannersController extends BaseController{
 				rs = bannersService.updateByPrimaryKeySelective(banner);
 				if (rs == 1) {
 					//默認第一張
-					Banners b1 = bannersService.selectByCurrentindex(1);
+					Map<String, Object> mtp = new HashMap<String, Object>();
+					mtp.put("currentindex", 1);
+					mtp.put("type", "home");
+					Banners b1 = bannersService.selectByCurrentindex(mtp);
 					Banners b2 = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
 					if(b1 != null && b2 != null){
 						b1.setCurrentindex(b2.getCurrentindex());
@@ -433,5 +437,43 @@ public class BannersController extends BaseController{
 		}
 	}
 	
+	@RequestMapping(value = "/sort",method = RequestMethod.POST)
+	@ResponseBody
+	public String bannerSort(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("banner_uuid") == null || bodyInfo.get("currentIndex") ==null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整2");
+			return buildReqJsonObject(json);
+		}
+		Map<String, Object> mtp = new HashMap<String, Object>();
+		mtp.put("currentindex", bodyInfo.getInt("currentIndex"));
+		mtp.put("type", "home");
+		Banners b1 = bannersService.selectByCurrentindex(mtp);
+		Banners b2 = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
+		if(b2 == null){
+			json.put("result", 1);
+			json.put("description", "未查詢到輪播圖信息");
+			return buildReqJsonObject(json);
+		}
+		if(b1 == null){
+          b2.setCurrentindex(bodyInfo.getInt("currentIndex"));
+          bannersService.updateByPrimaryKeySelective(b2);
+		}else{
+			b1.setCurrentindex(b2.getCurrentindex());
+			b2.setCurrentindex(bodyInfo.getInt("currentIndex"));
+			bannersService.updateByPrimaryKeySelective(b1);
+			bannersService.updateByPrimaryKeySelective(b2);
+		}
+		json.put("result", 0);
+		json.put("description", "更改成功");
+		return buildReqJsonObject(json);
+	}
 	
 }

@@ -77,7 +77,7 @@ public class BannersServiceImpl implements IBannersService{
 	}
 
 	@Override
-	public Banners selectByCurrentindex(Integer currentindex) {
-		return bannersMapper.selectByCurrentindex(currentindex);
+	public Banners selectByCurrentindex(Map<String, Object> map) {
+		return bannersMapper.selectByCurrentindex(map);
 	}
 }

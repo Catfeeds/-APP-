@@ -30,5 +30,5 @@ public interface IBannersService {
 
 	int selectByBannerStatus();
 	
-	public Banners selectByCurrentindex(Integer currentindex);
+	public Banners selectByCurrentindex(Map<String, Object> map);
 }

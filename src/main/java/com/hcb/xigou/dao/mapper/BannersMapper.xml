@@ -44,11 +44,11 @@
     where banner_uuid = #{bannerUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
-  <select id="selectByCurrentindex" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByCurrentindex" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
     <include refid="Base_Column_List" />
     from banners
-    where currentIndex = #{currentindex,jdbcType=INTEGER} and delete_at is null
+    where currentIndex = #{currentindex,jdbcType=INTEGER} and type = #{type,jdbcType=VARCHAR} and delete_at is null
   </select>
   
   <select id="searchBannerByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
