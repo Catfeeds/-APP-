@@ -34,12 +34,13 @@
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
     <result column="member_card_number" property="memberCardNumber" jdbcType="VARCHAR" />
     <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, user_uuid, create_datetime, update_datetime, delete_at, password, userId, 
     phone, nickname, headimgurl, sex, birthday, country, province, city, unionid, openid, 
     balance, coupons, coins, fraction, grade, codes, client_id, device_token, name, device_name, 
-    device_osver, app_version, store_uuid, member_card_number,register_time
+    device_osver, app_version, store_uuid, member_card_number,register_time,address
   </sql>
   
   <!-- 登陆 -->
@@ -56,6 +57,51 @@
   	from users  
   	where register_time &gt;= #{firstDay,jdbcType=VARCHAR} and register_time &lt;= #{lastDay,jdbcType=VARCHAR} and delete_at is null
   </select>
+  <!-- 会员列表 -->
+    <select id="selectByPaging" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from users
+  	where  grade IS NOT NULL 
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	</if>
+  	<if test="grade != null and grade != ''">
+  		and grade = #{grade,jdbcType=VARCHAR}
+  	</if>
+  	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+    <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from users
+  	where grade IS NOT NULL
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	</if>
+    <if test="grade != null and grade != ''">
+  		and grade = #{grade,jdbcType=VARCHAR}
+  	</if>
+  </select>
+  
+  
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -78,7 +124,7 @@
       grade, codes, client_id, 
       device_token, name, device_name, 
       device_osver, app_version, store_uuid, 
-      member_card_number,register_time
+      member_card_number,register_time,address
       )
     values (#{fakeId,jdbcType=INTEGER}, #{userUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
@@ -90,7 +136,7 @@
       #{grade,jdbcType=CHAR}, #{codes,jdbcType=VARCHAR}, #{clientId,jdbcType=VARCHAR}, 
       #{deviceToken,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{deviceName,jdbcType=VARCHAR}, 
       #{deviceOsver,jdbcType=VARCHAR}, #{appVersion,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
-      #{memberCardNumber,jdbcType=VARCHAR},#{registerTime,jdbcType=TIMESTAMP}
+      #{memberCardNumber,jdbcType=VARCHAR},#{registerTime,jdbcType=TIMESTAMP},#{address,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.pojo.Users" >
@@ -192,6 +238,9 @@
      <if test="registerTime != null" >
         register_time,
       </if>
+      <if test="address != null" >
+        address,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -289,6 +338,9 @@
       </if>
       <if test="registerTime != null" >
         #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -389,6 +441,9 @@
       <if test="registerTime != null" >
         register_time = #{registerTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -424,7 +479,8 @@
       app_version = #{appVersion,jdbcType=VARCHAR},
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       member_card_number = #{memberCardNumber,jdbcType=VARCHAR},
-      register_time = #{registerTime,jdbcType=TIMESTAMP}
+      register_time = #{registerTime,jdbcType=TIMESTAMP},
+      address = #{address,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

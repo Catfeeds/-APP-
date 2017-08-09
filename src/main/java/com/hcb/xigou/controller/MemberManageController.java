@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.UserManage;
+import com.hcb.xigou.pojo.Users;
+import com.hcb.xigou.service.IUserService;
 import com.hcb.xigou.service.UserManageService;
 
 import net.sf.json.JSONArray;
@@ -26,6 +28,8 @@ public class MemberManageController extends BaseController{
 
 	@Autowired
 	UserManageService userManageService;
+	@Autowired
+	IUserService userService;
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -158,7 +162,7 @@ public class MemberManageController extends BaseController{
 		}
 		ModelMap model = new ModelMap();
 
-		List<UserManage> list = new ArrayList<UserManage>();
+		List<Users> list = new ArrayList<Users>();
 		Integer pageIndex = bodyInfo.getInt("pageIndex");
 		Integer pageSize = bodyInfo.getInt("pageSize");
 		pageIndex=1;
@@ -196,10 +200,10 @@ public class MemberManageController extends BaseController{
 				map.put("grade", bodyInfo.getString("grade"));
 			}
 			
-			list = userManageService.searchMemberMagageByMap(map);
+			list = userService.selectByPaging(map);
 			Integer count = 0;
 			int usernum = userManageService.countMemberUsers(map);
-			count = userManageService.countMemberMagageByMap(map);
+			count = userService.totalCount(map);
 			
 			if (count % pageSize == 0) {
 				Integer total = count / pageSize;

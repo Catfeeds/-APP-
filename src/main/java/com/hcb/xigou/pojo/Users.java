@@ -68,6 +68,8 @@ public class Users {
     private String memberCardNumber;
     
     private Date registerTime;
+    
+    private String address;
 
     public Integer getFakeId() {
         return fakeId;
@@ -325,5 +327,13 @@ public class Users {
 
 	public void setRegisterTime(Date registerTime) {
 		this.registerTime = registerTime;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address == null ? null : address.trim();
 	}
 }

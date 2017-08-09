@@ -39,7 +39,7 @@
     u.fake_id, u.user_uuid, u.create_datetime, u.update_datetime, u.delete_at, u.password, u.userId, 
     u.phone, u.nickname, u.headimgurl, u.sex, u.birthday, u.country, u.province, u.city, u.unionid, u.openid, 
     u.balance, u.coupons, u.coins, u.fraction, u.grade, u.codes, u.client_id, u.device_token, u.name, u.device_name, 
-    u.device_osver, u.app_version, u.store_uuid, u.member_card_number,ud.address
+    u.device_osver, u.app_version, u.store_uuid, u.member_card_number
   </sql>
   
   
@@ -93,7 +93,7 @@
   	select 
   	<include refid="Base_Column_List" />
   	from users u
-  	where  u.grade IS NOT NULL
+  	where  u.grade IS NOT NULL 
   	<if test="name != null and name != ''">
   		and u.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
   	</if>
