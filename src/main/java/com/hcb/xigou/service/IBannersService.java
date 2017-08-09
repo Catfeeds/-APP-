@@ -29,4 +29,6 @@ public interface IBannersService {
 	int insertByBanner(Banners banner);
 
 	int selectByBannerStatus();
+	
+	public Banners selectByCurrentindex(Integer currentindex);
 }

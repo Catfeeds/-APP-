@@ -73,7 +73,11 @@ public class BannersServiceImpl implements IBannersService{
 
 	@Override
 	public int selectByBannerStatus() {
-		// TODO Auto-generated method stub
 		return bannersMapper.selectByBannerStatus();
+	}
+
+	@Override
+	public Banners selectByCurrentindex(Integer currentindex) {
+		return bannersMapper.selectByCurrentindex(currentindex);
 	}
 }

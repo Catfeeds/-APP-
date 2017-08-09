@@ -1,5 +1,7 @@
 package com.hcb.xigou.controller;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -156,9 +158,10 @@ public class BannersController extends BaseController{
 		int i = bannersService.selectByBannerStatus();
 		if ("1".equals(bodyInfo.getString("banner_status"))) {
 			banner.setBannerStatus(2);
+			banner.setShelvesTime(null);
 			int rs = 0;
 			banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
-			rs = bannersService.updateByPrimaryKeySelective(banner);
+			rs = bannersService.updateByPrimaryKey(banner);
 			if (rs == 1) {
 				json.put("result", 0);
 				json.put("description", "更改banner状态成功");
@@ -171,6 +174,7 @@ public class BannersController extends BaseController{
 		}
 		if ("2".equals(bodyInfo.getString("banner_status"))) {
 			banner.setBannerStatus(1);
+			banner.setShelvesTime(Timestamp.from(Instant.now()));
 			banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
 			int rs = 0;
 			if(i>=4){
@@ -180,6 +184,15 @@ public class BannersController extends BaseController{
 			}else{
 				rs = bannersService.updateByPrimaryKeySelective(banner);
 				if (rs == 1) {
+					//默認第一張
+					Banners b1 = bannersService.selectByCurrentindex(1);
+					Banners b2 = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
+					if(b1 != null && b2 != null){
+						b1.setCurrentindex(b2.getCurrentindex());
+						b2.setCurrentindex(b1.getCurrentindex());
+						bannersService.updateByPrimaryKeySelective(b1);
+						bannersService.updateByPrimaryKeySelective(b2);
+					}
 					json.put("result", 0);
 					json.put("description", "更改banner状态成功");
 					return buildReqJsonObject(json);
@@ -404,6 +417,9 @@ public class BannersController extends BaseController{
 		banner.setCurrentindex(bodyInfo.getInt("currentIndex"));
 		banner.setBannerName(bodyInfo.getString("banner_name"));
 		banner.setStoreUuid(headInfo.getString("store_uuid"));
+		if(bodyInfo.get("web_url") != null){
+			banner.setWebUrl(bodyInfo.getString("web_url"));
+		}
 		int rs = 0;
 		rs = bannersService.insertByBanner(banner);
 		if(rs == 1){

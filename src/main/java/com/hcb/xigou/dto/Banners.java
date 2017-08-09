@@ -26,6 +26,10 @@ public class Banners {
     private Integer bannerStatus;
     
     private String bannerName;
+    
+    private String webUrl;
+    
+    private Date shelvesTime;
 
     public String getBannerName() {
 		return bannerName;
@@ -122,4 +126,20 @@ public class Banners {
     public void setCurrentindex(Integer currentindex) {
         this.currentindex = currentindex;
     }
+
+	public String getWebUrl() {
+		return webUrl;
+	}
+
+	public void setWebUrl(String webUrl) {
+		this.webUrl = webUrl == null ? null : webUrl.trim();
+	}
+
+	public Date getShelvesTime() {
+		return shelvesTime;
+	}
+
+	public void setShelvesTime(Date shelvesTime) {
+		this.shelvesTime = shelvesTime;
+	}
 }

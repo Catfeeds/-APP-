@@ -29,4 +29,6 @@ public interface BannersMapper {
 	int insertByBanner(Banners banner);
 
 	int selectByBannerStatus();
+	
+	Banners selectByCurrentindex(Integer currentindex);
 }

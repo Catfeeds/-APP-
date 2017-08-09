@@ -14,10 +14,12 @@
     <result column="currentIndex" property="currentindex" jdbcType="INTEGER" />
     <result column="banner_status" property="bannerStatus" jdbcType="INTEGER" />
     <result column="banner_name" property="bannerName" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+    <result column="shelves_time" property="shelvesTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, banner_uuid, create_datetime, update_datetime, delete_at, type, url, store_uuid, 
-    good_uuid, currentIndex,banner_status,banner_name
+    good_uuid, currentIndex,banner_status,banner_name,web_url,shelves_time
   </sql>
   
   <!-- 统计正在使用的banner个数，限制使用状态最多为四张 -->
@@ -40,6 +42,13 @@
     <include refid="Base_Column_List" />
     from banners
     where banner_uuid = #{bannerUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
+  <select id="selectByCurrentindex" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from banners
+    where currentIndex = #{currentindex,jdbcType=INTEGER} and delete_at is null
   </select>
   
   <select id="searchBannerByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
@@ -119,6 +128,12 @@
       <if test="bannerName != null" >
         banner_name,
       </if>
+      <if test="webUrl != null" >
+        web_url,
+      </if>
+      <if test="shelvesTime != null" >
+        shelves_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -156,6 +171,12 @@
       </if>
       <if test="bannerName != null" >
          #{bannerName,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null" >
+         #{webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shelvesTime != null" >
+         #{shelvesTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -195,6 +216,12 @@
       <if test="bannerName != null" >
          banner_name = #{bannerName,jdbcType=VARCHAR},
       </if>
+      <if test="webUrl != null" >
+         web_url = #{webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shelvesTime != null" >
+         shelves_time = #{shelvesTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where banner_uuid = #{bannerUuid,jdbcType=VARCHAR}
   </update>
@@ -210,7 +237,9 @@
       good_uuid = #{goodUuid,jdbcType=VARCHAR},
       currentIndex = #{currentindex,jdbcType=INTEGER},
       banner_status = #{bannerStatus,jdbcType=INTEGER},
-      banner_name = #{bannerName,jdbcType=VARCHAR}
+      banner_name = #{bannerName,jdbcType=VARCHAR},
+      web_url = #{webUrl,jdbcType=VARCHAR},
+      shelves_time = #{shelvesTime,jdbcType=TIMESTAMP}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>
