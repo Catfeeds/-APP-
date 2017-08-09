@@ -24,11 +24,12 @@
     <result column="position" property="position" jdbcType="TINYINT" />
     <result column="is_open" property="isOpen" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="currentIndex" property="currentIndex" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
     image, title, description, start_time, end_time, open_time, type, sign, groups, banner, 
-    store_uuid, is_stop, position, is_open, url
+    store_uuid, is_stop, position, is_open, url, currentIndex
   </sql>
   
   
@@ -62,13 +63,8 @@
 	</if>
 	and type = 'activity'
   </select>
-  
-  
-  
-  
+ 
   <!-- 活动管理 -->
-  
-
   <select id="selectByPopularId" resultMap="BaseResultMap" parameterType="java.lang.String">
   	select 
   	<include refid="Base_Column_List"/>
@@ -76,8 +72,7 @@
   	where 
   	activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </select>
-  
-  
+   
   <select id="searchPopularByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"/>
@@ -96,6 +91,44 @@
 		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if>
 	and type = 'host'
+  </select>
+ <!-- 人氣推薦新 -->
+   <select id="selectByPaging" resultType="java.util.Map" parameterType="java.util.HashMap">
+  	select
+  	cast( a.create_datetime as char(32) ) AS create_datetime, 
+    g.good_name,g.cover,g.good_code,g.good_status,a.title,a.is_stop,
+    a.activity_uuid,a.currentIndex
+  	from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
+  	where  a.type = 'host'
+  	<if test="goodname != null and goodname != ''">
+  		and g.good_name like CONCAT(CONCAT('%', #{goodname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="goodcode != null and goodcode != ''">
+  		and g.good_code = #{goodcode,jdbcType=VARCHAR}
+  	</if>
+  	<if test="goodstatus != null and goodstatus != ''">
+  		and g.good_status = #{goodstatus,jdbcType=VARCHAR}
+  	</if>
+     <if test="storeUuid != null and storeUuid != ''">
+  		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
+  	</if>
+  	order by a.create_datetime desc LIMIT #{start},#{end}
+  </select>
+  <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1) from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
+  	where a.type = 'host'
+  	<if test="goodname != null and goodname != ''">
+  		and g.good_name like CONCAT(CONCAT('%', #{goodname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="goodcode != null and goodcode != ''">
+  		and g.good_code = #{goodcode,jdbcType=VARCHAR}
+  	</if>
+  	<if test="goodstatus != null and goodstatus != ''">
+  		and g.good_status = #{goodstatus,jdbcType=VARCHAR}
+  	</if>
+  	 <if test="storeUuid != null and storeUuid != ''">
+  		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
+  	</if>
   </select>
   
   
@@ -227,6 +260,9 @@
       <if test="url != null" >
         url,
       </if>
+       <if test="currentIndex != null" >
+        currentIndex,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -295,6 +331,9 @@
       <if test="url != null" >
         #{url,jdbcType=VARCHAR},
       </if>
+      <if test="currentIndex != null" >
+        #{currentIndex,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.ActivityZones" >
@@ -362,6 +401,9 @@
       </if>
       <if test="url != null" >
         url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="currentIndex != null" >
+        currentIndex = #{currentIndex,jdbcType=INTEGER},
       </if>
     </set>
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
@@ -433,6 +475,9 @@
       <if test="url != null" >
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="currentIndex != null" >
+        currentIndex = #{currentIndex,jdbcType=INTEGER},
+      </if>
     </set>
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </update>
@@ -455,7 +500,8 @@
       groups = #{groups,jdbcType=CHAR},
       banner = #{banner,jdbcType=VARCHAR},
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
-      is_stop = #{isStop,jdbcType=CHAR}
+      is_stop = #{isStop,jdbcType=CHAR},
+      currentIndex = #{currentIndex,jdbcType=INTEGER}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

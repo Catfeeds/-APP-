@@ -49,6 +49,8 @@ public class ActivityZones {
     
     private String surplusTime;
     
+    private Integer currentIndex;
+    
     public Date getOpenTime() {
         return openTime;
     }
@@ -232,4 +234,12 @@ public class ActivityZones {
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
     }
+
+	public Integer getCurrentIndex() {
+		return currentIndex;
+	}
+
+	public void setCurrentIndex(Integer currentIndex) {
+		this.currentIndex = currentIndex;
+	}
 }

@@ -19,123 +19,111 @@ public class ActivityZonesServiceImpl implements IActivityZonesService{
 	
 	@Override
 	public int deleteByPrimaryKey(Integer fakeId) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.deleteByPrimaryKey(fakeId);
 	}
 
 	@Override
 	public int insert(ActivityZones record) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.insert(record);
 	}
 
 	@Override
 	public int insertSelective(ActivityZones record) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.insertSelective(record);
 	}
 
 	@Override
 	public ActivityZones selectByPrimaryKey(Integer fakeId) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectByPrimaryKey(fakeId);
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(ActivityZones record) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
 	public int updateByPrimaryKey(ActivityZones record) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.updateByPrimaryKey(record);
 	}
 
 	@Override
 	public int deleteByActivityUuids(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.deleteByActivityUuids(map);
 	}
 
 	@Override
 	public ActivityZones selectByActivityUuid(String activityUuid) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectByActivityUuid(activityUuid);
 	}
 
 	@Override
 	public List<ActivityZones> searchActivityByMap(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.searchActivityByMap(map);
 	}
 
 	@Override
 	public int countActivityByMap(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.countActivityByMap(map);
 	}
 
 	@Override
 	public int updateByActivityUuid(ActivityZones record) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.updateByActivityUuid(record);
 	}
 
 	@Override
 	public List<PopularActivity> searchPopularByMap(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.searchPopularByMap(map);
 	}
 
 	@Override
 	public int countPopularByMap(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.countPopularByMap(map);
 	}
 
 	@Override
 	public int deleteByPopular(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.deleteByPopular(map);
 	}
 
 	@Override
 	public ActivityZones selectByPopularId(String activityUuid) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectByPopularId(activityUuid);
 	}
 
 	@Override
 	public List<ActivityZones> searchActivityList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.searchActivityList(map);
 	}
 
 	@Override
 	public int countActivityInt(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.countActivityInt(map);
 	}
 
 	@Override
 	public ActivityZones selectByActivity(String activityUuid) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectByActivity(activityUuid);
 	}
 
 	@Override
 	public int selectByActivityCount() {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectByActivityCount();
 	}
 
 	@Override
 	public int selectByActivitySellingCount() {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectByActivitySellingCount();
 	}
 
+	@Override
+	public List<Map<String, Object>> selectByPaging(Map<String, Object> map) {
+		return activityZonesMapper.selectByPaging(map);
+	}
 
+	@Override
+	public Integer totalCount(Map<String, Object> map) {
+		return activityZonesMapper.totalCount(map);
+	}
 }

@@ -46,4 +46,8 @@ public interface ActivityZonesMapper {
 	int selectByActivityCount();
 
 	int selectByActivitySellingCount();
+	
+    List<Map<String, Object>> selectByPaging(Map<String, Object> map);
+	
+    Integer totalCount(Map<String, Object> map);
 }
