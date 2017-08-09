@@ -221,6 +221,9 @@ public class UserOrdersController extends BaseController{
 					map.put("storeUuid", bodyInfo.getString("store_uuid"));
 				}
 			}
+			if(bodyInfo.get("member_card_number")!=null){
+				map.put("memberCardNumber", bodyInfo.getString("member_card_number"));
+			}
 			
 			list = userOrdersService.searchUsersOrderByMap(map);
 			for (int i = 0; i < list.size(); i++) {

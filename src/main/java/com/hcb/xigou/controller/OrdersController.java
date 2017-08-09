@@ -180,6 +180,9 @@ public class OrdersController extends BaseController{
 			if(bodyInfo.get("pay_status")!=null){
 				map.put("payStatus", bodyInfo.getString("pay_status"));
 			}
+			if(bodyInfo.get("member_card_number")!=null){
+				map.put("memberCardNumber", bodyInfo.getString("member_card_number"));
+			}
 			
 			list = userOrdersService.searchOrderByMap(map);
 			Integer count = 0;

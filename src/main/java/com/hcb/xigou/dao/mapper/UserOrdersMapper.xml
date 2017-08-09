@@ -63,8 +63,7 @@
 	  	select 
 	  	<include refid="Base_Column_List"/>
 	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
-	  	where o.delete_at is null
-	  	and type = 'trust'
+	  	where o.delete_at is null and type in ('trust')
 	  	<if test="orderNumber != null and orderNumber != ''">
 	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
 	  	</if>
@@ -80,13 +79,15 @@
 	 	<if test="storeUuid != null and storeUuid != ''">
 	  		and o.store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	  	</if>
+	    <if test="memberCardNumber != null and memberCardNumber != ''">
+  		    and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	    </if>
 	  	order by o.create_datetime desc LIMIT #{start},#{end}
     </select>
   
   <select id="countUsersOrderByMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
-  	where o.delete_at is null
-  	and type = 'trust'
+  	where o.delete_at is null and type in ('trust')
   	<if test="orderNumber != null and orderNumber != ''">
 	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
 	  	</if>
@@ -102,6 +103,9 @@
 	 	<if test="storeUuid != null and storeUuid != ''">
 	  		and o.store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	  	</if>
+	    <if test="memberCardNumber != null and memberCardNumber != ''">
+  		    and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	    </if>
   </select>
   
    
@@ -109,7 +113,7 @@
 	  	select 
 	  	<include refid="Base_Column_List"/>
 	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
-	  	where o.delete_at is null
+	  	where o.delete_at is null and type in ('shopping')
 	  	<if test="orderNumber != null and orderNumber != ''">
 	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
 	  	</if>
@@ -123,14 +127,17 @@
   			and o.create_datetime &lt; #{endTime,jdbcType=VARCHAR}
   		</if>
 	  	<if test="payStatus != null and payStatus != '' ">
-	  		and pay_status = #{payStatus,jdbcType=VARCHAR}
+	  		and o.pay_status = #{payStatus,jdbcType=VARCHAR}
 	  	</if>
+	  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		    and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	    </if>
 	  	order by o.create_datetime desc LIMIT #{start},#{end}
     </select>
   
   <select id="countOrderyMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
-  	where o.delete_at is null
+  	where o.delete_at is null and type in ('shopping')
   	<if test="orderNumber != null and orderNumber != ''">
 	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
 	  	</if>
@@ -144,8 +151,11 @@
   			and o.create_datetime &lt; #{endTime,jdbcType=VARCHAR}
   		</if>
 	  	<if test="payStatus != null and payStatus != '' ">
-	  		and pay_status = #{payStatus,jdbcType=VARCHAR}
+	  		and o.pay_status = #{payStatus,jdbcType=VARCHAR}
 	  	</if>
+	  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		    and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	    </if>
   </select>
   
   
