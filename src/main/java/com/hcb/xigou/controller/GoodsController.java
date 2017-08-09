@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
@@ -478,4 +479,37 @@ public class GoodsController extends BaseController{
 
 	}
 	
+	@RequestMapping(value = "/add/sku" , method = RequestMethod.POST)
+	@ResponseBody
+	public String  goodAddSku(){
+		JSONObject json = new JSONObject();
+		if (sign == 1 || sign == 2) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("good_uuid") == null || bodyInfo.get("skus") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		GoodsWithBLOBs good = goodsService.selectGoodByGoodUuid(bodyInfo.getString("good_uuid"));
+		if(good == null){
+			json.put("result", 1);
+			json.put("description", "未查詢到商品信息");
+			return buildReqJsonObject(json);
+		}
+		good.setSkus(bodyInfo.getString("skus"));
+		Integer rs = goodsService.updateByGoodsUuid(good);
+		if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "添加成功");
+		}else{
+			json.put("result", 1);
+			json.put("description", "添加失敗");
+			return buildReqJsonObject(json);
+		}
+		return buildReqJsonObject(json);
+	}
 }

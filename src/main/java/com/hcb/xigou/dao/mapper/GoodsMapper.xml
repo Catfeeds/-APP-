@@ -28,6 +28,7 @@
     <result column="poster" property="poster" jdbcType="LONGVARCHAR" />
     <result column="photos" property="photos" jdbcType="LONGVARCHAR" />
     <result column="models" property="models" jdbcType="LONGVARCHAR" />
+    <result column="skus" property="skus" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, good_uuid, create_datetime, update_datetime, delete_at, merchant_uuid, good_name, 
@@ -35,7 +36,7 @@
     second_uuid, second_category_name, store_uuid, address, good_code,good_status
   </sql>
   <sql id="Blob_Column_List" >
-    poster, photos, models
+    poster, photos, models,skus
   </sql>
   
   <update id="updateByGoodsStatus" parameterType="java.util.HashMap">
@@ -244,6 +245,9 @@
       <if test="models != null" >
         models,
       </if>
+      <if test="skus != null" >
+        skus,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -317,6 +321,9 @@
       </if>
       <if test="models != null" >
         #{models,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="skus != null" >
+        #{skus,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -392,6 +399,9 @@
       <if test="models != null" >
         models = #{models,jdbcType=LONGVARCHAR},
       </if>
+      <if test="skus != null" >
+        skus = #{skus,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -465,6 +475,9 @@
       <if test="models != null" >
         models = #{models,jdbcType=LONGVARCHAR},
       </if>
+      <if test="skus != null" >
+        skus = #{skus,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where good_uuid = #{goodUuid,jdbcType=VARCHAR}
   </update>
@@ -493,7 +506,8 @@
       good_status = #{goodStatus,jdbcType=INTEGER},
       poster = #{poster,jdbcType=LONGVARCHAR},
       photos = #{photos,jdbcType=LONGVARCHAR},
-      models = #{models,jdbcType=LONGVARCHAR}
+      models = #{models,jdbcType=LONGVARCHAR},
+      skus = #{skus,jdbcType=LONGVARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.pojo.Goods" >
@@ -517,7 +531,8 @@
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       good_code = #{goodCode,jdbcType=VARCHAR},
-      good_status = #{goodStatus,jdbcType=INTEGER}
+      good_status = #{goodStatus,jdbcType=INTEGER},
+      skus = #{skus,jdbcType=LONGVARCHAR},
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

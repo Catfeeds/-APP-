@@ -6,6 +6,8 @@ public class GoodsWithBLOBs extends Goods {
     private String photos;
 
     private String models;
+    
+    private String skus;
 
 	public String getPoster() {
 		return poster;
@@ -43,4 +45,12 @@ public class GoodsWithBLOBs extends Goods {
     public void setModels(String models) {
         this.models = models == null ? null : models.trim();
     }
+    
+    public String getSkus() {
+		return skus;
+	}
+
+	public void setSkus(String skus) {
+		this.skus = skus == null ? null : skus.trim();
+	}
 }

@@ -38,7 +38,7 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public Goods selectGoodByGoodUuid(String goodUuid) {
+	public GoodsWithBLOBs selectGoodByGoodUuid(String goodUuid) {
 		return goodsMapper.selectGoodByGoodUuid(goodUuid);
 	}
 

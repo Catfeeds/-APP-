@@ -17,7 +17,7 @@ public interface GoodsService {
 
 	public Goods selectGoodById(int fakeId);
 	
-	Goods selectGoodByGoodUuid(String goodUuid);
+	GoodsWithBLOBs selectGoodByGoodUuid(String goodUuid);
 	
 	int deleteByGoodUuids(Map<String,Object> map);
 

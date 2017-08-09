@@ -17,7 +17,7 @@ public interface GoodsMapper {
 
 	public int selectCountByGood(Map<String, Object> map);
 	
-	public Goods selectGoodByGoodUuid(String goodUuid);
+	public GoodsWithBLOBs selectGoodByGoodUuid(String goodUuid);
 	
 	int deleteByGoodUuids(Map<String,Object> map);
 
