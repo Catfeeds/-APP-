@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcb.xigou.dao.interfaceClass.PackagesMapper" >
+  <resultMap id="BaseResultMap" type="com.hcb.xigou.dto.Packages" >
+    <id column="fake_id" property="fakeId" jdbcType="INTEGER" />
+    <result column="package_uuid" property="packageUuid" jdbcType="VARCHAR" />
+    <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_datetime" property="updateDatetime" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="VARCHAR" />
+    <result column="coupon_uuid" property="couponUuid" jdbcType="VARCHAR" />
+    <result column="package_name" property="packageName" jdbcType="VARCHAR" />
+    <result column="package_status" property="packageStatus" jdbcType="CHAR" />
+    <result column="packeage_stock" property="packeageStock" jdbcType="INTEGER" />
+    <result column="coupon_numbers" property="couponNumbers" jdbcType="INTEGER" />
+    <result column="rule_one" property="ruleOne" jdbcType="VARCHAR" />
+    <result column="rule_two" property="ruleTwo" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="banner" property="banner" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fake_id, package_uuid, create_datetime, update_datetime, delete_at, coupon_uuid, 
+    package_name, package_status, packeage_stock, coupon_numbers, rule_one, rule_two, 
+    title, url, banner
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from packages
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  <!-- 根据uuid -->
+  <select id="selectByPackageUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from packages
+    where package_uuid = #{packageUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  <!-- 所有 -->
+  <select id="selectByAll" resultType="java.util.Map">
+    select 
+     package_uuid,package_name
+    from packages
+    where delete_at is null
+  </select>
+  <!-- 列表 -->
+   <select id="selectByPaging" resultType="java.util.Map" parameterType="java.util.HashMap">
+  	select
+  	package_uuid, 
+  	cast(create_datetime as char(32)) AS create_datetime,
+    package_name, package_status, packeage_stock, title,url,banner
+  	from packages
+  	where delete_at is null
+  	order by create_datetime DESC LIMIT #{start},#{end}
+  </select>
+  <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1) from packages where delete_at is null
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from packages
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.Packages" >
+    insert into packages (fake_id, package_uuid, create_datetime, 
+      update_datetime, delete_at, coupon_uuid, 
+      package_name, package_status, packeage_stock, 
+      coupon_numbers, rule_one, rule_two, 
+      title, url, banner)
+    values (#{fakeId,jdbcType=INTEGER}, #{packageUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{couponUuid,jdbcType=VARCHAR}, 
+      #{packageName,jdbcType=VARCHAR}, #{packageStatus,jdbcType=CHAR}, #{packeageStock,jdbcType=INTEGER}, 
+      #{couponNumbers,jdbcType=INTEGER}, #{ruleOne,jdbcType=VARCHAR}, #{ruleTwo,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{banner,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Packages" >
+    insert into packages
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="packageUuid != null" >
+        package_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="couponUuid != null" >
+        coupon_uuid,
+      </if>
+      <if test="packageName != null" >
+        package_name,
+      </if>
+      <if test="packageStatus != null" >
+        package_status,
+      </if>
+      <if test="packeageStock != null" >
+        packeage_stock,
+      </if>
+      <if test="couponNumbers != null" >
+        coupon_numbers,
+      </if>
+      <if test="ruleOne != null" >
+        rule_one,
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="banner != null" >
+        banner,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="packageUuid != null" >
+        #{packageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="couponUuid != null" >
+        #{couponUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageStatus != null" >
+        #{packageStatus,jdbcType=CHAR},
+      </if>
+      <if test="packeageStock != null" >
+        #{packeageStock,jdbcType=INTEGER},
+      </if>
+      <if test="couponNumbers != null" >
+        #{couponNumbers,jdbcType=INTEGER},
+      </if>
+      <if test="ruleOne != null" >
+        #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        #{ruleTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="banner != null" >
+        #{banner,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.Packages" >
+    update packages
+    <set >
+      <if test="packageUuid != null" >
+        package_uuid = #{packageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="couponUuid != null" >
+        coupon_uuid = #{couponUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        package_name = #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageStatus != null" >
+        package_status = #{packageStatus,jdbcType=CHAR},
+      </if>
+      <if test="packeageStock != null" >
+        packeage_stock = #{packeageStock,jdbcType=INTEGER},
+      </if>
+      <if test="couponNumbers != null" >
+        coupon_numbers = #{couponNumbers,jdbcType=INTEGER},
+      </if>
+      <if test="ruleOne != null" >
+        rule_one = #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="banner != null" >
+        banner = #{banner,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Packages" >
+    update packages
+    set package_uuid = #{packageUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      coupon_uuid = #{couponUuid,jdbcType=VARCHAR},
+      package_name = #{packageName,jdbcType=VARCHAR},
+      package_status = #{packageStatus,jdbcType=CHAR},
+      packeage_stock = #{packeageStock,jdbcType=INTEGER},
+      coupon_numbers = #{couponNumbers,jdbcType=INTEGER},
+      rule_one = #{ruleOne,jdbcType=VARCHAR},
+      rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      banner = #{banner,jdbcType=VARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+</mapper>

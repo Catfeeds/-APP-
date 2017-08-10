@@ -41,6 +41,16 @@ public class Coupons {
     private Integer couponStock;
 
     private String isGrant;
+    
+    private String packageUuid;
+    
+    private String url;
+    
+    private String ruleOne;
+    
+    private String ruleTwo;
+    
+    private String groups;
 
     public Integer getFakeId() {
         return fakeId;
@@ -193,4 +203,44 @@ public class Coupons {
     public void setIsGrant(String isGrant) {
         this.isGrant = isGrant == null ? null : isGrant.trim();
     }
+
+	public String getPackageUuid() {
+		return packageUuid;
+	}
+
+	public void setPackageUuid(String packageUuid) {
+		this.packageUuid = packageUuid == null ? null : packageUuid.trim();
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url == null ? null : url.trim();
+	}
+
+	public String getRuleOne() {
+		return ruleOne;
+	}
+
+	public void setRuleOne(String ruleOne) {
+		this.ruleOne = ruleOne == null ? null : ruleOne.trim();
+	}
+
+	public String getRuleTwo() {
+		return ruleTwo;
+	}
+
+	public void setRuleTwo(String ruleTwo) {
+		this.ruleTwo = ruleTwo == null ? null : ruleTwo.trim();
+	}
+
+	public String getGroups() {
+		return groups;
+	}
+
+	public void setGroups(String groups) {
+		this.groups = groups == null ? null : groups.trim();
+	}
 }

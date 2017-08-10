@@ -83,6 +83,8 @@ public class BaseController {
 							if (bodyString == null) {
 								sign = 1;
 							}
+						}else if(url.contains("package/all")){
+							//不做处理
 						} else {
 							JSONObject headInfo = (JSONObject) json.get("head");
 							headString = headInfo.toString();

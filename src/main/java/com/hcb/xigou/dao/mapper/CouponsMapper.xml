@@ -21,11 +21,16 @@
     <result column="coupon_status" property="couponStatus" jdbcType="CHAR" />
     <result column="coupon_stock" property="couponStock" jdbcType="INTEGER" />
     <result column="is_grant" property="isGrant" jdbcType="CHAR" />
+    <result column="package_uuid" property="packageUuid" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="rule_one" property="ruleOne" jdbcType="VARCHAR" />
+    <result column="rule_two" property="ruleTwo" jdbcType="VARCHAR" />
+    <result column="groups" property="groups" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, coupon_uuid, create_datetime, update_datetime, delete_at, user_uuid, amount, 
     good_uuid, grant_time, fail_time, first_uuid, second_uuid, title, description, type, content, 
-    coupon_status, coupon_stock, is_grant
+    coupon_status, coupon_stock, is_grant,package_uuid,url,rule_one,rule_two,groups
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -76,14 +81,17 @@
       amount, good_uuid, grant_time, fail_time, 
       first_uuid, second_uuid, title, 
       description, type, content, 
-      coupon_status, coupon_stock, is_grant
+      coupon_status, coupon_stock, is_grant,
+      package_uuid,url,rule_one,rule_two,groups
       )
     values (#{fakeId,jdbcType=INTEGER}, #{couponUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
       #{amount,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, #{grantTime,jdbcType=TIMESTAMP}, #{failTime,jdbcType=TIMESTAMP}, 
       #{firstUuid,jdbcType=VARCHAR}, #{secondUuid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{content,jdbcType=VARCHAR}, 
-      #{couponStatus,jdbcType=CHAR}, #{couponStock,jdbcType=INTEGER}, #{isGrant,jdbcType=CHAR}
+      #{couponStatus,jdbcType=CHAR}, #{couponStock,jdbcType=INTEGER}, #{isGrant,jdbcType=CHAR},
+      #{packageUuid,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{ruleOne,jdbcType=VARCHAR},#{ruleTwo,jdbcType=VARCHAR},
+      #{groups,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Coupons" >
@@ -146,6 +154,21 @@
       <if test="isGrant != null" >
         is_grant,
       </if>
+      <if test="packageUuid != null" >
+        package_uuid,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="ruleOne != null" >
+        rule_one,
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two,
+      </if>
+      <if test="groups != null" >
+        groups,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -204,6 +227,21 @@
       </if>
       <if test="isGrant != null" >
         #{isGrant,jdbcType=CHAR},
+      </if>
+      <if test="packageUuid != null" >
+        #{packageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleOne != null" >
+        #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        #{ruleTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        #{groups,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -264,6 +302,24 @@
       <if test="isGrant != null" >
         is_grant = #{isGrant,jdbcType=CHAR},
       </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="packageUuid != null" >
+        package_uuid = #{packageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleOne != null" >
+        rule_one = #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        groups = #{groups,jdbcType=VARCHAR},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -286,7 +342,12 @@
       content = #{content,jdbcType=VARCHAR},
       coupon_status = #{couponStatus,jdbcType=CHAR},
       coupon_stock = #{couponStock,jdbcType=INTEGER},
-      is_grant = #{isGrant,jdbcType=CHAR}
+      is_grant = #{isGrant,jdbcType=CHAR},
+      package_uuid = #{packageUuid,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      rule_one = #{ruleOne,jdbcType=VARCHAR},
+      rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      groups = #{groups,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
   
@@ -343,6 +404,21 @@
       </if>
       <if test="isGrant != null" >
         is_grant = #{isGrant,jdbcType=CHAR},
+      </if>
+      <if test="packageUuid != null" >
+        package_uuid = #{packageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleOne != null" >
+        rule_one = #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        groups = #{groups,jdbcType=VARCHAR},
       </if>
     </set>
     where coupon_uuid = #{couponUuid,jdbcType=VARCHAR}
