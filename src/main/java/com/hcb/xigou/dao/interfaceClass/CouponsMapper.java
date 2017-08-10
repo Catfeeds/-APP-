@@ -27,4 +27,6 @@ public interface CouponsMapper {
     int countCouponByMap(Map<String,Object> map);
     
     int updateByCouponUuid(Coupons record);
+    
+    List<Coupons> selectByPackageAll(Map<String, Object> map);
 }

@@ -82,4 +82,9 @@ public class CouponsServiceImpl implements ICouponsService{
 		return couponsMapper.updateByCouponUuid(record);
 	}
 
+	@Override
+	public List<Coupons> selectByPackageAll(Map<String, Object> map) {
+		return couponsMapper.selectByPackageAll(map);
+	}
+
 }

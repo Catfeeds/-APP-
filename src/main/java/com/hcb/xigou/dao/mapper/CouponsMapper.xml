@@ -74,6 +74,13 @@
    select count(1) from coupons
     where delete_at is null
   </select>
+  <!-- 大礼包 -->
+  <select id="selectByPackageAll" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupons
+    where package_uuid = #{packageUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
   
   <insert id="insert" parameterType="com.hcb.xigou.dto.Coupons" >
     insert into coupons (fake_id, coupon_uuid, create_datetime, 

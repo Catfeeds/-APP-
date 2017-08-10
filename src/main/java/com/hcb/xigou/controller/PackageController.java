@@ -1,5 +1,7 @@
 package com.hcb.xigou.controller;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcb.xigou.dto.Coupons;
 import com.hcb.xigou.dto.Packages;
+import com.hcb.xigou.service.ICouponsService;
 import com.hcb.xigou.service.IPackagesService;
 import com.hcb.xigou.util.MD5Util;
 import com.hcb.xigou.util.RandomStringGenerator;
+import com.hcb.xigou.util.StringToDate;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -28,6 +33,8 @@ public class PackageController extends BannersController{
 	
 	@Autowired
 	IPackagesService packagesService;
+	@Autowired
+	ICouponsService couponsService;
 
 	@RequestMapping(value = "publish" , method = RequestMethod.POST)
     public String packagePublish(){
@@ -154,6 +161,15 @@ public class PackageController extends BannersController{
 				  Integer rs = packagesService.updateByPrimaryKeySelective(pack);
 				  if(rs == 1){
 					  flag = true;
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("packageUuid", array.get(i).toString());
+						List<Coupons> coupos = couponsService.selectByPackageAll(map);
+						for (Coupons coupon : coupos) {
+							if(coupon != null){
+								coupon.setDeleteAt("del");
+								couponsService.updateByPrimaryKeySelective(coupon);
+							}
+						}
 					  continue;
 				  }else{
 					  flag = false;
@@ -172,6 +188,39 @@ public class PackageController extends BannersController{
 		return buildReqJsonObject(json);
 	}
 	
+	@RequestMapping(value = "status" , method = RequestMethod.POST)
+	public String packageStatus(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("package_uuid") == null || bodyInfo.get("package_status") ==null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Packages pack = packagesService.selectByPackageUuid(bodyInfo.getString("package_uuid"));
+		if(pack == null){
+			json.put("result", 1);
+			json.put("description", "未查询到大礼包信息");
+			return buildReqJsonObject(json);
+		}
+		pack.setPackageStatus(bodyInfo.getString("package_status"));
+		Integer rs = packagesService.updateByPrimaryKeySelective(pack);
+		if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "更改成功");
+		}else{
+			json.put("result", 0);
+			json.put("description", "更改失败");
+			return buildReqJsonObject(json);
+		}
+		return buildReqJsonObject(json);
+	}
+	
 	@RequestMapping(value = "list" , method = RequestMethod.POST)
 	public String packageList(){
 		JSONObject json = new JSONObject();
@@ -186,7 +235,6 @@ public class PackageController extends BannersController{
 			json.put("description", "验证失败，user_uuid或密码不正确");
 			return buildReqJsonInteger(2, json);
 		}
-		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null) {
 			json.put("result", "1");
@@ -239,6 +287,243 @@ public class PackageController extends BannersController{
 		}
 		model.put("description", "查询成功");
 		model.put("result", "0");
+		return buildReqJsonObject(model);
+	}
+	
+	@RequestMapping(value = "coupon/create" , method = RequestMethod.POST)
+	public String couponOfCreate(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("package_uuid") == null || bodyInfo.get("title") ==null ||
+			bodyInfo.get("amount") == null || bodyInfo.get("rule_one") ==null||
+			bodyInfo.get("rule_two") == null || bodyInfo.get("description") ==null||
+			bodyInfo.get("fail_time") == null || bodyInfo.get("url") ==null||
+			bodyInfo.get("coupon_stock") == null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Packages pack = packagesService.selectByPackageUuid(bodyInfo.getString("package_uuid"));
+		if(pack == null){
+			json.put("result", 1);
+			json.put("description", "未查询到大礼包信息");
+			return buildReqJsonObject(json);
+		}
+		Coupons coupon = new Coupons();
+		coupon.setCreateDatetime(new Date());
+		coupon.setTitle(bodyInfo.getString("title"));
+		coupon.setAmount(bodyInfo.getString("amount"));
+		coupon.setRuleOne(bodyInfo.getString("rule_one"));
+		coupon.setRuleTwo(bodyInfo.getString("rule_two"));
+		coupon.setDescription(bodyInfo.getString("description"));
+		int days = bodyInfo.getInt("fail_time");
+		Date close = new Date();
+	    Calendar calendar1 = Calendar.getInstance();// 日历对象
+	    calendar1.setTime(close);// 设置到期日期
+	    calendar1.add(Calendar.DATE, days);// 月份加一
+	    Date closeTime = calendar1.getTime();
+	    coupon.setFailTime(StringToDate.dateToString(closeTime));
+	    coupon.setUrl(bodyInfo.getString("url"));
+	    coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
+	    coupon.setPackageUuid(pack.getPackageUuid());
+	    coupon.setGroups("gift");
+		try {
+			coupon.setCouponUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Integer rs = couponsService.insertSelective(coupon);
+		if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "添加成功");
+			pack.setCouponNumbers(pack.getCouponNumbers() + 1);
+			packagesService.updateByPrimaryKeySelective(pack);
+		}else{
+			json.put("result", 1);
+			json.put("description", "添加失败");
+		}
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "coupon/edit" , method = RequestMethod.POST)
+	public String couponOfEdit(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("coupon_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Coupons coupon = couponsService.selectByCouponUuid(bodyInfo.getString("coupon_uuid"));
+		if(coupon == null){
+			json.put("result", 1);
+			json.put("description", "未查询到优惠券信息");
+			return buildReqJsonObject(json);
+		}
+		if(bodyInfo.get("title") != null){
+			coupon.setTitle(bodyInfo.getString("title"));
+		}
+		if(bodyInfo.get("amount") != null){
+			coupon.setAmount(bodyInfo.getString("amount"));
+		}
+		if(bodyInfo.get("rule_one") != null){
+			coupon.setRuleOne(bodyInfo.getString("rule_one"));
+		}
+		if(bodyInfo.get("rule_two") != null){
+			coupon.setRuleTwo(bodyInfo.getString("rule_two"));
+		}
+		if(bodyInfo.get("description") != null){
+			coupon.setDescription(bodyInfo.getString("description"));
+		}
+		if(bodyInfo.get("fail_time") != null){
+			int days = bodyInfo.getInt("fail_time");
+			Date close = new Date();
+		    Calendar calendar1 = Calendar.getInstance();// 日历对象
+		    calendar1.setTime(close);// 设置到期日期
+		    calendar1.add(Calendar.DATE, days);// 月份加一
+		    Date closeTime = calendar1.getTime();
+		    coupon.setFailTime(StringToDate.dateToString(closeTime));
+		}
+		if(bodyInfo.get("url") != null){
+			 coupon.setUrl(bodyInfo.getString("url"));
+		}
+		if(bodyInfo.get("coupon_stock") != null){
+			coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
+		}
+		Integer rs = couponsService.updateByPrimaryKeySelective(coupon);
+		if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "更改成功");
+		}else{
+			json.put("result", 0);
+			json.put("description", "更改失败");
+		}
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "coupon/delete" , method = RequestMethod.POST)
+	public String couponOfDelete(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("coupon_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Boolean flag = false;
+	    JSONArray array = JSONArray.fromObject(bodyInfo.getString("coupon_uuid"));
+	    for (int i = 0; i < array.size(); i++) {
+	    	if(array.get(i).toString() != null){
+	    		Coupons coupon = couponsService.selectByCouponUuid(array.get(i).toString());
+	    		if(coupon != null){
+	    			coupon.setDeleteAt("del");
+	    			Integer rs = couponsService.updateByPrimaryKeySelective(coupon);
+	    			if(rs == 1){
+						  flag = true;
+						  Packages pack = packagesService.selectByPackageUuid(coupon.getPackageUuid());
+						  if(pack != null){
+							  pack.setCouponNumbers(pack.getCouponNumbers() - 1);
+							  packagesService.updateByPrimaryKeySelective(pack);
+						  }
+						  continue;
+					  }else{
+						  flag = false;
+						  break;
+					  }
+	    		}
+			}
+		}
+	    if(flag){
+	    	json.put("result", 0);
+	    	json.put("description", "删除成功");
+	    }else{
+	     	json.put("result", 1);
+	    	json.put("description", "删除失败");
+	    }
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "coupon/status" , method = RequestMethod.POST)
+	public String couponOfStatus(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("coupon_uuid") == null || bodyInfo.get("is_grant") == null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Coupons coupon = couponsService.selectByCouponUuid(bodyInfo.getString("coupon_uuid"));
+		if(coupon == null){
+			json.put("result", 1);
+			json.put("description", "未查询到优惠券信息");
+			return buildReqJsonObject(json);
+		}
+		coupon.setIsGrant(bodyInfo.getString("is_grant"));
+		Integer rs = couponsService.updateByPrimaryKeySelective(coupon);
+		if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "上下架成功");
+		}else{
+			json.put("result", 0);
+			json.put("description", "上下架失败");
+		}
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "detail" , method = RequestMethod.POST)
+	public String packageDetail(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("package_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		ModelMap model = new ModelMap();
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		map.put("packageUuid", bodyInfo.getString("package_uuid"));
+		List<Coupons> coupos = couponsService.selectByPackageAll(map);
+		for (Coupons coupon : coupos) {
+			if(coupon != null){
+				Map<String, Object> mvp = new HashMap<String, Object>();
+				mvp.put("package_uuid", bodyInfo.getString("package_uuid"));
+				mvp.put("coupon_uuid", coupon.getCouponUuid());
+				mvp.put("title", coupon.getTitle());
+				mvp.put("coupon_stock", coupon.getCouponStock());
+				mvp.put("amount", coupon.getAmount());
+				mvp.put("is_grant", coupon.getIsGrant());
+				list.add(mvp);
+			}
+		}
+		model.put("description", "查询成功");
+		model.put("result", "0");
+		model.put("list", list);
 		return buildReqJsonObject(model);
 	}
 }

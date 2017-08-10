@@ -48,7 +48,7 @@
   	select
   	package_uuid, 
   	cast(create_datetime as char(32)) AS create_datetime,
-    package_name, package_status, packeage_stock, title,url,banner
+    package_name, package_status, packeage_stock, title,url,banner,coupon_numbers
   	from packages
   	where delete_at is null
   	order by create_datetime DESC LIMIT #{start},#{end}
