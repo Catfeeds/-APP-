@@ -33,6 +33,16 @@ public class Packages {
 
     private String banner;
 
+    private Date startDatetime;
+
+    private Date endDatetime;
+
+    private String isOpen;
+
+    private Date openDatetime;
+
+    private Date closeDatetime;
+
     public Integer getFakeId() {
         return fakeId;
     }
@@ -151,5 +161,45 @@ public class Packages {
 
     public void setBanner(String banner) {
         this.banner = banner == null ? null : banner.trim();
+    }
+
+    public Date getStartDatetime() {
+        return startDatetime;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public Date getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
+    }
+
+    public String getIsOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(String isOpen) {
+        this.isOpen = isOpen == null ? null : isOpen.trim();
+    }
+
+    public Date getOpenDatetime() {
+        return openDatetime;
+    }
+
+    public void setOpenDatetime(Date openDatetime) {
+        this.openDatetime = openDatetime;
+    }
+
+    public Date getCloseDatetime() {
+        return closeDatetime;
+    }
+
+    public void setCloseDatetime(Date closeDatetime) {
+        this.closeDatetime = closeDatetime;
     }
 }

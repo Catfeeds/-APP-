@@ -17,11 +17,16 @@
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="banner" property="banner" jdbcType="VARCHAR" />
+    <result column="start_datetime" property="startDatetime" jdbcType="TIMESTAMP" />
+    <result column="end_datetime" property="endDatetime" jdbcType="TIMESTAMP" />
+    <result column="is_open" property="isOpen" jdbcType="CHAR" />
+    <result column="open_datetime" property="openDatetime" jdbcType="TIMESTAMP" />
+    <result column="close_datetime" property="closeDatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, package_uuid, create_datetime, update_datetime, delete_at, coupon_uuid, 
     package_name, package_status, packeage_stock, coupon_numbers, rule_one, rule_two, 
-    title, url, banner
+    title, url, banner, start_datetime, end_datetime, is_open, open_datetime, close_datetime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -29,7 +34,7 @@
     from packages
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
-  <!-- 根据uuid -->
+ <!-- 根据uuid -->
   <select id="selectByPackageUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -66,12 +71,16 @@
       update_datetime, delete_at, coupon_uuid, 
       package_name, package_status, packeage_stock, 
       coupon_numbers, rule_one, rule_two, 
-      title, url, banner)
+      title, url, banner, 
+      start_datetime, end_datetime, is_open, 
+      open_datetime, close_datetime)
     values (#{fakeId,jdbcType=INTEGER}, #{packageUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{couponUuid,jdbcType=VARCHAR}, 
       #{packageName,jdbcType=VARCHAR}, #{packageStatus,jdbcType=CHAR}, #{packeageStock,jdbcType=INTEGER}, 
       #{couponNumbers,jdbcType=INTEGER}, #{ruleOne,jdbcType=VARCHAR}, #{ruleTwo,jdbcType=VARCHAR}, 
-      #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{banner,jdbcType=VARCHAR})
+      #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{banner,jdbcType=VARCHAR}, 
+      #{startDatetime,jdbcType=TIMESTAMP}, #{endDatetime,jdbcType=TIMESTAMP}, #{isOpen,jdbcType=CHAR}, 
+      #{openDatetime,jdbcType=TIMESTAMP}, #{closeDatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Packages" >
     insert into packages
@@ -121,6 +130,21 @@
       <if test="banner != null" >
         banner,
       </if>
+      <if test="startDatetime != null" >
+        start_datetime,
+      </if>
+      <if test="endDatetime != null" >
+        end_datetime,
+      </if>
+      <if test="isOpen != null" >
+        is_open,
+      </if>
+      <if test="openDatetime != null" >
+        open_datetime,
+      </if>
+      <if test="closeDatetime != null" >
+        close_datetime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -167,6 +191,21 @@
       </if>
       <if test="banner != null" >
         #{banner,jdbcType=VARCHAR},
+      </if>
+      <if test="startDatetime != null" >
+        #{startDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDatetime != null" >
+        #{endDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isOpen != null" >
+        #{isOpen,jdbcType=CHAR},
+      </if>
+      <if test="openDatetime != null" >
+        #{openDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeDatetime != null" >
+        #{closeDatetime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -215,6 +254,21 @@
       <if test="banner != null" >
         banner = #{banner,jdbcType=VARCHAR},
       </if>
+      <if test="startDatetime != null" >
+        start_datetime = #{startDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDatetime != null" >
+        end_datetime = #{endDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isOpen != null" >
+        is_open = #{isOpen,jdbcType=CHAR},
+      </if>
+      <if test="openDatetime != null" >
+        open_datetime = #{openDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeDatetime != null" >
+        close_datetime = #{closeDatetime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -233,7 +287,12 @@
       rule_two = #{ruleTwo,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
-      banner = #{banner,jdbcType=VARCHAR}
+      banner = #{banner,jdbcType=VARCHAR},
+      start_datetime = #{startDatetime,jdbcType=TIMESTAMP},
+      end_datetime = #{endDatetime,jdbcType=TIMESTAMP},
+      is_open = #{isOpen,jdbcType=CHAR},
+      open_datetime = #{openDatetime,jdbcType=TIMESTAMP},
+      close_datetime = #{closeDatetime,jdbcType=TIMESTAMP}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

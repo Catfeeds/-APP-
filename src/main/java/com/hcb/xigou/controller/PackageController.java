@@ -63,6 +63,12 @@ public class PackageController extends BannersController{
 		if(bodyInfo.get("banner") != null){
 			pack.setBanner(bodyInfo.getString("banner"));
 		}
+		if(bodyInfo.get("start_datetime") != null){
+			pack.setStartDatetime(StringToDate.stringtoDateTime(bodyInfo.getString("start_datetime")));
+		}
+		if(bodyInfo.get("close_time") != null){
+			pack.setCloseDatetime(StringToDate.stringtoDateTime(bodyInfo.getString("close_time")));
+		}
 		try {
 			pack.setPackageUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
 		} catch (Exception e) {
