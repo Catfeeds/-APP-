@@ -11,16 +11,81 @@
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
     <result column="grade" property="grade" jdbcType="CHAR" />
     <result column="store_uuid" property="storeUuid" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="superior_uuid" property="superiorUuid" jdbcType="VARCHAR" />
+    <result column="groups" property="groups" jdbcType="VARCHAR" />
+    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.Managers" extends="BaseResultMap" >
+    <result column="permissions" property="permissions" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, manager_uuid, create_datetime, update_datetime, delete_at, password, nickname, 
-    grade, store_uuid
+    grade, store_uuid, number, superior_uuid, groups, group_name
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <sql id="Blob_Column_List" >
+    permissions
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from managers
-    where fake_id = #{fakeId,jdbcType=INTEGER} and delete_at is null
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </select>
+  <!-- 根据uuid -->
+  <select id="selectByManagerUuid" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from managers
+    where manager_uuid = #{managerUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  <!-- 列表 -->
+    <select id="selectByPaging" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from managers
+  	where  delete_at is null
+  	<if test="groupname != null and groupname != ''">
+  		and group_name like CONCAT(CONCAT('%', #{groupname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+    <if test="grade !='' and grade != null">
+		and grade = #{grade,jdbcType=CHAR}
+	 </if>
+	 <if test="managerUuid !='' and managerUuid != null">
+		and manager_uuid = #{managerUuid,jdbcType=VARCHAR}
+	 </if>
+	 <if test="number !='' and number != null">
+		and number = #{number,jdbcType=VARCHAR}
+	 </if>
+  	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+  	select count(1)
+  	from managers
+  	where delete_at is null
+  	<if test="groupname != null and groupname != ''">
+  		and group_name like CONCAT(CONCAT('%', #{groupname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+    <if test="grade !='' and grade != null">
+		and grade = #{grade,jdbcType=CHAR}
+	</if>
+	<if test="managerUuid !='' and managerUuid != null">
+		and manager_uuid = #{managerUuid,jdbcType=VARCHAR}
+	 </if>
+	<if test="number !='' and number != null">
+		and number = #{number,jdbcType=VARCHAR}
+	 </if>
   </select>
   
   <select id="selectBynicknameAndGrade" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
@@ -37,6 +102,9 @@
 	<if test="grade !='' and grade != null">
 		and grade = #{grade,jdbcType=CHAR}
 	</if>
+    <if test="managerUuid !='' and managerUuid != null">
+		and manager_uuid = #{managerUuid,jdbcType=VARCHAR}
+	 </if>
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -46,12 +114,14 @@
   <insert id="insert" parameterType="com.hcb.xigou.dto.Managers" >
     insert into managers (fake_id, manager_uuid, create_datetime, 
       update_datetime, delete_at, password, 
-      nickname, grade, store_uuid
-      )
+      nickname, grade, store_uuid, 
+      number, superior_uuid, groups, 
+      group_name, permissions)
     values (#{fakeId,jdbcType=INTEGER}, #{managerUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{nickname,jdbcType=VARCHAR}, #{grade,jdbcType=CHAR}, #{storeUuid,jdbcType=VARCHAR}
-      )
+      #{nickname,jdbcType=VARCHAR}, #{grade,jdbcType=CHAR}, #{storeUuid,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{superiorUuid,jdbcType=VARCHAR}, #{groups,jdbcType=VARCHAR}, 
+      #{groupName,jdbcType=VARCHAR}, #{permissions,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Managers" >
     insert into managers
@@ -83,6 +153,21 @@
       <if test="storeUuid != null" >
         store_uuid,
       </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="superiorUuid != null" >
+        superior_uuid,
+      </if>
+      <if test="groups != null" >
+        groups,
+      </if>
+      <if test="groupName != null" >
+        group_name,
+      </if>
+      <if test="permissions != null" >
+        permissions,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -111,6 +196,21 @@
       </if>
       <if test="storeUuid != null" >
         #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorUuid != null" >
+        #{superiorUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null" >
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="permissions != null" >
+        #{permissions,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -141,7 +241,39 @@
       <if test="storeUuid != null" >
         store_uuid = #{storeUuid,jdbcType=VARCHAR},
       </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorUuid != null" >
+        superior_uuid = #{superiorUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        groups = #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null" >
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="permissions != null" >
+        permissions = #{permissions,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hcb.xigou.dto.Managers" >
+    update managers
+    set manager_uuid = #{managerUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=CHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      superior_uuid = #{superiorUuid,jdbcType=VARCHAR},
+      groups = #{groups,jdbcType=VARCHAR},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      permissions = #{permissions,jdbcType=LONGVARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Managers" >
@@ -153,7 +285,11 @@
       password = #{password,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
       grade = #{grade,jdbcType=CHAR},
-      store_uuid = #{storeUuid,jdbcType=VARCHAR}
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      superior_uuid = #{superiorUuid,jdbcType=VARCHAR},
+      groups = #{groups,jdbcType=VARCHAR},
+      group_name = #{groupName,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

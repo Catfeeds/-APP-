@@ -1,5 +1,6 @@
 package com.hcb.xigou.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,20 @@ public class ManagersServiceImpl implements IManagersService{
 	@Override
 	public Managers selectBynicknameAndGrade(Map<String, Object> map) {
 		return managersMapper.selectBynicknameAndGrade(map);
+	}
+
+	@Override
+	public Managers selectByManagerUuid(String managerUuid) {
+		return managersMapper.selectByManagerUuid(managerUuid);
+	}
+
+	@Override
+	public List<Managers> selectByPaging(Map<String, Object> map) {
+		return managersMapper.selectByPaging(map);
+	}
+
+	@Override
+	public Integer totalCount(Map<String, Object> map) {
+		return managersMapper.totalCount(map);
 	}
 }

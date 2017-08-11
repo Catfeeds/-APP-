@@ -21,6 +21,16 @@ public class Managers {
 
     private String storeUuid;
 
+    private String number;
+
+    private String superiorUuid;
+
+    private String groups;
+
+    private String groupName;
+
+    private String permissions;
+
     public Integer getFakeId() {
         return fakeId;
     }
@@ -91,5 +101,45 @@ public class Managers {
 
     public void setStoreUuid(String storeUuid) {
         this.storeUuid = storeUuid == null ? null : storeUuid.trim();
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number == null ? null : number.trim();
+    }
+
+    public String getSuperiorUuid() {
+        return superiorUuid;
+    }
+
+    public void setSuperiorUuid(String superiorUuid) {
+        this.superiorUuid = superiorUuid == null ? null : superiorUuid.trim();
+    }
+
+    public String getGroups() {
+        return groups;
+    }
+
+    public void setGroups(String groups) {
+        this.groups = groups == null ? null : groups.trim();
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName == null ? null : groupName.trim();
+    }
+
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions == null ? null : permissions.trim();
     }
 }
