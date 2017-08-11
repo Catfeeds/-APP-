@@ -66,13 +66,13 @@
     select 
     <include refid="Base_Column_List" />
     from coupons
-    where delete_at is null
+    where delete_at is null and groups in ('coupon')
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
   <select id="countCouponByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
    select count(1) from coupons
-    where delete_at is null
+    where delete_at is null and groups in ('coupon')
   </select>
   <!-- 大礼包 -->
   <select id="selectByPackageAll" resultMap="BaseResultMap" parameterType="java.util.HashMap" >

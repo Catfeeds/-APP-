@@ -230,6 +230,13 @@ public class CouponsController extends BaseController {
 		coupon.setGrantTime(bodyInfo.getString("grant_time"));
 		coupon.setFailTime(bodyInfo.getString("fail_time"));
 		coupon.setIsGrant("1");
+		coupon.setGroups("coupon");
+		if(bodyInfo.get("rule_one") != null){
+			coupon.setRuleOne(bodyInfo.getString("rule_one"));
+		}
+		if(bodyInfo.get("rule_two") != null){
+			coupon.setRuleTwo(bodyInfo.getString("rule_two"));
+		}
 		int rs = 0;
 		rs = couponsService.insertSelective(coupon);
 		if (rs == 1) {
