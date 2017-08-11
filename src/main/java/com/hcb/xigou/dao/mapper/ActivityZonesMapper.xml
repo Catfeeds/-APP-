@@ -106,8 +106,8 @@
   	<if test="goodcode != null and goodcode != ''">
   		and g.good_code = #{goodcode,jdbcType=VARCHAR}
   	</if>
-  	<if test="goodstatus != null and goodstatus != ''">
-  		and g.good_status = #{goodstatus,jdbcType=VARCHAR}
+  	<if test="isStop != null and isStop != ''">
+  		and a.is_stop = #{isStop,jdbcType=VARCHAR}
   	</if>
      <if test="storeUuid != null and storeUuid != ''">
   		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
@@ -123,8 +123,8 @@
   	<if test="goodcode != null and goodcode != ''">
   		and g.good_code = #{goodcode,jdbcType=VARCHAR}
   	</if>
-  	<if test="goodstatus != null and goodstatus != ''">
-  		and g.good_status = #{goodstatus,jdbcType=VARCHAR}
+  	<if test="isStop != null and isStop != ''">
+  		and a.is_stop = #{isStop,jdbcType=VARCHAR}
   	</if>
   	 <if test="storeUuid != null and storeUuid != ''">
   		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}

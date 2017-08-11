@@ -54,7 +54,7 @@
   		select 
   		<include refid="Base_Column_List"/>
   		from goods
-  		where delete_at is null
+  		where delete_at is null and good_status in ('up')
   		<if test="secondUuid != null and secondUuid != ''">
   			and second_uuid = #{secondUuid,jdbcType=VARCHAR}
   		</if>

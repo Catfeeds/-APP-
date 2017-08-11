@@ -421,9 +421,9 @@ public class PopularActivityController extends BaseController{
 		}
 	}
 	
-	@RequestMapping(value = "host/list/{good_name}/{good_code}/{good_status}" , method = RequestMethod.POST)
+	@RequestMapping(value = "host/list/{good_name}/{good_code}/{is_stop}" , method = RequestMethod.POST)
 	@ResponseBody
-	public String hostList(@PathVariable String good_name , @PathVariable String good_code , @PathVariable String good_status){
+	public String hostList(@PathVariable String good_name , @PathVariable String good_code , @PathVariable String is_stop){
 		JSONObject json = new JSONObject();
 		if (sign == 1) {
 			json.put("result", "1");
@@ -469,8 +469,8 @@ public class PopularActivityController extends BaseController{
 			if(!good_code.equals("1")){
 				map.put("goodcode", good_code);
 			}
-			if(!good_status.equals("1")){
-				map.put("goodstatus", good_status);
+			if(!is_stop.equals("0")){
+				map.put("isStop", is_stop);
 			}
 			List<Map<String, Object>> list = activityZonesService.selectByPaging(map);
 			model.put("list", list);

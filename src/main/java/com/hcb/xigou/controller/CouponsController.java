@@ -194,7 +194,7 @@ public class CouponsController extends BaseController {
 		JSONObject json = new JSONObject();
 		if (sign == 1 || sign == 2) {
 			json.put("result", 1);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整22222222");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
@@ -202,7 +202,7 @@ public class CouponsController extends BaseController {
 				|| bodyInfo.get("url") == null || bodyInfo.get("coupon_name") == null
 				|| bodyInfo.get("coupon_stock") == null || bodyInfo.get("type") == null) {
 			json.put("result", 1);
-			json.put("description", "请检查参数格式是否正确或者参数是否完整1111111");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

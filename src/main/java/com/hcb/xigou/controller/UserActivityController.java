@@ -24,6 +24,7 @@ import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
 import com.hcb.xigou.service.UserActivityService;
 import com.hcb.xigou.util.MD5Util;
+import com.hcb.xigou.util.StringToDate;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -218,7 +219,9 @@ public class UserActivityController extends BaseController{
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
 		if (headInfo.get("store_uuid")==null||bodyInfo.get("banner") == null||
-				bodyInfo.get("good_uuid") == null||bodyInfo.get("title") == null) {
+				bodyInfo.get("good_uuid") == null||bodyInfo.get("title") == null ||
+				bodyInfo.get("start_time") == null||bodyInfo.get("end_time") == null || 
+				bodyInfo.get("description") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整2");
 			return buildReqJsonObject(json);
@@ -245,6 +248,10 @@ public class UserActivityController extends BaseController{
 			activityZones.setGoodUuid(jsonArray.getString(i));
 			activityZones.setBanner(bodyInfo.getString("banner"));
 			activityZones.setStoreUuid(headInfo.getString("store_uuid"));
+			activityZones.setType("host");
+			activityZones.setStartTime(StringToDate.stringtoDateTime(bodyInfo.getString("start_time")));
+			activityZones.setEndTime(StringToDate.stringtoDateTime(bodyInfo.getString("end_time")));
+			activityZones.setDescription(bodyInfo.getString("description"));
 			listAct.add(activityZones);
 		}
 		int rs = userActivityService.insertByActivityUuids(listAct);
