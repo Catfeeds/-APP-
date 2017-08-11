@@ -455,4 +455,54 @@ public class GradeController extends BaseController{
 	    }
 		return buildReqJsonObject(json);
 	}
+	
+	@RequestMapping(value = "group/all" , method = RequestMethod.POST)
+	public String groupOfAll(){
+		JSONObject json = new JSONObject();
+		List<Map<String, Object>> list = managersService.selectByAll();
+		json.put("result", 0);
+		json.put("description", "查询成功");
+		json.put("list", list);
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "change" , method = RequestMethod.POST)
+	public String gradeOfChange(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("group_uuid") == null || bodyInfo.get("staff_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Managers admin = managersService.selectByManagerUuid(bodyInfo.getString("group_uuid"));
+		if(admin == null){
+			json.put("result", 1);
+			json.put("description", "未查询到小组信息");
+			return buildReqJsonObject(json);
+		}
+		Managers staff = managersService.selectByManagerUuid(bodyInfo.getString("staff_uuid"));
+        if(staff == null){
+        	json.put("result", 1);
+			json.put("description", "未查询到组员信息");
+			return buildReqJsonObject(json);
+		}
+        staff.setSuperiorUuid(admin.getManagerUuid());
+        staff.setGroups(admin.getGroupName());
+        Integer rs = managersService.updateByPrimaryKeySelective(staff);
+        if(rs == 1){
+			json.put("result", 0);
+			json.put("description", "编辑成功");
+		}else{
+			json.put("result", 1);
+			json.put("description", "编辑失败");
+			return buildReqJsonObject(json);
+		}
+		return buildReqJsonObject(json);
+	}
 }

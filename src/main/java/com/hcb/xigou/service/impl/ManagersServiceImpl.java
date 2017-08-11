@@ -65,4 +65,9 @@ public class ManagersServiceImpl implements IManagersService{
 	public Integer totalCount(Map<String, Object> map) {
 		return managersMapper.totalCount(map);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectByAll() {
+		return managersMapper.selectByAll();
+	}
 }

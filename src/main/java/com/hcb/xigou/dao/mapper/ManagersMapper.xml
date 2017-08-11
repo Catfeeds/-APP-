@@ -87,6 +87,15 @@
 		and number = #{number,jdbcType=VARCHAR}
 	 </if>
   </select>
+  <!--  所有 小组-->
+   <select id="selectByAll" resultType="java.util.Map" parameterType="java.util.HashMap">
+  	select 
+    manager_uuid,group_name
+  	from managers
+  	where delete_at is null and grade = '3'
+  	order by create_datetime desc
+  </select>
+
   
   <select id="selectBynicknameAndGrade" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select 
