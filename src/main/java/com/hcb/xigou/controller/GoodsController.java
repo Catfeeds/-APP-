@@ -379,6 +379,9 @@ public class GoodsController extends BaseController{
 		goods.setPoster("0"+bodyInfo.getString("poster"));
 		goods.setGoodName((bodyInfo.getString("good_name")));
 		goods.setStoreUuid(headInfo.getString("store_uuid"));
+		if(bodyInfo.get("skus") != null){
+			goods.setSkus(bodyInfo.getString("skus"));
+		}
 		int rs = 0;
 		rs = goodsService.insertSelective(goods);
 		if(rs == 1){
