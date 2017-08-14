@@ -58,8 +58,8 @@ public class DailyController extends BaseController{
 		daily.setNumbers(Long.valueOf(bodyInfo.getString("numbers")));
 		daily.setTheNumber(bodyInfo.getInt("the_number"));
 		daily.setHighestAmount(new BigDecimal(bodyInfo.getString("highest_amount")));
-		daily.setStartTime(StringToDate.stringtoDateTime(bodyInfo.getString("start_time")));
-		daily.setEndTime(StringToDate.stringtoDateTime(bodyInfo.getString("end_time")));
+		daily.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+		daily.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
 		daily.setIsOpen(bodyInfo.getString("is_open"));
 		daily.setType(type);
 		daily.setSplitMoney(new BigDecimal(bodyInfo.getString("total_money")));

@@ -166,7 +166,7 @@
   	</if>
   </select>
   <!-- 活动专场  -->
-   <select id="selectByAll" resultMap="java.util.Map">
+   <select id="selectByAll" resultType="java.util.Map">
   	select 
   	fake_id AS eventId , title
   	from activity_zones
