@@ -50,4 +50,6 @@ public interface IActivityZonesService {
 		public List<Map<String, Object>> selectByPaging(Map<String, Object> map);
 		
 		public Integer totalCount(Map<String, Object> map);
+		
+		public List<Map<String, Object>> selectByAll();
 }

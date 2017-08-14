@@ -38,4 +38,6 @@ public interface GoodsService {
 	public List<Goods> searchGoodUuid(Map<String, Object> map);
 
 	public List<Goods> searchActivityGood(Map<String, Object> map);
+	
+	public List<Map<String, Object>> selectByAll();
 }

@@ -126,4 +126,9 @@ public class ActivityZonesServiceImpl implements IActivityZonesService{
 	public Integer totalCount(Map<String, Object> map) {
 		return activityZonesMapper.totalCount(map);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectByAll() {
+		return activityZonesMapper.selectByAll();
+	}
 }

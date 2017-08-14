@@ -130,6 +130,13 @@
   		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
   	</if>
   </select>
+  <!-- 活动专场  -->
+   <select id="selectByAll" resultMap="java.util.Map">
+  	select 
+  	fake_id AS eventId , title
+  	from activity_zones
+  	where delete_at is null and type = 'event'
+  </select>
   
   
   <delete id="deleteByPopular">

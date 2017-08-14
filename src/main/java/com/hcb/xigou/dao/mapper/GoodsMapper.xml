@@ -137,8 +137,14 @@
             #{fakeId,jdbcType=INTEGER}
         </foreach>
   </delete>
-  
-  
+  <!-- 所有上架商品 -->
+  <select id="selectByAll" resultType="java.util.Map">
+    select 
+    good_name,good_uuid
+    from goods
+    where delete_at is null and good_status = 'up'
+  </select>
+
   
    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 

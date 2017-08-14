@@ -50,4 +50,6 @@ public interface ActivityZonesMapper {
     List<Map<String, Object>> selectByPaging(Map<String, Object> map);
 	
     Integer totalCount(Map<String, Object> map);
+    
+    List<Map<String, Object>> selectByAll();
 }

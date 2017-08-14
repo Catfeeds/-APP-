@@ -100,4 +100,8 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.searchActivityGood(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectByAll() {
+		return goodsMapper.selectByAll();
+	}
 }

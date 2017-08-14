@@ -87,7 +87,12 @@ public class BaseController {
 							//不做处理
 						} else if(url.contains("grade/group/all")){
 							//不做处理
-						}else {
+						}else if(url.contains("banner/all/goods")){
+							//不做处理
+						} else if(url.contains("banner/all/events")){
+							//不做处理
+						}
+						else {
 							JSONObject headInfo = (JSONObject) json.get("head");
 							headString = headInfo.toString();
 							String nickname = null;

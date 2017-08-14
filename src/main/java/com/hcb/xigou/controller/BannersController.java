@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.Banners;
+import com.hcb.xigou.service.GoodsService;
+import com.hcb.xigou.service.IActivityZonesService;
 import com.hcb.xigou.service.IBannersService;
 import com.hcb.xigou.util.MD5Util;
 
@@ -31,6 +33,10 @@ public class BannersController extends BaseController{
 	
 	@Autowired
 	IBannersService bannersService;
+	@Autowired
+	GoodsService goodsService;
+	@Autowired
+	IActivityZonesService activityZonesService;
 	
 	@RequestMapping("delete")
 	@ResponseBody
@@ -476,4 +482,23 @@ public class BannersController extends BaseController{
 		return buildReqJsonObject(json);
 	}
 	
+	@RequestMapping(value = "all/goods" , method = RequestMethod.POST)
+	public String allOfGoods(){
+		JSONObject json = new JSONObject();
+		List<Map<String, Object>> list = goodsService.selectByAll();
+		json.put("result", 0);
+		json.put("description", "查询成功");
+		json.put("list", list);
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "all/events" , method = RequestMethod.POST)
+	public String allOfEvents(){
+		JSONObject json = new JSONObject();
+		List<Map<String, Object>> list = activityZonesService.selectByAll();
+		json.put("result", 0);
+		json.put("description", "查询成功");
+		json.put("list", list);
+		return buildReqJsonObject(json);
+	}
 }
