@@ -52,7 +52,9 @@ import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.Coupons;
 import com.hcb.xigou.dto.FirstCategorys;
 import com.hcb.xigou.dto.Managers;
+import com.hcb.xigou.dto.Orders;
 import com.hcb.xigou.dto.UserActivity;
+import com.hcb.xigou.dto.UserOrders;
 import com.hcb.xigou.dto.UserRechargers;
 import com.hcb.xigou.pojo.ActivityExcelport;
 import com.hcb.xigou.pojo.BannersExcelport;
@@ -183,7 +185,7 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "/yaoguo/file/"+fileName+".xls";
+	    		String path = "C:/Users/俞旭东/Desktop/xigou/file/"+fileName+".xls";
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -246,7 +248,7 @@ public class ExportController<T> {
 		}
 		ExportController<BannersExcelport> ex =new ExportController<BannersExcelport>();
 		 String[] headers =  
-		        { "商品ID", "名称", "规格", "分类", "价格/单位", "是否上架"}; 
+		        { "bannerID", "名称", "状态"}; 
 		 List<BannersExcelport> dataset = new ArrayList<BannersExcelport>();
 		 for(BannersExcelport export:exportList){
 	        	dataset.add(export);  
@@ -257,7 +259,7 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "/yaoguo/file/"+fileName+".xls";
+	    		String path = "C:/Users/俞旭东/Desktop/xigou/file/"+fileName+".xls";
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -333,7 +335,7 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "/yaoguo/file/"+fileName+".xls";
+	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -366,7 +368,7 @@ public class ExportController<T> {
 	            e.printStackTrace();  
 	        } 
 	}
-	//活动模块
+	//活动模块..
 	@RequestMapping("ActivityExcelport")
 	@ResponseBody
 	public void ActivityExcelport(HttpServletRequest req, HttpServletResponse res, ModelMap model){
@@ -377,19 +379,24 @@ public class ExportController<T> {
 		for(ActivityZones exList:list ){
 			if(exList != null){
 				ActivityExcelport excelport= new ActivityExcelport();
-				try {
-					excelport.setTitle(EmojiConvert.emojiRecovery2(exList.getTitle()));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+				if(exList.getTitle() != null){
+					excelport.setTitle(exList.getTitle());
+				}else{
+					excelport.setTitle("");
 				}
 				excelport.setStartTime(exList.getStartTime());
 				excelport.setEndTime(exList.getEndTime());
 				excelport.setOpenTime(exList.getOpenTime());
-				if(exList.getIsOpen().equals("1")){
-					excelport.setIsOpen("开始");	
+				if(exList.getIsOpen() != null){
+					if(exList.getIsOpen().equals(1)){
+						excelport.setIsOpen("开始");	
+					}else{
+						excelport.setIsOpen("关闭");
+					}
 				}else{
-					excelport.setIsOpen("关闭");
+					excelport.setIsOpen("");
 				}
+				
 				SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				if(exList.getEndTime()!=null&&exList.getOpenTime()!=null){
 					String fromDate = simpleFormat.format(exList.getOpenTime());  
@@ -439,7 +446,7 @@ public class ExportController<T> {
 						e.printStackTrace();
 					}
 				}
-			
+				excelport.setPosition(exList.getPosition());
 				if(exList.getIsStop().equals("1")){
 					excelport.setIsStop("上线");
 				}else{
@@ -450,7 +457,7 @@ public class ExportController<T> {
 		}
 		ExportController<ActivityExcelport> ex =new ExportController<ActivityExcelport>();
 		 String[] headers =  
-		        { "活动名称", "活动开始时间", "活动结束时间", "倒计时开始时间", "活动倒计时是否开启", "价格/单位", "活动位置", "状态"}; 
+		        { "活动名称", "活动开始时间", "活动结束时间", "倒计时开始时间", "活动倒计时是否开启", "活动倒计时结束", "活动位置", "状态"}; 
 		 List<ActivityExcelport> dataset = new ArrayList<ActivityExcelport>();
 		 for(ActivityExcelport export:exportList){
 	        	dataset.add(export);  
@@ -461,7 +468,7 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "/yaoguo/file/"+fileName+".xls";
+	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -505,11 +512,9 @@ public class ExportController<T> {
 		for(UserActivity exList:list ){
 			if(exList != null){
 				UserActivityExcelport excelport= new UserActivityExcelport();
-				try {
-					excelport.setTitle(EmojiConvert.emojiRecovery2(exList.getTitle()));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+				
+				excelport.setTitle(exList.getTitle());
+
 				if(exList.getIsStop().equals("1")){
 					excelport.setIsStop("上线");
 				}else{
@@ -531,7 +536,7 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "/yaoguo/file/"+fileName+".xls";
+	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -575,11 +580,8 @@ public class ExportController<T> {
 		for(FirstCategorys exList:list ){
 			if(exList != null){
 				CategoryExcelport excelport= new CategoryExcelport();
-				try {
-					excelport.setCategory_name(EmojiConvert.emojiRecovery2(exList.getCategoryName()));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+			    excelport.setCategory_name(exList.getCategoryName());
+
 				exportList.add(excelport);
 			}
 		}
@@ -596,7 +598,7 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "/yaoguo/file/"+fileName+".xls";
+	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -640,11 +642,8 @@ public class ExportController<T> {
 			for(ActivityZones exList:list ){
 				if(exList != null){
 					CouponsActivityExcelport excelport= new CouponsActivityExcelport();
-					try {
-						excelport.setTitle(EmojiConvert.emojiRecovery2(exList.getTitle()));
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
+					excelport.setTitle(exList.getTitle());
+
 					if(exList.getIsStop() == "1"){
 						excelport.setIsStop("上线");
 					}else{
@@ -666,7 +665,7 @@ public class ExportController<T> {
 		    		Date date = new Date();
 		    		String fileName = format.format(date);
 		    		
-		    		String path = "/yaoguo/file/"+fileName+".xls";
+		    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 		            OutputStream out = new FileOutputStream(path);   
 		            ex.exportExcel(headers, dataset, out);  
 		            out.close();   
@@ -710,28 +709,35 @@ public class ExportController<T> {
 				for(Coupons exList:list ){
 					if(exList != null){
 						CouponExcelport excelport= new CouponExcelport();
-						try {
-							excelport.setTitle(EmojiConvert.emojiRecovery2(exList.getTitle()));
-						} catch (UnsupportedEncodingException e) {
-							e.printStackTrace();
-						}
+
+						excelport.setTitle(exList.getTitle());
+
 						excelport.setPlayTime(exList.getGrantTime()+"—"+exList.getFailTime());
-						if(exList.getType()=="1"){
-							excelport.setType("app专用");
+						if(exList.getType() != null){
+							if(exList.getType().equals("1")){
+								excelport.setType("app专用");
+							}	
+						}
+						else{
+							excelport.setType("");
 						}
 						excelport.setAmount(exList.getAmount());
 						excelport.setUrl(exList.getUrl());
-						if(exList.getCouponStatus()=="0"){
+						if(exList.getCouponStatus().equals("0")){
 							excelport.setCouponStatus("未使用");
-						}else if(exList.getCouponStatus()=="1"){
+						}else if(exList.getCouponStatus().equals("1")){
+							excelport.setCouponStatus("已使用");
+						}else if(exList.getCouponStatus().equals("2")){
 							excelport.setCouponStatus("已使用");
 						}else{
-							excelport.setCouponStatus("已过期");
+							excelport.setCouponStatus("");
 						}
-						if(exList.getIsGrant()=="1"){
+						if(exList.getIsGrant().equals("1")){
 							excelport.setIsGrant("未发放");
-						}else{
+						}else if(exList.getIsGrant().equals("2")){
 							excelport.setIsGrant("已发放");
+						}else{
+							excelport.setIsGrant("");
 						}
 						excelport.setCouponStock(exList.getCouponStock());
 						exportList.add(excelport);
@@ -750,7 +756,7 @@ public class ExportController<T> {
 			    		Date date = new Date();
 			    		String fileName = format.format(date);
 			    		
-			    		String path = "/yaoguo/file/"+fileName+".xls";
+			    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 			            OutputStream out = new FileOutputStream(path);   
 			            ex.exportExcel(headers, dataset, out);  
 			            out.close();   
@@ -794,11 +800,7 @@ public class ExportController<T> {
 					for(Map<String, Object> exList:list ){
 						if(exList != null){
 							PackagesExcelport excelport= new PackagesExcelport();
-							try {
-								excelport.setTitle(EmojiConvert.emojiRecovery2(String.valueOf(exList.get("title"))));
-							} catch (UnsupportedEncodingException e) {
-								e.printStackTrace();
-							}
+							excelport.setTitle(String.valueOf(exList.get("title")));
 							excelport.setCouponNumbers(String.valueOf(exList.get("coupon_numbers")));
 							excelport.setPackageStatus(String.valueOf(exList.get("packeage_stock")));
 							excelport.setPackageStatus(String.valueOf(exList.get("package_status")));
@@ -818,7 +820,7 @@ public class ExportController<T> {
 				    		Date date = new Date();
 				    		String fileName = format.format(date);
 				    		
-				    		String path = "/xigou/file/"+fileName+".xls";
+				    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 				            OutputStream out = new FileOutputStream(path);   
 				            ex.exportExcel(headers, dataset, out);  
 				            out.close();   
@@ -859,7 +861,7 @@ public class ExportController<T> {
 			@RequestParam(required = false) String startTime,@RequestParam(required = false) String endTime,
 			@RequestParam(required = false) String pay_status,@RequestParam(required = false) String member_card_number){
 						Map<String, Object> map = new HashMap<String,Object>();
-						List<Map<String, Object>> list = new ArrayList<>();
+						List<UserOrders> list = new ArrayList<UserOrders>();
 						if(!"".equals(order_number) && order_number != null){
 							map.put("orderNumber", order_number);
 						}
@@ -880,51 +882,51 @@ public class ExportController<T> {
 						}
 						list = userOrdersService.searchOrderExcelportByMap(map);
 						List<OrderExcelport> exportList= new ArrayList<OrderExcelport>();
-						for(Map<String, Object> exList:list ){
+						for(UserOrders exList:list ){
 							if(exList != null){
 								OrderExcelport excelport= new OrderExcelport();
-								excelport.setMemberCardNumber(String.valueOf(exList.get("member_card_number")));
-								excelport.setOrderNumber(String.valueOf(exList.get("order_number")));
-								excelport.setCreateDatetime(String.valueOf(exList.get("create_datetime")));
-								excelport.setTotalMoney(String.valueOf(exList.get("total_money")));
-								if(exList.get("pay_status") == "1"){
+								excelport.setMemberCardNumber(String.valueOf(exList.getMemberCardNumber()));
+								excelport.setOrderNumber(String.valueOf(exList.getOrderNumber()));
+								excelport.setCreateDatetime(String.valueOf(exList.getCreateDatetime()));
+								excelport.setTotalMoney(String.valueOf(exList.getTotalMoney()));
+								if(exList.getPayStatus().equals("1")){
 									excelport.setPayStatus("待付款");
-								}else if(exList.get("pay_status") == "2"){
+								}else if(exList.getPayStatus().equals("2")){
 									excelport.setPayStatus("待配送");
-								}else if(exList.get("pay_status") == "3"){
+								}else if(exList.getPayStatus().equals("3")){
 									excelport.setPayStatus("配送中");
-								}else if(exList.get("pay_status") == "4"){
+								}else if(exList.getPayStatus().equals("4")){
 									excelport.setPayStatus("退换货");
-								}else if(exList.get("pay_status") == "5"){
+								}else if(exList.getPayStatus().equals("5")){
 									excelport.setPayStatus("删除");
-								}else if(exList.get("pay_status") == "6"){
+								}else if(exList.getPayStatus().equals("6")){
 									excelport.setPayStatus("交易关闭");
 								}else{
 									excelport.setPayStatus("已完成");
 								}
-								excelport.setPaidMoney(String.valueOf(exList.get("paid_money")));
-								if(exList.get("pay_way") =="alipay"){
+								excelport.setPaidMoney(String.valueOf(exList.getPaidMoney()));
+								if(exList.getPayWay().equals("alipay")){
 									excelport.setPayWay("支付宝");
-								}else if(exList.get("pay_way") =="wechat"){
+								}else if(exList.getPayWay().equals("wechat")){
 									excelport.setPayWay("微信");
-								}else if(exList.get("pay_way") =="balance"){
+								}else if(exList.getPayWay().equals("balance")){
 									excelport.setPayWay("余额");
-								}else if(exList.get("pay_way") =="toPay"){
+								}else if(exList.getPayWay().equals("toPay")){
 									excelport.setPayWay("到付");
-								}else if(exList.get("pay_way") =="cash"){
+								}else if(exList.getPayWay().equals("cash")){
 									excelport.setPayWay("现金");
-								}else if(exList.get("pay_way") =="card"){
+								}else if(exList.getPayWay().equals("card")){
 									excelport.setPayWay("刷卡");
 								}
-								if(exList.get("type") == "shopping"){
+								if(exList.getType().equals("shopping")){
 									excelport.setType("商城购");
-								}else if(exList.get("type") == "trust"){
+								}else if(exList.getType().equals("trust")){
 									excelport.setType("信任购");
-								}else if(exList.get("type") == "scan"){
+								}else if(exList.getType().equals("scan")){
 									excelport.setType("扫码");
 								}
-								excelport.setUserUuid(String.valueOf(exList.get("user_uuid")));
-								excelport.setNickname(String.valueOf(exList.get("nickname")));
+								excelport.setUserUuid(String.valueOf(exList.getUserUuid()));
+								excelport.setNickname(String.valueOf(exList.getNickname()));
 								exportList.add(excelport);
 							}
 						}
@@ -941,7 +943,7 @@ public class ExportController<T> {
 					    		Date date = new Date();
 					    		String fileName = format.format(date);
 					    		
-					    		String path = "/xigou/file/"+fileName+".xls";
+					    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 					            OutputStream out = new FileOutputStream(path);   
 					            ex.exportExcel(headers, dataset, out);  
 					            out.close();   
@@ -1028,7 +1030,7 @@ public class ExportController<T> {
 				    		Date date = new Date();
 				    		String fileName = format.format(date);
 				    		
-				    		String path = "/xigou/file/"+fileName+".xls";
+				    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 				            OutputStream out = new FileOutputStream(path);   
 				            ex.exportExcel(headers, dataset, out);  
 				            out.close();   
@@ -1134,7 +1136,7 @@ public class ExportController<T> {
 					    		Date date = new Date();
 					    		String fileName = format.format(date);
 					    		
-					    		String path = "/xigou/file/"+fileName+".xls";
+					    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 					            OutputStream out = new FileOutputStream(path);   
 					            ex.exportExcel(headers, dataset, out);  
 					            out.close();   
@@ -1224,7 +1226,7 @@ public class ExportController<T> {
 						    		Date date = new Date();
 						    		String fileName = format.format(date);
 						    		
-						    		String path = "/xigou/file/"+fileName+".xls";
+						    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 						            OutputStream out = new FileOutputStream(path);   
 						            ex.exportExcel(headers, dataset, out);  
 						            out.close();   
@@ -1297,7 +1299,7 @@ public class ExportController<T> {
 							    		Date date = new Date();
 							    		String fileName = format.format(date);
 							    		
-							    		String path = "/xigou/file/"+fileName+".xls";
+							    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
 							            OutputStream out = new FileOutputStream(path);   
 							            ex.exportExcel(headers, dataset, out);  
 							            out.close();   

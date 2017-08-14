@@ -41,7 +41,7 @@ public class UserOrdersServiceImpl implements UserOrdersService {
 	}
 
 	@Override
-	public List<Map<String, Object>> searchOrderExcelportByMap(Map<String, Object> map) {
+	public List<UserOrders> searchOrderExcelportByMap(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return userOrdersMapper.searchOrderExcelportByMap(map);
 	}

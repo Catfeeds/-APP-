@@ -41,7 +41,7 @@
     <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
     <result column="is_sign" property="isSign" jdbcType="CHAR" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-    <result column="member_card_number" property="member_card_number" jdbcType="VARCHAR" />
+    <result column="member_card_number" property="memberCardNumber" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.Orders" extends="BaseResultMap" >
     <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />
@@ -139,7 +139,7 @@
     <select id="searchOrderExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
 	  	select 
 	  	<include refid="Base_Column_List"/>
-	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
+	  	from orders AS o LEFT JOIN users AS u on o.user_uuid=u.user_uuid
 	  	where o.delete_at is null and type in ('shopping')
 	  	<if test="orderNumber != null and orderNumber != ''">
 	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}

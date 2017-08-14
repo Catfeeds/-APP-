@@ -3,6 +3,8 @@ package com.hcb.xigou.pojo;
 import java.util.Date;
 
 public class ActivityExcelport {
+	private String title;
+	 
     private Date startTime;
 
     private Date endTime;
@@ -11,13 +13,13 @@ public class ActivityExcelport {
     
     private String isOpen;
     
+    private String countdown;
+    
     private Byte position;
     
     private String isStop;
     
-    private String countdown;
-    
-    private String title;
+   
 
 	public String getCountdown() {
 		return countdown;

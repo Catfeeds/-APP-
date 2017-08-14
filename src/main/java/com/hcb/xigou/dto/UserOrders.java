@@ -6,19 +6,11 @@ public class UserOrders extends Orders{
     
     private String storeName;
     
-    private String member_card_number;
+    private String memberCardNumber;
     
     public String getNickname() {
         return nickname;
     }
-
-    public String getMember_card_number() {
-		return member_card_number;
-	}
-
-	public void setMember_card_number(String member_card_number) {
-		this.member_card_number = member_card_number == null ? null : member_card_number.trim();
-	}
 
 	public void setNickname(String nickname) {
         this.nickname = nickname == null ? null : nickname.trim();
@@ -31,4 +23,13 @@ public class UserOrders extends Orders{
 	public void setStoreName(String storeName) {
 		this.storeName = storeName;
 	}
+
+	public String getMemberCardNumber() {
+		return memberCardNumber;
+	}
+
+	public void setMemberCardNumber(String memberCardNumber) {
+		this.memberCardNumber = memberCardNumber;
+	}
+	
 }
