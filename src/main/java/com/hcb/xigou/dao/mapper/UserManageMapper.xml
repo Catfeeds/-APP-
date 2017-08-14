@@ -59,6 +59,7 @@
   	</if>
   	order by u.create_datetime desc LIMIT #{start},#{end}
   </select>
+  
   <select id="countUserMagageByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users u  LEFT JOIN user_address ud on u.user_uuid = ud.user_uuid

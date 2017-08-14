@@ -17,6 +17,8 @@ public interface UserActivityService {
 	int insertByActivityUuids(List<ActivityZones> listAct);
 
 	List<UserActivity> searchUserActivityByMap(Map<String, Object> map);
+	
+	List<UserActivity> searchUserActivityExcelportByMap(Map<String, Object> map);
 
 	int countUserActivityByMap(Map<String, Object> map);
 

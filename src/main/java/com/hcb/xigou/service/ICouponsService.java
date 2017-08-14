@@ -24,6 +24,8 @@ public interface ICouponsService {
     
     List<Coupons> searchCouponByMap(Map<String,Object> map);
     
+    List<Coupons> searchCouponExcelportByMap(Map<String,Object> map);
+    
     int countCouponByMap(Map<String,Object> map);
     
     int updateByCouponUuid(Coupons record);

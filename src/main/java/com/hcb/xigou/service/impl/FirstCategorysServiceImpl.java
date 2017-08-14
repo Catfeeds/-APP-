@@ -88,4 +88,10 @@ public class FirstCategorysServiceImpl implements IFirstCategorysService{
 		return firstCategorysMapper.firstUuid();
 	}
 
+	@Override
+	public List<FirstCategorys> searchCategoryExcelportByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return firstCategorysMapper.searchCategoryExcelportByMap(map);
+	}
+
 }

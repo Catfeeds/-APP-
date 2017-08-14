@@ -77,5 +77,11 @@ public class UserActivityServiceImpl implements UserActivityService {
 		// TODO Auto-generated method stub
 		return userActivityMapper.selectByActiviAndGood(map);
 	}
+
+	@Override
+	public List<UserActivity> searchUserActivityExcelportByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userActivityMapper.searchUserActivityExcelportByMap(map);
+	}
 	
 }

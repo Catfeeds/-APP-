@@ -22,6 +22,8 @@ public interface IPackagesService {
 	
 	public List<Map<String, Object>> selectByPaging(Map<String, Object> map);
 	
+	public List<Map<String, Object>> selectByPackagesExcelport(Map<String, Object> map);
+	
 	public Integer totalCount(Map<String, Object> map);
 	
 	public List<Map<String, Object>> selectByAll();

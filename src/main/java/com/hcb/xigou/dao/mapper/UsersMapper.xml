@@ -84,6 +84,30 @@
   	</if>
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
+  
+  <select id="selectByMemberExcelport" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from users
+  	where  grade IS NOT NULL 
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		and member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	</if>
+  	<if test="grade != null and grade != ''">
+  		and grade = #{grade,jdbcType=VARCHAR}
+  	</if>
+  	order by create_datetime desc 
+  </select>
+  
     <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users
@@ -136,6 +160,39 @@
   	</if>
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
+  
+  <select id="selectByUserListExcelport" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from users
+  	where delete_at is null
+  	<if test="name != null and name != ''">
+  		and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+    <if test="firstDay != null and lastDay != null">
+  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
+  	</if>
+  	<if test="numberStart != null and numberStart != ''">
+  		and order_number &gt;= #{numberStart,jdbcType=INTEGER}
+  	</if>
+  	<if test="numberEnd != null and numberEnd != ''">
+  		and order_number &lt;= #{numberEnd,jdbcType=INTEGER}
+  	</if>
+    <if test="moneyStart != null and moneyStart != ''">
+  		and total_money &gt;= #{moneyStart,jdbcType=VARCHAR}
+  	</if>
+  	<if test="moneyEnd != null and moneyEnd != ''">
+  		and total_money &lt;= #{moneyEnd,jdbcType=VARCHAR}
+  	</if>
+  	order by create_datetime desc 
+  </select>
+  
   <select id="totalCountUserList" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from users

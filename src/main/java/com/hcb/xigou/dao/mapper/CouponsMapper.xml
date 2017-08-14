@@ -70,6 +70,14 @@
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
+    <select id="searchCouponExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupons
+    where delete_at is null and groups in ('coupon')
+	order by create_datetime desc 
+  </select>
+  
   <select id="countCouponByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
    select count(1) from coupons
     where delete_at is null and groups in ('coupon')

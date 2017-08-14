@@ -21,6 +21,8 @@ public interface PackagesMapper {
     Packages selectByPackageUuid(String PackageUuid);
 	
     List<Map<String, Object>> selectByPaging(Map<String, Object> map);
+    
+    List<Map<String, Object>> selectByPackagesExcelport(Map<String, Object> map);
 	
     Integer totalCount(Map<String, Object> map);
     

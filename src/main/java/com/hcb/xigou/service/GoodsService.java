@@ -22,6 +22,8 @@ public interface GoodsService {
 	int deleteByGoodUuids(Map<String,Object> map);
 
 	public List<GoodsWithBLOBs> searchGoodsByMap(Map<String, Object> map);
+	
+	public List<GoodsWithBLOBs> searchGoodsExcelByMap(Map<String, Object> map);
 
 	public int countGoodsByMap(Map<String, Object> map);
 	

@@ -23,7 +23,7 @@
     r.fake_id, r.recharge_uuid, r.create_datetime, r.update_datetime, r.delete_at, r.user_uuid, r.recharge_number, 
     r.wechat_number, r.alipay_number, r.pay_time, r.amount, r.status, r.third_way,u.phone,u.nickname,u.name
   </sql>
-	<select id="searchUserRechargersByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="searchUserRechargersByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
   	from recharges r  LEFT JOIN users u on r.user_uuid = u.user_uuid
@@ -48,6 +48,32 @@
 		and r.pay_time &lt;= #{endTime,jdbcType=VARCHAR}
 	</if>
   	order by r.create_datetime desc LIMIT #{start},#{end}
+  </select>
+  <select id="searchUserRechargersExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from recharges r  LEFT JOIN users u on r.user_uuid = u.user_uuid
+  	where r.delete_at is null
+  	and status = '1'
+  	<if test="name != null and name != ''">
+  		and u.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and u.nickname like CONCAT(CONCAT('%',#{nickname,jdbcType=VARCHAR}),'%')
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and u.phone = #{phone,jdbcType=VARCHAR}
+  	</if>
+  	<if test="thirdWay != null and thirdWay != ''">
+  		and r.third_way = #{thirdWay,jdbcType=VARCHAR}
+  	</if>
+	<if test="startTime != null and startTime != '' ">
+		and r.pay_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+		and r.pay_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+  	order by r.create_datetime desc 
   </select>
   <select id="countUserRechargersByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)

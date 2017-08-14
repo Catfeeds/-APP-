@@ -115,6 +115,16 @@
     group by groups
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
+  
+  <select id="searchUserActivityExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones 
+    where delete_at is null
+    and type = 'selling'
+    group by groups
+	order by create_datetime desc 
+  </select>
 	
   <select id="countUserActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
     select count(az.banner) from (

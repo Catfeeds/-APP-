@@ -25,6 +25,8 @@ public interface IActivityZonesService {
 	    
 	    List<ActivityZones> searchActivityByMap(Map<String,Object> map);
 	    
+	    List<ActivityZones> searchActivityExcelportByMap(Map<String,Object> map);
+	    
 	    int countActivityByMap(Map<String,Object> map);
 	    
 	    int updateByActivityUuid(ActivityZones record);
@@ -38,6 +40,8 @@ public interface IActivityZonesService {
 		ActivityZones selectByPopularId(String activityUuid);
 
 		List<ActivityZones> searchActivityList(Map<String, Object> map);
+		
+		List<ActivityZones> searchActivityExcelport(Map<String, Object> map);
 
 		int countActivityInt(Map<String, Object> map);
 
@@ -48,6 +52,8 @@ public interface IActivityZonesService {
 		int selectByActivitySellingCount();
 		
 		public List<Map<String, Object>> selectByPaging(Map<String, Object> map);
+		
+		public List<Map<String, Object>> selectBypopularActivityExcelport(Map<String, Object> map);
 		
 		public Integer totalCount(Map<String, Object> map);
 		

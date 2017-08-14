@@ -135,6 +135,32 @@
   	    </if>
 	  	order by o.create_datetime desc LIMIT #{start},#{end}
     </select>
+    
+    <select id="searchOrderExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	  	select 
+	  	<include refid="Base_Column_List"/>
+	  	from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid
+	  	where o.delete_at is null and type in ('shopping')
+	  	<if test="orderNumber != null and orderNumber != ''">
+	  		and o.order_number = #{orderNumber,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="nickname != null and nickname != ''">
+	  		and  u.nickname  like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%') 
+	  	</if>
+	  	<if test="startTime!=null and startTime!=''">
+  			and o.create_datetime > #{startTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime!=null and endTime!=''">
+  			and o.create_datetime &lt; #{endTime,jdbcType=VARCHAR}
+  		</if>
+	  	<if test="payStatus != null and payStatus != '' ">
+	  		and o.pay_status = #{payStatus,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="memberCardNumber != null and memberCardNumber != ''">
+  		    and u.member_card_number = #{memberCardNumber,jdbcType=VARCHAR}
+  	    </if>
+	  	order by o.create_datetime desc 
+    </select>
   
   <select id="countOrderyMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from orders o LEFT JOIN users u on o.user_uuid=u.user_uuid

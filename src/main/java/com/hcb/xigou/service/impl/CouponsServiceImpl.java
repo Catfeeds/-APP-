@@ -87,4 +87,10 @@ public class CouponsServiceImpl implements ICouponsService{
 		return couponsMapper.selectByPackageAll(map);
 	}
 
+	@Override
+	public List<Coupons> searchCouponExcelportByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return couponsMapper.searchCouponExcelportByMap(map);
+	}
+
 }

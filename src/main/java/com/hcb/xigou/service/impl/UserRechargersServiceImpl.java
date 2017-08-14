@@ -28,4 +28,9 @@ public class UserRechargersServiceImpl implements UserRechargersService {
 		return userRechargersMapper.countUserRechargersByMap(map);
 	}
 
+	@Override
+	public List<UserRechargers> searchUserRechargersExcelportByMap(Map<String, Object> map) {
+		return userRechargersMapper.searchUserRechargersExcelportByMap(map);
+	}
+
 }

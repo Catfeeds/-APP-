@@ -49,6 +49,17 @@
 	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
+    <select id="searchCategoryExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from first_categorys
+    where delete_at is null
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	order by create_datetime desc 
+  </select>
+  
   <select id="countCategoryByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
    select count(1) from first_categorys
     where delete_at is null

@@ -65,4 +65,10 @@ public class PackagesServiceImpl implements IPackagesService{
 	public List<Map<String, Object>> selectByAll() {
 		return packagesMapper.selectByAll();
 	}
+
+	@Override
+	public List<Map<String, Object>> selectByPackagesExcelport(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return packagesMapper.selectByPackagesExcelport(map);
+	}
 }

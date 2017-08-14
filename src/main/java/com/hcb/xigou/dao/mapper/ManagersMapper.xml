@@ -67,6 +67,29 @@
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
+  <select id="selectByManagersExcelport" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from managers
+  	where  delete_at is null
+  	<if test="groupName != null and groupName != ''">
+  		and group_name like CONCAT(CONCAT('%', #{groupName,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="nickname != null and nickname != ''">
+  		and nickname like CONCAT(CONCAT('%', #{nickname,jdbcType=VARCHAR}), '%')
+  	</if>
+    <if test="grade !='' and grade != null">
+		and grade = #{grade,jdbcType=CHAR}
+	 </if>
+	 <if test="managerUuid !='' and managerUuid != null">
+		and manager_uuid = #{managerUuid,jdbcType=VARCHAR}
+	 </if>
+	 <if test="number !='' and number != null">
+		and number = #{number,jdbcType=VARCHAR}
+	 </if>
+  	order by create_datetime desc 
+  </select>
+  
   <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1)
   	from managers

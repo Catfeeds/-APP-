@@ -22,6 +22,8 @@ public interface IFirstCategorysService {
     
     List<FirstCategorys> searchCategoryByMap(Map<String,Object> map);
     
+    List<FirstCategorys> searchCategoryExcelportByMap(Map<String,Object> map);
+    
     int countCategoryByMap(Map<String,Object> map);
     
     int deleteByFirstUuids(Map<String,Object> map);

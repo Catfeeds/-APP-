@@ -24,6 +24,8 @@ public interface BannersMapper {
     
     List<Banners> searchBannerByMap(Map<String,Object> map);
     
+    List<Banners> searchBannerExcelByMap(Map<String,Object> map);
+    
     int countBannerByMap(Map<String,Object> map);
 
 	int insertByBanner(Banners banner);

@@ -55,6 +55,18 @@
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
+  <select id="searchActivityExcelport" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from activity_zones
+  	where delete_at is null
+  	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	and type = 'activity'
+  	order by create_datetime desc
+  </select>
+  
   <select id="countActivityInt" resultType="java.lang.Integer" parameterType="java.util.HashMap">
   	select count(1) from  activity_zones
   	where delete_at is null
@@ -114,6 +126,29 @@
   	</if>
   	order by a.currentIndex asc LIMIT #{start},#{end}
   </select>
+  
+  <select id="selectBypopularActivityExcelport" resultType="java.util.Map" parameterType="java.util.HashMap">
+  	select
+  	cast( a.create_datetime as char(32) ) AS create_datetime, 
+    g.good_name,g.cover,g.good_code,g.good_status,a.title,a.is_stop,
+    a.activity_uuid,a.currentIndex
+  	from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
+  	where  a.type = 'host'
+  	<if test="goodname != null and goodname != ''">
+  		and g.good_name like CONCAT(CONCAT('%', #{goodname,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="goodcode != null and goodcode != ''">
+  		and g.good_code = #{goodcode,jdbcType=VARCHAR}
+  	</if>
+  	<if test="isStop != null and isStop != ''">
+  		and a.is_stop = #{isStop,jdbcType=VARCHAR}
+  	</if>
+     <if test="storeUuid != null and storeUuid != ''">
+  		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
+  	</if>
+  	order by a.currentIndex asc 
+  </select>
+  
   <select id="totalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
   	where a.type = 'host'
@@ -173,6 +208,18 @@
 	</if>
 	and type = 'coupon'
 	order by create_datetime desc LIMIT #{start},#{end}
+  </select>
+  
+  <select id="searchActivityExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+    where delete_at is null
+	<if test="storeUuid !='' and storeUuid != null">
+		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
+	</if>
+	and type = 'coupon'
+	order by create_datetime desc 
   </select>
   
   <select id="countActivityByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >

@@ -35,4 +35,16 @@ public class UserServiceImpl implements IUserService{
 	public Integer totalCountUserList(Map<String, Object> map) {
 		return usersMapper.totalCountUserList(map);
 	}
+
+	@Override
+	public List<Users> selectByUserListExcelport(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return usersMapper.selectByUserListExcelport(map);
+	}
+
+	@Override
+	public List<Users> selectByMemberExcelport(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return usersMapper.selectByMemberExcelport(map);
+	}
 }

@@ -80,4 +80,10 @@ public class BannersServiceImpl implements IBannersService{
 	public Banners selectByCurrentindex(Map<String, Object> map) {
 		return bannersMapper.selectByCurrentindex(map);
 	}
+
+	@Override
+	public List<Banners> searchBannerExcelByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return bannersMapper.searchBannerExcelByMap(map);
+	}
 }

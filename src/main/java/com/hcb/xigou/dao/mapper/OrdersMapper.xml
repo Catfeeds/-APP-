@@ -102,6 +102,31 @@
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
+  <select id="searchOrderExcelportByMap" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from orders
+  	where delete_at is null
+  	<if test="orderNumber != null and orderNumber != ''">
+  		and order_number = #{orderNumber,jdbcType=VARCHAR}
+  	</if>
+  	<if test="phone != null and phone != ''">
+  		and (
+  			select user_uuid from user_address where phone = #{phone,jdbcType=VARCHAR}
+  		)
+  	</if>
+  	<if test="startTime!=null and startTime!=''">
+  		and create_datetime &gt; = #{startTime,jdbcType=VARCHAR}
+  	</if>
+  	<if test="endTime!=null and endTime!=''">
+  		and create_datetime &lt; = #{endTime,jdbcType=VARCHAR}
+  	</if>
+ 	<if test="payStatus != null and payStatus != ''">
+  		and pay_status = #{payStatus,jdbcType=VARCHAR}
+  	</if>
+  	order by create_datetime desc LIMIT 
+  </select>
+  
   <select id="countOrderyMap"  resultType="java.lang.Integer" parameterType="java.util.HashMap" >
   	select count(1) from orders
   	where delete_at is null

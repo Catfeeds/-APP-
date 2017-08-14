@@ -70,4 +70,10 @@ public class ManagersServiceImpl implements IManagersService{
 	public List<Map<String, Object>> selectByAll() {
 		return managersMapper.selectByAll();
 	}
+
+	@Override
+	public List<Managers> selectByManagersExcelport(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return managersMapper.selectByManagersExcelport(map);
+	}
 }

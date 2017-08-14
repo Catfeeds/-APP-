@@ -119,6 +119,31 @@
    	order by create_datetime desc LIMIT #{start},#{end}
   </select>
 
+
+  <select id="searchGoodsExcelByMap" parameterType="java.util.HashMap" resultMap="BaseResultMap"> 
+  	select  
+  	<include refid="Base_Column_List" />
+  	,
+  	<include refid="Blob_Column_List"/>
+  	from goods 
+  	where delete_at is null
+  	<if test="goodName != null and goodName != ''">
+  		and good_name like CONCAT(CONCAT('%', #{goodName,jdbcType=VARCHAR}), '%')
+  	</if>
+  	<if test="firtCategoryName != null and firtCategoryName != ''">
+  		and firt_category_name= #{firtCategoryName,jdbcType=VARCHAR}
+  	</if>
+  	<if test="goodStatus != null">
+  		and good_status = #{goodStatus,jdbcType=VARCHAR}
+  	</if>
+  	<if test="minPrice != null and minPrice != 0">
+  		and unit_price &gt;=#{minPrice,jdbcType=DECIMAL}
+  	</if>
+  	<if test="maxPrice !=null and maxPrice != 0">
+  		and unit_price &lt;=#{maxPrice,jdbcType=DECIMAL}
+  	</if>
+   	order by create_datetime desc 
+  </select>
   
 
   <select id="selectGoodById" parameterType="java.lang.Integer" resultType="com.hcb.xigou.pojo.Goods">

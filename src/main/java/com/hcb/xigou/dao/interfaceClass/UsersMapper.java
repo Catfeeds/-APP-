@@ -12,10 +12,14 @@ public interface UsersMapper {
 	Integer registerCount(Map<String, Object> map);
 	
 	List<Users> selectByPaging(Map<String,Object> map);
+	
+	List<Users> selectByMemberExcelport(Map<String,Object> map);
 
     Integer totalCount(Map<String,Object> map);
     
     List<Users> selectByUserList(Map<String,Object> map);
+    
+    List<Users> selectByUserListExcelport(Map<String,Object> map);
 	
     Integer totalCountUserList(Map<String,Object> map);
 }

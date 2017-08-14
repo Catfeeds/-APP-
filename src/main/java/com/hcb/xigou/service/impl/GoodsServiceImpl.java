@@ -104,4 +104,10 @@ public class GoodsServiceImpl implements GoodsService {
 	public List<Map<String, Object>> selectByAll() {
 		return goodsMapper.selectByAll();
 	}
+
+	@Override
+	public List<GoodsWithBLOBs> searchGoodsExcelByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return goodsMapper.searchGoodsExcelByMap(map);
+	}
 }

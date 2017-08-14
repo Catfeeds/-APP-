@@ -39,5 +39,11 @@ public class UserOrdersServiceImpl implements UserOrdersService {
 		// TODO Auto-generated method stub
 		return userOrdersMapper.countOrderyMap(map);
 	}
+
+	@Override
+	public List<Map<String, Object>> searchOrderExcelportByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userOrdersMapper.searchOrderExcelportByMap(map);
+	}
 	
 }

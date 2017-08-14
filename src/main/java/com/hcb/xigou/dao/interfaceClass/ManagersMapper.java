@@ -26,6 +26,8 @@ public interface ManagersMapper {
     
     List<Managers> selectByPaging(Map<String, Object> map);
     
+    List<Managers> selectByManagersExcelport(Map<String, Object> map);
+    
     Integer totalCount(Map<String, Object> map);
     
     List<Map<String, Object>> selectByAll();

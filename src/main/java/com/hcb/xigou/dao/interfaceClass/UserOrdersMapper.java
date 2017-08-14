@@ -13,6 +13,8 @@ public interface UserOrdersMapper {
 	int countUsersOrderByMap(Map<String, Object> map);
 
 	List<Orders> searchOrderByMap(Map<String, Object> map);
+	
+	List<Map<String, Object>> searchOrderExcelportByMap(Map<String, Object> map);
 
 	int countOrderyMap(Map<String, Object> map);
 	
