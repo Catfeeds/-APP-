@@ -22,6 +22,7 @@ import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IActivityZonesService;
 import com.hcb.xigou.service.IBannersService;
 import com.hcb.xigou.util.MD5Util;
+import com.hcb.xigou.util.StringToDate;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -424,11 +425,32 @@ public class BannersController extends BaseController{
 		banner.setBannerUuid(bannerUuid);
 		banner.setType("home");
 		banner.setUrl(bodyInfo.getString("url"));
+		Map<String, Object> mtp = new HashMap<String, Object>();
+		mtp.put("currentindex", bodyInfo.getInt("currentIndex"));
+		mtp.put("type", "home");
+		Banners b1 = bannersService.selectByCurrentindex(mtp);
+		if(b1 != null){
+			bannersService.deleteByPrimaryKey(b1.getFakeId());
+		}else{
+			//暂不处理
+		}
 		banner.setCurrentindex(bodyInfo.getInt("currentIndex"));
 		banner.setBannerName(bodyInfo.getString("banner_name"));
 		banner.setStoreUuid(headInfo.getString("store_uuid"));
 		if(bodyInfo.get("web_url") != null){
 			banner.setWebUrl(bodyInfo.getString("web_url"));
+		}
+		if(bodyInfo.get("good_uuid") != null){
+			banner.setGoodUuid(bodyInfo.getString("good_uuid"));
+		}
+		if(bodyInfo.get("eventId") != null){
+			banner.setActivityId(bodyInfo.getInt("eventId"));
+		}
+		if(bodyInfo.get("start_time") != null){
+			banner.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+		}
+		if(bodyInfo.get("end_time") != null){
+			banner.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
 		}
 		int rs = 0;
 		rs = bannersService.insertByBanner(banner);

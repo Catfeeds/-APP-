@@ -22,32 +22,24 @@ public class Banners {
     private String goodUuid;
 
     private Integer currentindex;
-    
+
     private Integer bannerStatus;
-    
+
     private String bannerName;
-    
+
     private String webUrl;
-    
+
     private Date shelvesTime;
 
-    public String getBannerName() {
-		return bannerName;
-	}
+    private Date startTime;
 
-	public void setBannerName(String bannerName) {
-		this.bannerName = bannerName;
-	}
+    private Date endTime;
 
-	public Integer getBannerStatus() {
-		return bannerStatus;
-	}
+    private Integer activityId;
 
-	public void setBannerStatus(Integer bannerStatus) {
-		this.bannerStatus = bannerStatus;
-	}
+    private String goodCode;
 
-	public Integer getFakeId() {
+    public Integer getFakeId() {
         return fakeId;
     }
 
@@ -127,19 +119,67 @@ public class Banners {
         this.currentindex = currentindex;
     }
 
-	public String getWebUrl() {
-		return webUrl;
-	}
+    public Integer getBannerStatus() {
+        return bannerStatus;
+    }
 
-	public void setWebUrl(String webUrl) {
-		this.webUrl = webUrl == null ? null : webUrl.trim();
-	}
+    public void setBannerStatus(Integer bannerStatus) {
+        this.bannerStatus = bannerStatus;
+    }
 
-	public Date getShelvesTime() {
-		return shelvesTime;
-	}
+    public String getBannerName() {
+        return bannerName;
+    }
 
-	public void setShelvesTime(Date shelvesTime) {
-		this.shelvesTime = shelvesTime;
-	}
+    public void setBannerName(String bannerName) {
+        this.bannerName = bannerName == null ? null : bannerName.trim();
+    }
+
+    public String getWebUrl() {
+        return webUrl;
+    }
+
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl == null ? null : webUrl.trim();
+    }
+
+    public Date getShelvesTime() {
+        return shelvesTime;
+    }
+
+    public void setShelvesTime(Date shelvesTime) {
+        this.shelvesTime = shelvesTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
+    }
+
+    public String getGoodCode() {
+        return goodCode;
+    }
+
+    public void setGoodCode(String goodCode) {
+        this.goodCode = goodCode == null ? null : goodCode.trim();
+    }
 }
