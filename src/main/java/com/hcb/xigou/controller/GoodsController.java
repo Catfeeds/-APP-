@@ -19,10 +19,11 @@ import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.pojo.Goods;
 import com.hcb.xigou.pojo.GoodsWithBLOBs;
 import com.hcb.xigou.dto.SecondCategorys;
-
+import com.hcb.xigou.dto.Skus;
 import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
+import com.hcb.xigou.service.ISkusService;
 import com.hcb.xigou.util.MD5Util;
 
 import net.sf.json.JSONArray;
@@ -39,6 +40,8 @@ public class GoodsController extends BaseController{
 	ISecondCategorysService secondCategorysService;
 	@Autowired
 	IFirstCategorysService firstCategorysService;
+	@Autowired
+	ISkusService skusService;
 	
 
 	@RequestMapping("delete")
@@ -112,6 +115,7 @@ public class GoodsController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 	}
+	
 	@RequestMapping("search")
 	@ResponseBody
 	public String search(){
@@ -306,6 +310,7 @@ public class GoodsController extends BaseController{
 		a = a.replace("]\"", "]");
 		return a;
 	}
+
 	@RequestMapping("selectgood")
 	@ResponseBody
 	public String selectgood(){
@@ -334,7 +339,6 @@ public class GoodsController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 	}
-	
 	
 	@RequestMapping("insert")
 	@ResponseBody
@@ -394,6 +398,7 @@ public class GoodsController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 	}
+
 	@RequestMapping("update")
 	@ResponseBody
 	public String update(){
@@ -514,5 +519,62 @@ public class GoodsController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "category" , method = RequestMethod.POST)
+	@ResponseBody
+	public String searchCategory(){
+		JSONObject json = new JSONObject();
+		ModelMap model = new ModelMap();
+		List<Skus> list = new ArrayList<Skus>();
+		if (sign == 1 || sign == 2) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		Map<String,Object> map = new HashMap<String,Object>();
+		list= skusService.selectAllCategory(map);
+		if(list == null){
+			json.put("result", 1);
+			json.put("description", "查不到类别");
+			return buildReqJsonObject(json);
+		}else{
+			model.put("categoryList", list);
+		}
+		model.put("description", "查询成功");
+		model.put("result",0);
+		return buildReqJsonObject(model);
+		
+	}
+	
+	@RequestMapping(value = "parameter" , method = RequestMethod.POST)
+	@ResponseBody
+	public String searchParameter(){
+		JSONObject json = new JSONObject();
+		ModelMap model = new ModelMap();
+		List<Skus> list = new ArrayList<Skus>();
+		if (sign == 1 || sign == 2) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("category") == null ) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		list = skusService.selectAllParameter(bodyInfo.getString("category"));
+		if(list == null){
+			json.put("result", 1);
+			json.put("description", "查不到类别");
+			return buildReqJsonObject(json);
+		}else{
+			model.put("parameterList", list);
+		}
+		model.put("description", "查询成功");
+		model.put("result",0);
+		return buildReqJsonObject(model);
+		
 	}
 }

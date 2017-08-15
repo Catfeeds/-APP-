@@ -42,4 +42,5 @@ public interface GoodsMapper {
 	public List<Goods> searchActivityGood(Map<String, Object> map);
 	
 	List<Map<String, Object>> selectByAll();
+	
 }

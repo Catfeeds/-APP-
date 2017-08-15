@@ -1066,10 +1066,11 @@ public class ExportController<T> {
 	//用户管理
 	@RequestMapping("UserListExcelport")
 	@ResponseBody
-	public void UserListExcelport(HttpServletRequest req, HttpServletResponse res, @RequestParam(required = false) Integer userId,@RequestParam(required = false) String name,
-			@RequestParam(required = false) String nickname,@RequestParam(required = false) String phone,@RequestParam(required = false) String money_start,
-			@RequestParam(required = false) String money_end,@RequestParam(required = false) String register_time,
-			@RequestParam(required = false) Integer number_start,@RequestParam(required = false) Integer number_end)throws UnsupportedEncodingException{
+	public void UserListExcelport(HttpServletRequest req, HttpServletResponse res,@RequestParam(required = false) String name,
+			@RequestParam(required = false) String nickname,@RequestParam(required = false) String phone,
+			@RequestParam(required = false) String money_start,@RequestParam(required = false) String money_end,
+			@RequestParam(required = false) String register_time,@RequestParam(required = false) Integer number_start,
+			@RequestParam(required = false) Integer number_end)throws UnsupportedEncodingException{
 		    req.setCharacterEncoding("UTF-8");
 						Map<String, Object> map = new HashMap<String,Object>();
 						List<Users> list = new ArrayList<Users>();
@@ -1081,7 +1082,8 @@ public class ExportController<T> {
 						}
 						if(phone != null && !phone.equals("")){
 							map.put("phone", phone);
-						}if(money_start != null && !money_start.equals("")){
+						}
+						if(money_start != null && !money_start.equals("")){
 							map.put("moneyStart", money_start);
 						}
 						if(money_end != null && !money_end.equals("")){
