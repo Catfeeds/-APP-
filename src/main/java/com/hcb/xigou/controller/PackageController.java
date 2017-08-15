@@ -335,7 +335,7 @@ public class PackageController extends BannersController{
 	    calendar1.setTime(close);// 设置到期日期
 	    calendar1.add(Calendar.DATE, days);// 月份加一
 	    Date closeTime = calendar1.getTime();
-	    coupon.setFailTime(StringToDate.dateToString(closeTime));
+	    coupon.setFailTime(closeTime);
 	    coupon.setUrl(bodyInfo.getString("url"));
 	    coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
 	    coupon.setPackageUuid(pack.getPackageUuid());
@@ -346,7 +346,7 @@ public class PackageController extends BannersController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Integer rs = couponsService.insertSelective(coupon);
+		Integer rs = couponsService.insert(coupon);
 		if(rs == 1){
 			json.put("result", 0);
 			json.put("description", "添加成功");
@@ -401,7 +401,7 @@ public class PackageController extends BannersController{
 		    calendar1.setTime(close);// 设置到期日期
 		    calendar1.add(Calendar.DATE, days);// 月份加一
 		    Date closeTime = calendar1.getTime();
-		    coupon.setFailTime(StringToDate.dateToString(closeTime));
+		    coupon.setFailTime(closeTime);
 		}
 		if(bodyInfo.get("url") != null){
 			 coupon.setUrl(bodyInfo.getString("url"));
