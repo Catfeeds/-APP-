@@ -47,6 +47,8 @@
     <select id="selectByPaging" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
   	from managers
   	where  delete_at is null
   	<if test="groupname != null and groupname != ''">
@@ -70,6 +72,8 @@
   <select id="selectByManagersExcelport" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
   	from managers
   	where  delete_at is null
   	<if test="groupName != null and groupName != ''">
