@@ -453,7 +453,7 @@ public class BannersController extends BaseController{
 			banner.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
 		}
 		int rs = 0;
-		rs = bannersService.insertByBanner(banner);
+		rs = bannersService.insertSelective(banner);
 		if(rs == 1){
 			json.put("result", 0);
 			json.put("description", "添加banner图片成功");

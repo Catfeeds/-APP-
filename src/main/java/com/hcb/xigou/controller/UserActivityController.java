@@ -249,8 +249,8 @@ public class UserActivityController extends BaseController{
 			activityZones.setBanner(bodyInfo.getString("banner"));
 			activityZones.setStoreUuid(headInfo.getString("store_uuid"));
 			activityZones.setType("host");
-			activityZones.setStartTime(StringToDate.stringtoDateTime(bodyInfo.getString("start_time")));
-			activityZones.setEndTime(StringToDate.stringtoDateTime(bodyInfo.getString("end_time")));
+			activityZones.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+			activityZones.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
 			activityZones.setDescription(bodyInfo.getString("description"));
 			listAct.add(activityZones);
 		}
