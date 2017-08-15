@@ -25,13 +25,14 @@
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="rule_one" property="ruleOne" jdbcType="VARCHAR" />
     <result column="rule_two" property="ruleTwo" jdbcType="VARCHAR" />
-    <result column="groups" property="groups" jdbcType="VARCHAR" />
+    <result column="groups" property="groups" jdbcType="CHAR" />
     <result column="validity_days" property="validityDays" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, coupon_uuid, create_datetime, update_datetime, delete_at, user_uuid, amount, 
-    good_uuid, grant_time, fail_time, first_uuid, second_uuid, title, description, type, content, 
-    coupon_status, coupon_stock, is_grant,package_uuid,url,rule_one,rule_two,groups,validity_days
+    good_uuid, grant_time, fail_time, first_uuid, second_uuid, title, description, type, 
+    content, coupon_status, coupon_stock, is_grant, package_uuid, url, rule_one, rule_two, 
+    groups, validity_days
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -39,18 +40,12 @@
     from coupons
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
-  
-  <select id="selectByCouponUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   <select id="selectByCouponUuid" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from coupons
     where coupon_uuid = #{couponUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
-  
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from coupons
-    where fake_id = #{fakeId,jdbcType=INTEGER}
-  </delete>
   
   <delete id="deleteByCouponUuids" parameterType="java.util.HashMap" >
    delete from  coupons
@@ -91,24 +86,29 @@
     where package_uuid = #{packageUuid,jdbcType=VARCHAR} and delete_at is null
   </select>
   
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coupons
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" parameterType="com.hcb.xigou.dto.Coupons" >
     insert into coupons (fake_id, coupon_uuid, create_datetime, 
       update_datetime, delete_at, user_uuid, 
-      amount, good_uuid, grant_time, fail_time, 
-      first_uuid, second_uuid, title, 
-      description, type, content, 
-      coupon_status, coupon_stock, is_grant,
-      package_uuid,url,rule_one,rule_two,groups,validity_days
-      )
+      amount, good_uuid, grant_time, 
+      fail_time, first_uuid, second_uuid, 
+      title, description, type, 
+      content, coupon_status, coupon_stock, 
+      is_grant, package_uuid, url, 
+      rule_one, rule_two, groups, 
+      validity_days)
     values (#{fakeId,jdbcType=INTEGER}, #{couponUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, #{grantTime,jdbcType=TIMESTAMP}, #{failTime,jdbcType=TIMESTAMP}, 
-      #{firstUuid,jdbcType=VARCHAR}, #{secondUuid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{content,jdbcType=VARCHAR}, 
-      #{couponStatus,jdbcType=CHAR}, #{couponStock,jdbcType=INTEGER}, #{isGrant,jdbcType=CHAR},
-      #{packageUuid,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{ruleOne,jdbcType=VARCHAR},#{ruleTwo,jdbcType=VARCHAR},
-      #{groups,jdbcType=VARCHAR},#{validityDays,jdbcType=INTEGER}
-      )
+      #{amount,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, #{grantTime,jdbcType=TIMESTAMP}, 
+      #{failTime,jdbcType=TIMESTAMP}, #{firstUuid,jdbcType=VARCHAR}, #{secondUuid,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{content,jdbcType=VARCHAR}, #{couponStatus,jdbcType=CHAR}, #{couponStock,jdbcType=INTEGER}, 
+      #{isGrant,jdbcType=CHAR}, #{packageUuid,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{ruleOne,jdbcType=VARCHAR}, #{ruleTwo,jdbcType=VARCHAR}, #{groups,jdbcType=CHAR}, 
+      #{validityDays,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Coupons" >
     insert into coupons
@@ -260,7 +260,7 @@
         #{ruleTwo,jdbcType=VARCHAR},
       </if>
       <if test="groups != null" >
-        #{groups,jdbcType=VARCHAR},
+        #{groups,jdbcType=CHAR},
       </if>
       <if test="validityDays != null" >
         #{validityDays,jdbcType=INTEGER},
@@ -324,9 +324,6 @@
       <if test="isGrant != null" >
         is_grant = #{isGrant,jdbcType=CHAR},
       </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
       <if test="packageUuid != null" >
         package_uuid = #{packageUuid,jdbcType=VARCHAR},
       </if>
@@ -340,7 +337,7 @@
         rule_two = #{ruleTwo,jdbcType=VARCHAR},
       </if>
       <if test="groups != null" >
-        groups = #{groups,jdbcType=VARCHAR},
+        groups = #{groups,jdbcType=CHAR},
       </if>
       <if test="validityDays != null" >
         validity_days = #{validityDays,jdbcType=INTEGER},
@@ -372,12 +369,11 @@
       url = #{url,jdbcType=VARCHAR},
       rule_one = #{ruleOne,jdbcType=VARCHAR},
       rule_two = #{ruleTwo,jdbcType=VARCHAR},
-      groups = #{groups,jdbcType=VARCHAR},
+      groups = #{groups,jdbcType=CHAR},
       validity_days = #{validityDays,jdbcType=INTEGER}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
-  
-  <update id="updateByCouponUuid" parameterType="com.hcb.xigou.dto.Coupons" >
+    <update id="updateByCouponUuid" parameterType="com.hcb.xigou.dto.Coupons" >
     update coupons
     <set >
       <if test="createDatetime != null" >

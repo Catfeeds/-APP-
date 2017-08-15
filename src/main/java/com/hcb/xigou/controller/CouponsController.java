@@ -20,6 +20,7 @@ import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.Coupons;
 import com.hcb.xigou.service.ICouponsService;
 import com.hcb.xigou.util.MD5Util;
+import com.hcb.xigou.util.StringToDate;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -227,8 +228,8 @@ public class CouponsController extends BaseController {
 		coupon.setDescription(bodyInfo.getString("url"));
 		coupon.setCouponUuid(couponUuid);
 		coupon.setCreateDatetime(createTime);
-		coupon.setGrantTime(bodyInfo.getString("grant_time"));
-		coupon.setFailTime(bodyInfo.getString("fail_time"));
+		coupon.setGrantTime(StringToDate.stringToDateStart(bodyInfo.getString("grant_time")));
+		coupon.setFailTime(StringToDate.stringToDateStart(bodyInfo.getString("fail_time")));
 		coupon.setIsGrant("1");
 		coupon.setGroups("coupon");
 		if(bodyInfo.get("rule_one") != null){
@@ -385,8 +386,8 @@ public class CouponsController extends BaseController {
 			coupon.setType(bodyInfo.getString("type"));
 			coupon.setDescription(bodyInfo.getString("url"));
 			coupon.setUpdateDatetime(updateTime);
-			coupon.setGrantTime(bodyInfo.getString("grant_time"));
-			coupon.setFailTime(bodyInfo.getString("fail_time"));
+			coupon.setGrantTime(StringToDate.stringToDateStart(bodyInfo.getString("grant_time")));
+			coupon.setFailTime(StringToDate.stringToDateStart(bodyInfo.getString("fail_time")));
 			coupon.setIsGrant("1");
 			int rs = 0;
 			rs = couponsService.updateByCouponUuid(coupon);

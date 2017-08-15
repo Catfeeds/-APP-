@@ -1,6 +1,5 @@
 package com.hcb.xigou.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Coupons {
@@ -20,9 +19,9 @@ public class Coupons {
 
     private String goodUuid;
 
-    private String grantTime;
-    
-    private String failTime;
+    private Date grantTime;
+
+    private Date failTime;
 
     private String firstUuid;
 
@@ -41,17 +40,17 @@ public class Coupons {
     private Integer couponStock;
 
     private String isGrant;
-    
+
     private String packageUuid;
-    
+
     private String url;
-    
+
     private String ruleOne;
-    
+
     private String ruleTwo;
-    
+
     private String groups;
-    
+
     private Integer validityDays;
 
     public Integer getFakeId() {
@@ -116,21 +115,21 @@ public class Coupons {
 
     public void setGoodUuid(String goodUuid) {
         this.goodUuid = goodUuid == null ? null : goodUuid.trim();
-    }   
-
-    public String getGrantTime() {
-		return grantTime.substring(0,10);
-	}
-
-	public void setGrantTime(String grantTime) {
-		this.grantTime = grantTime;
-	}
-
-	public String getFailTime() {
-        return failTime.substring(0, 10);
     }
 
-    public void setFailTime(String failTime) {
+    public Date getGrantTime() {
+        return grantTime;
+    }
+
+    public void setGrantTime(Date grantTime) {
+        this.grantTime = grantTime;
+    }
+
+    public Date getFailTime() {
+        return failTime;
+    }
+
+    public void setFailTime(Date failTime) {
         this.failTime = failTime;
     }
 
@@ -206,51 +205,51 @@ public class Coupons {
         this.isGrant = isGrant == null ? null : isGrant.trim();
     }
 
-	public String getPackageUuid() {
-		return packageUuid;
-	}
+    public String getPackageUuid() {
+        return packageUuid;
+    }
 
-	public void setPackageUuid(String packageUuid) {
-		this.packageUuid = packageUuid == null ? null : packageUuid.trim();
-	}
+    public void setPackageUuid(String packageUuid) {
+        this.packageUuid = packageUuid == null ? null : packageUuid.trim();
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url == null ? null : url.trim();
-	}
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
 
-	public String getRuleOne() {
-		return ruleOne;
-	}
+    public String getRuleOne() {
+        return ruleOne;
+    }
 
-	public void setRuleOne(String ruleOne) {
-		this.ruleOne = ruleOne == null ? null : ruleOne.trim();
-	}
+    public void setRuleOne(String ruleOne) {
+        this.ruleOne = ruleOne == null ? null : ruleOne.trim();
+    }
 
-	public String getRuleTwo() {
-		return ruleTwo;
-	}
+    public String getRuleTwo() {
+        return ruleTwo;
+    }
 
-	public void setRuleTwo(String ruleTwo) {
-		this.ruleTwo = ruleTwo == null ? null : ruleTwo.trim();
-	}
+    public void setRuleTwo(String ruleTwo) {
+        this.ruleTwo = ruleTwo == null ? null : ruleTwo.trim();
+    }
 
-	public String getGroups() {
-		return groups;
-	}
+    public String getGroups() {
+        return groups;
+    }
 
-	public void setGroups(String groups) {
-		this.groups = groups == null ? null : groups.trim();
-	}
+    public void setGroups(String groups) {
+        this.groups = groups == null ? null : groups.trim();
+    }
 
-	public Integer getValidityDays() {
-		return validityDays;
-	}
+    public Integer getValidityDays() {
+        return validityDays;
+    }
 
-	public void setValidityDays(Integer validityDays) {
-		this.validityDays = validityDays;
-	}
+    public void setValidityDays(Integer validityDays) {
+        this.validityDays = validityDays;
+    }
 }
