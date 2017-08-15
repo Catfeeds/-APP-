@@ -112,7 +112,7 @@ public class GradeController extends BaseController{
 		}
 		Managers manager = new Managers();
 		manager.setCreateDatetime(new Date());
-		manager.setSuperiorUuid(bodyInfo.getString("manager_uuid"));
+		//manager.setSuperiorUuid(bodyInfo.getString("manager_uuid"));
 		manager.setNickname(bodyInfo.getString("nickname"));
 		manager.setNumber(bodyInfo.getString("number"));
 		manager.setPassword(bodyInfo.getString("password"));
