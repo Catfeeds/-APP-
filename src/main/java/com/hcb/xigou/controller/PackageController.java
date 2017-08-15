@@ -45,7 +45,7 @@ public class PackageController extends BannersController{
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("package_name") == null || bodyInfo.get("packeage_stock") ==null) {
+		if (bodyInfo.get("package_name") == null) {
 			json.put("result", 1);
 			json.put("description", "请输入必填项");
 			return buildReqJsonObject(json);
@@ -53,7 +53,9 @@ public class PackageController extends BannersController{
     	Packages pack = new Packages();
     	pack.setCreateDatetime(new Date());
     	pack.setPackageName(bodyInfo.getString("package_name"));
-    	pack.setPackeageStock(bodyInfo.getInt("packeage_stock"));
+    	if(bodyInfo.get("packeage_stock") != null){
+    		pack.setPackeageStock(bodyInfo.getInt("packeage_stock"));
+    	}
 		if(bodyInfo.get("url") != null){
 			pack.setUrl(bodyInfo.getString("url"));
 		}
@@ -63,11 +65,11 @@ public class PackageController extends BannersController{
 		if(bodyInfo.get("banner") != null){
 			pack.setBanner(bodyInfo.getString("banner"));
 		}
-		if(bodyInfo.get("start_datetime") != null){
-			pack.setStartDatetime(StringToDate.stringtoDateTime(bodyInfo.getString("start_datetime")));
+		if(bodyInfo.get("start_time") != null){
+			pack.setStartDatetime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
 		}
 		if(bodyInfo.get("close_time") != null){
-			pack.setCloseDatetime(StringToDate.stringtoDateTime(bodyInfo.getString("close_time")));
+			pack.setCloseDatetime(StringToDate.stringToDateStart(bodyInfo.getString("close_time")));
 		}
 		try {
 			pack.setPackageUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));

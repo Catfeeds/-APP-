@@ -116,10 +116,10 @@ public class DailyController extends BaseController{
 			daily.setHighestAmount(new BigDecimal(bodyInfo.getString("highest_amount")));
 		}
 		if(bodyInfo.get("start_time") != null){
-			daily.setStartTime(StringToDate.stringtoDateTime(bodyInfo.getString("start_time")));
+			daily.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
 		}
 		if(bodyInfo.get("end_time") != null){
-			daily.setEndTime(StringToDate.stringtoDateTime(bodyInfo.getString("end_time")));
+			daily.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
 		}
 		if(bodyInfo.get("is_open") != null){
 			daily.setIsOpen(bodyInfo.getString("is_open"));
