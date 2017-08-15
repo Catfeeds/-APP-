@@ -123,7 +123,7 @@ public class PackageController extends BannersController{
 		if(bodyInfo.get("packeage_stock") != null){
 			pack.setPackeageStock(bodyInfo.getInt("packeage_stock"));
 		}
-		Integer rs = packagesService.insertSelective(pack);
+		Integer rs = packagesService.updateByPrimaryKeySelective(pack);
 		if(rs == 1){
 			json.put("result", 0);
 			json.put("description", "更改成功");

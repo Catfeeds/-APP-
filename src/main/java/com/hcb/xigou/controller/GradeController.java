@@ -223,7 +223,11 @@ public class GradeController extends BaseController{
 		model.put("description", "查询成功");
 		model.put("result", "0");
 		model.put("list", list);
-		return buildReqJsonObject(model);
+		String a = buildReqJsonObject(model);
+		a = a.replace("\"[", "[");
+		a = a.replace("]\"", "]");
+		a = a.replaceAll("\\\\", "");
+		return a;
 	}
 	
 	@RequestMapping(value = "crew/list" , method = RequestMethod.POST)
@@ -306,6 +310,7 @@ public class GradeController extends BaseController{
 					mop.put("groups", manager.getGroups());
 					mop.put("permissions", manager.getPermissions());
 					mop.put("grade", manager.getGrade());
+					mop.put("number", manager.getNumber());
 					list.add(mop);
 				}
 			}
@@ -313,7 +318,11 @@ public class GradeController extends BaseController{
 		model.put("description", "查询成功");
 		model.put("result", "0");
 		model.put("list", list);
-		return buildReqJsonObject(model);
+		String a = buildReqJsonObject(model);
+		a = a.replace("\"[", "[");
+		a = a.replace("]\"", "]");
+		a = a.replaceAll("\\\\", "");
+		return a;
 	}
 	
 	@RequestMapping(value = "group/edit" ,method = RequestMethod.POST)
