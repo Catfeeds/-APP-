@@ -340,6 +340,7 @@ public class PackageController extends BannersController{
 	    coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
 	    coupon.setPackageUuid(pack.getPackageUuid());
 	    coupon.setGroups("gift");
+	    coupon.setValidityDays(days);
 		try {
 			coupon.setCouponUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
 		} catch (Exception e) {

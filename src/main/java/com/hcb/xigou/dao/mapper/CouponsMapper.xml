@@ -26,11 +26,12 @@
     <result column="rule_one" property="ruleOne" jdbcType="VARCHAR" />
     <result column="rule_two" property="ruleTwo" jdbcType="VARCHAR" />
     <result column="groups" property="groups" jdbcType="VARCHAR" />
+    <result column="validity_days" property="validityDays" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, coupon_uuid, create_datetime, update_datetime, delete_at, user_uuid, amount, 
     good_uuid, grant_time, fail_time, first_uuid, second_uuid, title, description, type, content, 
-    coupon_status, coupon_stock, is_grant,package_uuid,url,rule_one,rule_two,groups
+    coupon_status, coupon_stock, is_grant,package_uuid,url,rule_one,rule_two,groups,validity_days
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -97,7 +98,7 @@
       first_uuid, second_uuid, title, 
       description, type, content, 
       coupon_status, coupon_stock, is_grant,
-      package_uuid,url,rule_one,rule_two,groups
+      package_uuid,url,rule_one,rule_two,groups,validity_days
       )
     values (#{fakeId,jdbcType=INTEGER}, #{couponUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
       #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
@@ -106,7 +107,7 @@
       #{description,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{content,jdbcType=VARCHAR}, 
       #{couponStatus,jdbcType=CHAR}, #{couponStock,jdbcType=INTEGER}, #{isGrant,jdbcType=CHAR},
       #{packageUuid,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{ruleOne,jdbcType=VARCHAR},#{ruleTwo,jdbcType=VARCHAR},
-      #{groups,jdbcType=VARCHAR}
+      #{groups,jdbcType=VARCHAR},#{validityDays,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Coupons" >
@@ -184,6 +185,9 @@
       <if test="groups != null" >
         groups,
       </if>
+      <if test="validityDays != null" >
+        validity_days,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -257,6 +261,9 @@
       </if>
       <if test="groups != null" >
         #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="validityDays != null" >
+        #{validityDays,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -335,6 +342,9 @@
       <if test="groups != null" >
         groups = #{groups,jdbcType=VARCHAR},
       </if>
+      <if test="validityDays != null" >
+        validity_days = #{validityDays,jdbcType=INTEGER},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -362,7 +372,8 @@
       url = #{url,jdbcType=VARCHAR},
       rule_one = #{ruleOne,jdbcType=VARCHAR},
       rule_two = #{ruleTwo,jdbcType=VARCHAR},
-      groups = #{groups,jdbcType=VARCHAR}
+      groups = #{groups,jdbcType=VARCHAR},
+      validity_days = #{validityDays,jdbcType=INTEGER}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
   
@@ -434,6 +445,9 @@
       </if>
       <if test="groups != null" >
         groups = #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="validityDays != null" >
+        validity_days = #{validityDays,jdbcType=INTEGER},
       </if>
     </set>
     where coupon_uuid = #{couponUuid,jdbcType=VARCHAR}

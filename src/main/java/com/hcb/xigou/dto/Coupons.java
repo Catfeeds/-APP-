@@ -51,6 +51,8 @@ public class Coupons {
     private String ruleTwo;
     
     private String groups;
+    
+    private Integer validityDays;
 
     public Integer getFakeId() {
         return fakeId;
@@ -242,5 +244,13 @@ public class Coupons {
 
 	public void setGroups(String groups) {
 		this.groups = groups == null ? null : groups.trim();
+	}
+
+	public Integer getValidityDays() {
+		return validityDays;
+	}
+
+	public void setValidityDays(Integer validityDays) {
+		this.validityDays = validityDays;
 	}
 }
