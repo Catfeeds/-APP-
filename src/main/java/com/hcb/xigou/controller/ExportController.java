@@ -185,7 +185,10 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "C:/Users/俞旭东/Desktop/xigou/file/"+fileName+".xls";
+	    		String path = "/xigou/file/"+fileName+".xls";
+	    		if(!new File("/xigou/file/").exists()){
+	    			new File("/xigou/file/").mkdirs();
+	    		}
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -259,7 +262,10 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "C:/Users/俞旭东/Desktop/xigou/file/"+fileName+".xls";
+	    		String path = "/xigou/file/"+fileName+".xls";
+	    		if(!new File("/xigou/file/").exists()){
+	    			new File("/xigou/file/").mkdirs();
+	    		}
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -335,7 +341,10 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+	    		String path = "/xigou/file"+fileName+".xls";
+	    		if(!new File("/xigou/file/").exists()){
+	    			new File("/xigou/file/").mkdirs();
+	    		}
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -476,7 +485,10 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+	    		String path = "/xigou/file"+fileName+".xls";
+	    		if(!new File("/xigou/file/").exists()){
+	    			new File("/xigou/file/").mkdirs();
+	    		}
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -544,7 +556,10 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+	    		String path = "/xigou/file"+fileName+".xls";
+	    		if(!new File("/xigou/file/").exists()){
+	    			new File("/xigou/file/").mkdirs();
+	    		}
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -606,7 +621,10 @@ public class ExportController<T> {
 	    		Date date = new Date();
 	    		String fileName = format.format(date);
 	    		
-	    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+	    		String path = "/xigou/file"+fileName+".xls";
+	    		if(!new File("/xigou/file/").exists()){
+	    			new File("/xigou/file/").mkdirs();
+	    		}
 	            OutputStream out = new FileOutputStream(path);   
 	            ex.exportExcel(headers, dataset, out);  
 	            out.close();   
@@ -673,7 +691,10 @@ public class ExportController<T> {
 		    		Date date = new Date();
 		    		String fileName = format.format(date);
 		    		
-		    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+		    		String path = "/xigou/file"+fileName+".xls";
+		    		if(!new File("/xigou/file/").exists()){
+		    			new File("/xigou/file/").mkdirs();
+		    		}
 		            OutputStream out = new FileOutputStream(path);   
 		            ex.exportExcel(headers, dataset, out);  
 		            out.close();   
@@ -764,7 +785,10 @@ public class ExportController<T> {
 			    		Date date = new Date();
 			    		String fileName = format.format(date);
 			    		
-			    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+			    		String path = "/xigou/file"+fileName+".xls";
+			    		if(!new File("/xigou/file/").exists()){
+			    			new File("/xigou/file/").mkdirs();
+			    		}
 			            OutputStream out = new FileOutputStream(path);   
 			            ex.exportExcel(headers, dataset, out);  
 			            out.close();   
@@ -828,7 +852,10 @@ public class ExportController<T> {
 				    		Date date = new Date();
 				    		String fileName = format.format(date);
 				    		
-				    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+				    		String path = "/xigou/file"+fileName+".xls";
+				    		if(!new File("/xigou/file/").exists()){
+				    			new File("/xigou/file/").mkdirs();
+				    		}
 				            OutputStream out = new FileOutputStream(path);   
 				            ex.exportExcel(headers, dataset, out);  
 				            out.close();   
@@ -951,7 +978,10 @@ public class ExportController<T> {
 					    		Date date = new Date();
 					    		String fileName = format.format(date);
 					    		
-					    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+					    		String path = "/xigou/file"+fileName+".xls";
+					    		if(!new File("/xigou/file/").exists()){
+					    			new File("/xigou/file/").mkdirs();
+					    		}
 					            OutputStream out = new FileOutputStream(path);   
 					            ex.exportExcel(headers, dataset, out);  
 					            out.close();   
@@ -1038,7 +1068,10 @@ public class ExportController<T> {
 				    		Date date = new Date();
 				    		String fileName = format.format(date);
 				    		
-				    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+				    		String path = "/xigou/file"+fileName+".xls";
+				    		if(!new File("/xigou/file/").exists()){
+				    			new File("/xigou/file/").mkdirs();
+				    		}
 				            OutputStream out = new FileOutputStream(path);   
 				            ex.exportExcel(headers, dataset, out);  
 				            out.close();   
@@ -1146,7 +1179,10 @@ public class ExportController<T> {
 					    		Date date = new Date();
 					    		String fileName = format.format(date);
 					    		
-					    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+					    		String path = "/xigou/file"+fileName+".xls";
+					    		if(!new File("/xigou/file/").exists()){
+					    			new File("/xigou/file/").mkdirs();
+					    		}
 					            OutputStream out = new FileOutputStream(path);   
 					            ex.exportExcel(headers, dataset, out);  
 					            out.close();   
@@ -1236,7 +1272,10 @@ public class ExportController<T> {
 						    		Date date = new Date();
 						    		String fileName = format.format(date);
 						    		
-						    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+						    		String path = "/xigou/file"+fileName+".xls";
+						    		if(!new File("/xigou/file/").exists()){
+						    			new File("/xigou/file/").mkdirs();
+						    		}
 						            OutputStream out = new FileOutputStream(path);   
 						            ex.exportExcel(headers, dataset, out);  
 						            out.close();   
@@ -1309,7 +1348,10 @@ public class ExportController<T> {
 							    		Date date = new Date();
 							    		String fileName = format.format(date);
 							    		
-							    		String path = "C:/Users/俞旭东/Desktop/xigou/file"+fileName+".xls";
+							    		String path = "/xigou/file"+fileName+".xls";
+							    		if(!new File("/xigou/file/").exists()){
+							    			new File("/xigou/file/").mkdirs();
+							    		}
 							            OutputStream out = new FileOutputStream(path);   
 							            ex.exportExcel(headers, dataset, out);  
 							            out.close();   

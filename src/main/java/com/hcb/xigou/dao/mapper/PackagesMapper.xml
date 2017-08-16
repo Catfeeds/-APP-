@@ -51,19 +51,15 @@
   <!-- 列表 -->
    <select id="selectByPaging" resultType="java.util.Map" parameterType="java.util.HashMap">
   	select
-  	package_uuid, 
-  	cast(create_datetime as char(32)) AS create_datetime,
-    package_name, package_status, packeage_stock, title,url,banner,coupon_numbers
+    <include refid="Base_Column_List" />
   	from packages
   	where delete_at is null
   	order by create_datetime DESC LIMIT #{start},#{end}
   </select>
   
-     <select id="selectByPackagesExcelport" resultType="java.util.Map" parameterType="java.util.HashMap">
+  <select id="selectByPackagesExcelport" resultType="java.util.Map" parameterType="java.util.HashMap">
   	select
-  	package_uuid, 
-  	cast(create_datetime as char(32)) AS create_datetime,
-    package_name, package_status, packeage_stock, title,url,banner,coupon_numbers
+  	<include refid="Base_Column_List" />
   	from packages
   	where delete_at is null
   	order by create_datetime DESC 
