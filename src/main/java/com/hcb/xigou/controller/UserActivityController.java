@@ -247,8 +247,14 @@ public class UserActivityController extends BaseController{
 			activityZones.setActivityUuid(activityUuid);
 			activityZones.setGoodUuid(jsonArray.getString(i));
 			activityZones.setBanner(bodyInfo.getString("banner"));
+			if(bodyInfo.get("rule_one") != null){
+				activityZones.setRuleOne(bodyInfo.getString("rule_one"));
+			}
+			if(bodyInfo.get("rule_two") != null){
+				activityZones.setRuleTwo(bodyInfo.getString("rule_two"));
+			}
 			activityZones.setStoreUuid(headInfo.getString("store_uuid"));
-			activityZones.setType("host");
+			activityZones.setType("selling");
 			activityZones.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
 			activityZones.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
 			activityZones.setDescription(bodyInfo.getString("description"));
@@ -535,6 +541,12 @@ public class UserActivityController extends BaseController{
 		UserActivity userActivity = new UserActivity();
 		int rs = 0;
 		userActivity.setGroups(bodyInfo.getString("groups"));
+		if(bodyInfo.get("rule_one") != null){
+			userActivity.setRuleOne(bodyInfo.getString("rule_one"));
+		}
+		if(bodyInfo.get("rule_two") != null){
+			userActivity.setRuleTwo(bodyInfo.getString("rule_two"));
+		}
 		userActivity.setTitle(bodyInfo.getString("title"));
 		userActivity.setBanner(bodyInfo.getString("banner"));
 		rs = userActivityService.updateByActivity(userActivity);

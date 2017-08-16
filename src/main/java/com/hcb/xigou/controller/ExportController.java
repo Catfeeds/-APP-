@@ -383,10 +383,18 @@ public class ExportController<T> {
 					excelport.setTitle(exList.getTitle());
 				}else{
 					excelport.setTitle("");
+				}		
+				SimpleDateFormat simpleDateFormat;
+				simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				String startTime = simpleDateFormat.format(exList.getStartTime());
+				String endTime = simpleDateFormat.format(exList.getEndTime());
+				String openTime = "";
+				if(exList.getOpenTime() != null ){
+					openTime = simpleDateFormat.format(exList.getOpenTime());
 				}
-				excelport.setStartTime(exList.getStartTime());
-				excelport.setEndTime(exList.getEndTime());
-				excelport.setOpenTime(exList.getOpenTime());
+				excelport.setStartTime(startTime);
+				excelport.setEndTime(endTime);
+				excelport.setOpenTime(openTime);
 				if(exList.getIsOpen() != null){
 					if(exList.getIsOpen().equals(1)){
 						excelport.setIsOpen("开始");	
@@ -446,7 +454,7 @@ public class ExportController<T> {
 						e.printStackTrace();
 					}
 				}
-				excelport.setPosition(exList.getPosition());
+				excelport.setPosition(String.valueOf(exList.getPosition()));
 				if(exList.getIsStop().equals("1")){
 					excelport.setIsStop("上线");
 				}else{

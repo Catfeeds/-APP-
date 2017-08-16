@@ -105,7 +105,7 @@ public class testApproval {
    	    //查找案件主办律师
    	    //新建审批条目 在审批信息表 approval_inner_base_infos中0558
    	    //返回审批uuid
-   	    String url = "http://localhost/xigou-api/goods/parameter";
+   	    String url = "http://localhost/xigou-api/export/ActivityExcelport";
    	    // String url = "192.168.1.101:8080/apparel/alipay/confirm";
       // String url = "http://test.appring.cn:8080/fastask/question/show"; /* * * * * * root wget http://test.appring.cn:8080/fastask/energy/timing -q -O /usr/local/time/timelog
  	    HttpPost httpPost = new HttpPost(url);

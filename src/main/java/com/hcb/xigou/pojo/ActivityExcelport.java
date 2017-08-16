@@ -1,33 +1,21 @@
 package com.hcb.xigou.pojo;
 
-import java.util.Date;
-
 public class ActivityExcelport {
 	private String title;
 	 
-    private Date startTime;
+    private String startTime;
 
-    private Date endTime;
+    private String endTime;
     
-    private Date openTime;
+    private String openTime;
     
     private String isOpen;
     
     private String countdown;
     
-    private Byte position;
+    private String position;
     
     private String isStop;
-    
-   
-
-	public String getCountdown() {
-		return countdown;
-	}
-
-	public void setCountdown(String countdown) {
-		this.countdown = countdown;
-	}
 
 	public String getTitle() {
 		return title;
@@ -37,27 +25,27 @@ public class ActivityExcelport {
 		this.title = title;
 	}
 
-	public Date getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 
-	public Date getOpenTime() {
+	public String getOpenTime() {
 		return openTime;
 	}
 
-	public void setOpenTime(Date openTime) {
+	public void setOpenTime(String openTime) {
 		this.openTime = openTime;
 	}
 
@@ -69,11 +57,19 @@ public class ActivityExcelport {
 		this.isOpen = isOpen;
 	}
 
-	public Byte getPosition() {
+	public String getCountdown() {
+		return countdown;
+	}
+
+	public void setCountdown(String countdown) {
+		this.countdown = countdown;
+	}
+
+	public String getPosition() {
 		return position;
 	}
 
-	public void setPosition(Byte position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 
@@ -84,4 +80,6 @@ public class ActivityExcelport {
 	public void setIsStop(String isStop) {
 		this.isStop = isStop;
 	}
+    
+  
 }

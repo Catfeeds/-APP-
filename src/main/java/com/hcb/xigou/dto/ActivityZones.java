@@ -49,9 +49,29 @@ public class ActivityZones {
     
     private String surplusTime;
     
+    private String ruleOne;
+    
+    private String ruleTwo;
+    
     private Integer currentIndex;
     
-    public Date getOpenTime() {
+    public String getRuleOne() {
+		return ruleOne;
+	}
+
+	public void setRuleOne(String ruleOne) {
+		this.ruleOne = ruleOne;
+	}
+
+	public String getRuleTwo() {
+		return ruleTwo;
+	}
+
+	public void setRuleTwo(String ruleTwo) {
+		this.ruleTwo = ruleTwo;
+	}
+
+	public Date getOpenTime() {
         return openTime;
     }
 

@@ -24,12 +24,14 @@
     <result column="position" property="position" jdbcType="TINYINT" />
     <result column="is_open" property="isOpen" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="rule_one" property="ruleOne" jdbcType="VARCHAR" />
+    <result column="rule_two" property="ruleTwo" jdbcType="VARCHAR" />
     <result column="currentIndex" property="currentIndex" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
     image, title, description, start_time, end_time, open_time, type, sign, groups, banner, 
-    store_uuid, is_stop, position, is_open, url, currentIndex
+    store_uuid, is_stop, position, is_open, url, rule_one, rule_two, currentIndex
   </sql>
   
   
@@ -314,6 +316,12 @@
       <if test="url != null" >
         url,
       </if>
+      <if test="ruleOne != null" >
+        rule_one,
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two,
+      </if>
        <if test="currentIndex != null" >
         currentIndex,
       </if>
@@ -385,6 +393,12 @@
       <if test="url != null" >
         #{url,jdbcType=VARCHAR},
       </if>
+      <if test="ruleOne != null" >
+        #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        #{ruleTwo,jdbcType=VARCHAR},
+      </if>
       <if test="currentIndex != null" >
         #{currentIndex,jdbcType=INTEGER},
       </if>
@@ -455,6 +469,12 @@
       </if>
       <if test="url != null" >
         url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleOne != null" >
+        rule_one = #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two = #{ruleTwo,jdbcType=VARCHAR},
       </if>
       <if test="currentIndex != null" >
         currentIndex = #{currentIndex,jdbcType=INTEGER},
@@ -529,6 +549,12 @@
       <if test="url != null" >
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="ruleOne != null" >
+        rule_one = #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      </if>
       <if test="currentIndex != null" >
         currentIndex = #{currentIndex,jdbcType=INTEGER},
       </if>
@@ -555,6 +581,8 @@
       banner = #{banner,jdbcType=VARCHAR},
       store_uuid = #{storeUuid,jdbcType=VARCHAR},
       is_stop = #{isStop,jdbcType=CHAR},
+      rule_one = #{ruleOne,jdbcType=CHAR},
+      rule_two = #{ruleTwo,jdbcType=CHAR},
       currentIndex = #{currentIndex,jdbcType=INTEGER}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>

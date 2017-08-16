@@ -123,6 +123,12 @@ public class PackageController extends BannersController{
 		if(bodyInfo.get("packeage_stock") != null){
 			pack.setPackeageStock(bodyInfo.getInt("packeage_stock"));
 		}
+		if(bodyInfo.get("start_time") != null){
+			pack.setStartDatetime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+		}
+		if(bodyInfo.get("close_time") != null){
+			pack.setCloseDatetime(StringToDate.stringToDateStart(bodyInfo.getString("close_time")));
+		}
 		Integer rs = packagesService.updateByPrimaryKeySelective(pack);
 		if(rs == 1){
 			json.put("result", 0);
@@ -341,6 +347,9 @@ public class PackageController extends BannersController{
 	    coupon.setPackageUuid(pack.getPackageUuid());
 	    coupon.setGroups("gift");
 	    coupon.setValidityDays(days);
+	    coupon.setIsGrant("1");
+	    coupon.setCouponStatus("0");
+	    coupon.setType("1");
 		try {
 			coupon.setCouponUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
 		} catch (Exception e) {
