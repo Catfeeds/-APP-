@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @RestController
-@CrossOrigin
 @RequestMapping("package")
 public class PackageController extends BannersController{
 	

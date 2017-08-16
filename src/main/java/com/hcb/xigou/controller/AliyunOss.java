@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +23,6 @@ import com.hcb.xigou.util.MD5Util;
 import net.sf.json.JSONObject;
 
 @Controller
-@CrossOrigin
 public class AliyunOss {
 	private String getEndPoint() {
 		return Config.getString("endPoint");

@@ -41,7 +41,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -99,7 +98,6 @@ import com.hcb.xigou.util.StringToDate;
  */  
 
 @RestController
-@CrossOrigin
 @RequestMapping("export")
 public class ExportController<T> {
 	@Autowired
