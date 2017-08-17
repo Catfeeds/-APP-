@@ -2,6 +2,7 @@ package com.hcb.xigou.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -518,6 +519,48 @@ public class GoodsController extends BaseController{
 		}
 		return buildReqJsonObject(json);
 	}
+	
+	@RequestMapping(value = "addcategory" , method = RequestMethod.POST)
+	@ResponseBody
+	public String addCategory(){
+		JSONObject json = new JSONObject();
+		ModelMap model = new ModelMap();
+		if (sign == 1 || sign == 2) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("category") == null || bodyInfo.get("parameter") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		Skus skus = new Skus();
+		skus.setCategory(bodyInfo.getString("category"));
+		skus.setParameter(bodyInfo.getString("parameter"));		
+		String skuUuid = "";
+		try {
+
+			skuUuid = MD5Util.md5Digest(bodyInfo.getString("category") + System.currentTimeMillis() + RandomStringUtils.random(8));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		skus.setSkuUuid(skuUuid);
+		skus.setCreateDatetime(new Date());
+		int rs = 0 ;
+		rs = skusService.insert(skus);
+		if(rs >= 1){
+			model.put("description", "新建成功");
+			model.put("result",0);
+			return buildReqJsonObject(model);
+		}else{
+			model.put("description", "新建失败");
+			model.put("result",1);
+			return buildReqJsonObject(model);
+		}	
+	}
+	
 	
 	@RequestMapping(value = "category" , method = RequestMethod.POST)
 	@ResponseBody
