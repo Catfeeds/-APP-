@@ -76,4 +76,10 @@ public class ManagersServiceImpl implements IManagersService{
 		// TODO Auto-generated method stub
 		return managersMapper.selectByManagersExcelport(map);
 	}
+
+	@Override
+	public Managers selectByNickname(String nickname) {
+		// TODO Auto-generated method stub
+		return managersMapper.selectByNickname(nickname);
+	}
 }

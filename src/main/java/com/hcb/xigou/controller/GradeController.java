@@ -51,6 +51,12 @@ public class GradeController extends BaseController{
 			json.put("description", "输入密码不一致");
 			return buildReqJsonObject(json);
 		}
+		Managers nickname = managersService.selectByNickname(bodyInfo.getString("nickname"));
+		if(nickname != null){
+			json.put("result", 1);
+			json.put("description", "此账号已存在，请重新输入");
+			return buildReqJsonObject(json);
+		}
 		Managers manager = new Managers();
 		manager.setCreateDatetime(new Date());
 		manager.setGroupName(bodyInfo.getString("group_name"));
@@ -106,6 +112,12 @@ public class GradeController extends BaseController{
 		if(admin == null){
 			json.put("result", 1);
 			json.put("description", "未查询到小组信息");
+			return buildReqJsonObject(json);
+		}
+		Managers nickname = managersService.selectByNickname(bodyInfo.getString("nickname"));
+		if(nickname != null){
+			json.put("result", 1);
+			json.put("description", "此账号已存在，请重新输入");
 			return buildReqJsonObject(json);
 		}
 		Managers manager = new Managers();

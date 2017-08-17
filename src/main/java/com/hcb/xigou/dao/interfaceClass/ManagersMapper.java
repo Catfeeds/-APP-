@@ -22,6 +22,8 @@ public interface ManagersMapper {
     
     Managers selectBynicknameAndGrade(Map<String,Object> map);
     
+    Managers selectByNickname(String nickname);
+    
     Managers selectByManagerUuid(String managerUuid);
     
     List<Managers> selectByPaging(Map<String, Object> map);

@@ -20,6 +20,8 @@ public interface IManagersService {
     
     Managers selectBynicknameAndGrade(Map<String,Object> map);
     
+    public Managers selectByNickname(String nickname);
+    
     public Managers selectByManagerUuid(String managerUuid);
     
     public List<Managers> selectByPaging(Map<String, Object> map);

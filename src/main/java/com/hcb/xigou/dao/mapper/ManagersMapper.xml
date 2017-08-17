@@ -34,6 +34,15 @@
     from managers
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
+  
+  <select id="selectByNickname" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from managers
+    where nickname = #{nickname,jdbcType=VARCHAR} and delete_at is null
+  </select>
   <!-- 根据uuid -->
   <select id="selectByManagerUuid" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
