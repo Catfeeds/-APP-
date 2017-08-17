@@ -83,17 +83,19 @@ public class testApproval {
         /*body.put("order_uuid", "e9593a58d0397ac0451a0641236fc9d4");
         body.put("purchase_car_uuid", "b1873d210f4161034714eef975693174");
         body.put("reason", "质量问题");*/
-        body.put("banner", "nfibsdafiodbfiudbfaildfnidgf;nldgfd.jpg");
+/*        body.put("banner", "nfibsdafiodbfiudbfaildfnidgf;nldgfd.jpg");
         body.put("good_uuid",jsonDp1);
         body.put("title", "满一百送五十");
         body.put("start_time", "2017-08-16 19:18:06");
         body.put("end_time", "2017-08-17 19:18:06");
         body.put("description", "丰富的");
         body.put("rule_one", "100");
-        body.put("rule_two","50" );
+        body.put("rule_two","50" );*/
 //        
 //        String[] s={"ec973cf99e76696d1f357ab79fd601c9"}; 
 //        body.put("good_uuid",s);
+        body.put("banner_uuid", "723fa790fbb00886838fabb6b31c0fdc");
+        body.put("banner_status", "2");
         map.put("body",body);
   
         
@@ -103,7 +105,7 @@ public class testApproval {
    	    //查找案件主办律师
    	    //新建审批条目 在审批信息表 approval_inner_base_infos中0558
    	    //返回审批uuid
-   	    String url = "http://localhost/xigou-api/userActivity/insert";
+   	    String url = "http://localhost/xigou-api/banner/update_status";
    	    // String url = "192.168.1.101:8080/apparel/alipay/confirm";
       // String url = "http://test.appring.cn:8080/fastask/question/show"; /* * * * * * root wget http://test.appring.cn:8080/fastask/energy/timing -q -O /usr/local/time/timelog
  	    HttpPost httpPost = new HttpPost(url);

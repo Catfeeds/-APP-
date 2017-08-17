@@ -160,10 +160,10 @@ public class BannersController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整2");
 			return buildReqJsonObject(json);
 		}
-		Banners banner = new Banners();
+		Banners banner = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
 		int i = bannersService.selectByBannerStatus();
 		if ("1".equals(bodyInfo.getString("banner_status"))) {
-			banner.setBannerStatus(2);
+			banner.setBannerStatus(1);
 			banner.setShelvesTime(null);
 			int rs = 0;
 			banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
@@ -179,7 +179,7 @@ public class BannersController extends BaseController{
 			}
 		}
 		if ("2".equals(bodyInfo.getString("banner_status"))) {
-			banner.setBannerStatus(1);
+			banner.setBannerStatus(2);
 			banner.setShelvesTime(Timestamp.from(Instant.now()));
 			banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
 			int rs = 0;
