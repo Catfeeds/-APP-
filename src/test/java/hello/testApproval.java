@@ -43,12 +43,12 @@ public class testApproval {
         head.put("password", "123456");*/
         head.put("nickname", "admin");
         head.put("password", "123456");
+        head.put("store_uuid", "818601aecfb652a648a2bc29734a9652");
         map.put("head", head);	
         
         HashMap<String, Object> body = new HashMap<String, Object>();
         JSONArray jsonDp1 = new JSONArray(); 
-        jsonDp1.add(0, "ea3a6d35ae1e989ea4b42cc6eb5ffe17");
-        jsonDp1.add(1, "2d1c701ff70946e5a691358c01d7b030");
+        jsonDp1.add(0, "f945d55ddd3a6f560273745c33b07ade");
       /*  JSONArray jsonDp1 = new JSONArray(); 
         jsonDp1.add(0, "dhhdh");*/
  /*       body.put("merchant_name", "胡巴");
@@ -83,16 +83,14 @@ public class testApproval {
         /*body.put("order_uuid", "e9593a58d0397ac0451a0641236fc9d4");
         body.put("purchase_car_uuid", "b1873d210f4161034714eef975693174");
         body.put("reason", "质量问题");*/
-//        body.put("number", 10);
-//        body.put("amount", "23");
-//        body.put("grant_time", "2017-06-06");
-//        body.put("fail_time", "2017-07-07");
-//        body.put("url", "www.baidu.com");
-//        body.put("coupon_name", "丰富的");
-//        body.put("coupon_stock", "12");
-//        body.put("coupon_uuid",jsonDp1 );
-//        body.put("pageIndex",1 );
-        body.put("category","材质");
+        body.put("banner", "nfibsdafiodbfiudbfaildfnidgf;nldgfd.jpg");
+        body.put("good_uuid",jsonDp1);
+        body.put("title", "满一百送五十");
+        body.put("start_time", "2017-08-16 19:18:06");
+        body.put("end_time", "2017-08-17 19:18:06");
+        body.put("description", "丰富的");
+        body.put("rule_one", "100");
+        body.put("rule_two","50" );
 //        
 //        String[] s={"ec973cf99e76696d1f357ab79fd601c9"}; 
 //        body.put("good_uuid",s);
@@ -105,7 +103,7 @@ public class testApproval {
    	    //查找案件主办律师
    	    //新建审批条目 在审批信息表 approval_inner_base_infos中0558
    	    //返回审批uuid
-   	    String url = "http://localhost/xigou-api/export/ActivityExcelport";
+   	    String url = "http://localhost/xigou-api/userActivity/insert";
    	    // String url = "192.168.1.101:8080/apparel/alipay/confirm";
       // String url = "http://test.appring.cn:8080/fastask/question/show"; /* * * * * * root wget http://test.appring.cn:8080/fastask/energy/timing -q -O /usr/local/time/timelog
  	    HttpPost httpPost = new HttpPost(url);
