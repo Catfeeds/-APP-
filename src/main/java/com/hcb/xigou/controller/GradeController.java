@@ -226,6 +226,7 @@ public class GradeController extends BaseController{
 					mop.put("group_name", manager.getGroupName());
 					mop.put("permissions", manager.getPermissions());
 					mop.put("grade", manager.getGrade());
+					mop.put("password", manager.getPassword());
 					list.add(mop);
 				}
 			}
@@ -321,6 +322,7 @@ public class GradeController extends BaseController{
 					mop.put("permissions", manager.getPermissions());
 					mop.put("grade", manager.getGrade());
 					mop.put("number", manager.getNumber());
+					mop.put("password", manager.getPassword());
 					list.add(mop);
 				}
 			}
