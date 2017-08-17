@@ -186,6 +186,12 @@
       <if test="storeUuid != null" >
         store_uuid = #{storeUuid,jdbcType=VARCHAR},
       </if>
+      <if test="ruleOne != null" >
+        rule_one = #{ruleOne,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTwo != null" >
+        rule_two = #{ruleTwo,jdbcType=VARCHAR},
+      </if>
       <if test="isStop != null" >
         is_stop = #{isStop,jdbcType=VARCHAR},
       </if>

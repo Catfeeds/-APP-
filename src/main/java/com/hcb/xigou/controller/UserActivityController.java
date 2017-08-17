@@ -538,6 +538,11 @@ public class UserActivityController extends BaseController{
 		}
 		UserActivity userActivity = new UserActivity();
 		int rs = 0;
+
+
+		userActivity.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+		userActivity.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
+		userActivity.setDescription(bodyInfo.getString("description"));
 		userActivity.setGroups(bodyInfo.getString("groups"));
 		if(bodyInfo.get("rule_one") != null){
 			userActivity.setRuleOne(bodyInfo.getString("rule_one"));
@@ -547,6 +552,7 @@ public class UserActivityController extends BaseController{
 		}
 		userActivity.setTitle(bodyInfo.getString("title"));
 		userActivity.setBanner(bodyInfo.getString("banner"));
+		
 		rs = userActivityService.updateByActivity(userActivity);
 		if (rs > 0) {
 			json.put("result", 0);
