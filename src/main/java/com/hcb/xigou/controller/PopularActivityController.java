@@ -189,8 +189,7 @@ public class PopularActivityController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		PopularActivity popularActivity = popularActivityService
-				.selectByPopularActivityUuid(bodyInfo.getString("activity_uuid"));
+		PopularActivity popularActivity = popularActivityService.selectByPopularActivityUuid(bodyInfo.getString("activity_uuid"));
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (popularActivity != null) {
 			map.put("activityUuid", bodyInfo.getString("activity_uuid"));

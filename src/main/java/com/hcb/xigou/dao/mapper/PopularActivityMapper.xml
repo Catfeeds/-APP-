@@ -41,7 +41,15 @@
   </select>
   
  
-  
+  <select id="selectByPopularActivityUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from activity_zones
+  	where delete_at is null 
+  	<if test="activityUuid != null and activityUuid != ''">
+  		and activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+  	</if>
+  </select>
 
 
 
