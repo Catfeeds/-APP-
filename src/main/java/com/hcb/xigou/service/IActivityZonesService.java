@@ -58,4 +58,6 @@ public interface IActivityZonesService {
 		public Integer totalCount(Map<String, Object> map);
 		
 		public List<Map<String, Object>> selectByAll();
+		
+		public List<ActivityZones> selectBySellingOfGroups(Map<String, Object> map);
 }

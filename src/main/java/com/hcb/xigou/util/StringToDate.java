@@ -84,4 +84,9 @@ public class StringToDate {
 		str = time.format(date);
 		return str;
 	}
+	
+	public static String sellingOfGroup(String head,Date date){
+		String group = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(date);
+		return head + group;
+	}
 }

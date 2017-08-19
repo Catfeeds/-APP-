@@ -134,19 +134,21 @@ public class ActivityZonesServiceImpl implements IActivityZonesService{
 
 	@Override
 	public List<Map<String, Object>> selectBypopularActivityExcelport(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.selectBypopularActivityExcelport(map);
 	}
 
 	@Override
 	public List<ActivityZones> searchActivityExcelport(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.searchActivityExcelport(map);
 	}
 
 	@Override
 	public List<ActivityZones> searchActivityExcelportByMap(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return activityZonesMapper.searchActivityExcelportByMap(map);
+	}
+
+	@Override
+	public List<ActivityZones> selectBySellingOfGroups(Map<String, Object> map) {
+		return activityZonesMapper.selectBySellingOfGroups(map);
 	}
 }

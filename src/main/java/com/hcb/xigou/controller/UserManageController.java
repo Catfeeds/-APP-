@@ -292,7 +292,9 @@ public class UserManageController extends BaseController{
 			@RequestParam(required = false) String nickname,@RequestParam(required = false) String phone,@RequestParam(required = false) String money_start,
 			@RequestParam(required = false) String money_end,@RequestParam(required = false) String register_time,
 			@RequestParam(required = false) Integer number_start,@RequestParam(required = false) Integer number_end) throws UnsupportedEncodingException{
-		req.setCharacterEncoding("UTF-8");
+		//req.setCharacterEncoding("UTF-8");
+		name = new String(name.getBytes("ISO-8859-1"),"UTF-8");
+		nickname = new String(nickname.getBytes("ISO-8859-1"),"UTF-8");
 		JSONObject json = new JSONObject();
 		if (sign == 1) {
 			json.put("result", "1");

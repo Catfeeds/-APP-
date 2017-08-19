@@ -232,6 +232,14 @@
 	</if>
 	and type = 'coupon'
   </select>
+  <!-- 根据热销精选ID-->
+  <select id="selectBySellingOfGroups" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_zones
+    where delete_at is null AND type = 'selling' AND groups = #{groups,jdbcType=VARCHAR}
+	order by create_datetime desc 
+  </select>
   
   <delete id="deleteByActivityUuids" parameterType="java.util.HashMap" >
    delete from activity_zones
