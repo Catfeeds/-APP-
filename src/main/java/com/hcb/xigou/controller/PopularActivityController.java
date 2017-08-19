@@ -189,42 +189,17 @@ public class PopularActivityController extends BaseController{
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
 		}
-		PopularActivity popularActivity = popularActivityService.selectByPopularActivityUuid(bodyInfo.getString("activity_uuid"));
-		Map<String, Object> map = new HashMap<String, Object>();
+		ActivityZones popularActivity = activityZonesService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
 		if (popularActivity != null) {
-			map.put("activityUuid", bodyInfo.getString("activity_uuid"));
-			map.put("isStop", bodyInfo.getString("is_stop"));
-			map.put("updateDatetime", new Date());
-			int rs = 0;
-			rs = popularActivityService.updateByPopularActivityIsSTop(map);
-			if (rs == 1) {
+			popularActivity.setIsStop(bodyInfo.getString("is_stop"));
+			Integer rs = activityZonesService.updateByPrimaryKeySelective(popularActivity);
+			if(rs == 1){
 				json.put("result", 0);
-
-				ActivityZones activityZones = new ActivityZones();
-
-				activityZones.setActivityUuid(bodyInfo.getString("activity_uuid"));
-				if ("1".equals(bodyInfo.getString("is_stop"))) {
-					activityZones.setIsStop("2");
-				}
-				if ("2".equals(bodyInfo.getString("is_stop"))) {
-					activityZones.setIsStop("1");
-				}
-				/*
-				 * int num1 = activityZonesService.selectByActivityCount(); int
-				 * num2 = activityZonesService.selectByActivitySellingCount();
-				 * if((num1+num2)>4){ json.put("result", -1);
-				 * json.put("descrsiption", "修改活动状态失败，超过可上架活动数量限制"); return
-				 * buildReqJsonObject(json); }else{
-				 */
-				rs = activityZonesService.updateByPrimaryKeySelective(activityZones);
-				if (rs >= 1) {
-					json.put("result", 0);
-					json.put("description", "更改Activity状态成功");
-				} else {
-					json.put("result", 1);
-					json.put("description", "更改Activity状态失败，请重试");
-					return buildReqJsonObject(json);
-				}
+				json.put("description", "更改成功");
+			}else{
+				json.put("result", 1);
+				json.put("description", "更改失败");
+				return buildReqJsonObject(json);
 			}
 		}
 		return buildReqJsonObject(json);

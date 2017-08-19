@@ -290,8 +290,8 @@ public class UserManageController extends BaseController{
 	@ResponseBody
 	public String userList(HttpServletRequest req, HttpServletResponse res,@RequestParam(required = false) Integer userId,@RequestParam(required = false) String name,
 			@RequestParam(required = false) String nickname,@RequestParam(required = false) String phone,@RequestParam(required = false) String money_start,
-			@RequestParam(required = false) String money_end,@RequestParam(required = false) String register_time,
-			@RequestParam(required = false) Integer number_start,@RequestParam(required = false) Integer number_end) throws UnsupportedEncodingException{
+			@RequestParam(required = false) String money_end,@RequestParam(required = false) String register_time,@RequestParam(required = false) Integer number_start,
+			@RequestParam(required = false) Integer number_end,@RequestParam(required = false) String register_endTime) throws UnsupportedEncodingException{
 		//req.setCharacterEncoding("UTF-8");
 		name = new String(name.getBytes("ISO-8859-1"),"UTF-8");
 		nickname = new String(nickname.getBytes("ISO-8859-1"),"UTF-8");
@@ -344,8 +344,10 @@ public class UserManageController extends BaseController{
 				map.put("moneyEnd", money_end);
 			}
 			if(register_time != null && !register_time.equals("")){
-				map.put("firstDay", StringToDate.dateToString(Timestamp.from(Instant.now()))+" "+"00:00:00");
-				map.put("lastDay", StringToDate.dateToString(Timestamp.from(Instant.now()))+" "+"23:59:59");
+				map.put("firstDay", register_time);
+			}
+			if(register_endTime != null && !register_endTime.equals("")){
+				map.put("lastDay", register_endTime);
 			}
 			if(number_start != null){
 				map.put("numberStart", number_start);

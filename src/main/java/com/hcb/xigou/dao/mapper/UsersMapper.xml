@@ -143,8 +143,11 @@
   	<if test="phone != null and phone != ''">
   		and phone = #{phone,jdbcType=VARCHAR}
   	</if>
-    <if test="firstDay != null and lastDay != null">
-  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
+    <if test="firstDay != null and firstDay != ''">
+  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} 
+  	</if>
+  	 <if test="lastDay != null and lastDay != ''">
+  		and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
   	</if>
   	<if test="numberStart != null and numberStart != ''">
   		and order_number &gt;= #{numberStart,jdbcType=INTEGER}
@@ -175,8 +178,11 @@
   	<if test="phone != null and phone != ''">
   		and phone = #{phone,jdbcType=VARCHAR}
   	</if>
-    <if test="firstDay != null and lastDay != null">
-  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
+   <if test="firstDay != null and firstDay != ''">
+  		and register_time &gt;= #{firstDay,jdbcType=VARCHAR} 
+  	</if>
+  	 <if test="lastDay != null and lastDay != ''">
+  		and register_time &lt;= #{lastDay,jdbcType=VARCHAR}
   	</if>
   	<if test="numberStart != null and numberStart != ''">
   		and order_number &gt;= #{numberStart,jdbcType=INTEGER}
