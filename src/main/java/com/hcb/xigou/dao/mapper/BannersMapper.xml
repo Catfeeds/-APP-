@@ -59,7 +59,7 @@
     select 
     <include refid="Base_Column_List" />
     from banners
-    where delete_at is null
+    where delete_at is null AND type IN ('home')
     <if test="bannerName !='' and bannerName != null">
 		and banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
 	</if>
@@ -73,7 +73,7 @@
     select 
     <include refid="Base_Column_List" />
     from banners
-    where delete_at is null
+    where delete_at is null AND type IN ('home')
     <if test="bannerName !='' and bannerName != null">
 		and banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
 	</if>
@@ -85,7 +85,7 @@
   
   <select id="countBannerByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
    select count(1) from banners
-    where delete_at is null
+    where delete_at is null AND type IN ('home')
     <if test="bannerName !='' and bannerName != null">
 		and banner_name like CONCAT(CONCAT('%', #{bannerName,jdbcType=VARCHAR}), '%')
 	</if>
