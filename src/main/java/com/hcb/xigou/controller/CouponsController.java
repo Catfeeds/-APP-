@@ -236,6 +236,9 @@ public class CouponsController extends BaseController {
 		if(bodyInfo.get("rule_two") != null){
 			coupon.setRuleTwo(bodyInfo.getString("rule_two"));
 		}
+		if(bodyInfo.get("description") != null){
+			coupon.setDescription(bodyInfo.getString("description"));
+		}
 		int rs = 0;
 		rs = couponsService.insertSelective(coupon);
 		if (rs == 1) {
