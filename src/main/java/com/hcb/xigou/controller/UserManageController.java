@@ -295,6 +295,8 @@ public class UserManageController extends BaseController{
 		//req.setCharacterEncoding("UTF-8");
 		name = new String(name.getBytes("ISO-8859-1"),"UTF-8");
 		nickname = new String(nickname.getBytes("ISO-8859-1"),"UTF-8");
+		register_time = java.net.URLDecoder.decode(register_time, "utf-8");
+		register_endTime = java.net.URLDecoder.decode(register_endTime, "utf-8");
 		JSONObject json = new JSONObject();
 		if (sign == 1) {
 			json.put("result", "1");
