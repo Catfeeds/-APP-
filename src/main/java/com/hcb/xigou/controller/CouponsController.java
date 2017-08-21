@@ -362,10 +362,7 @@ public class CouponsController extends BaseController {
 			return buildReqJsonInteger(1, json);
 		}
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("amount") == null || bodyInfo.get("grant_time") == null || bodyInfo.get("fail_time") == null
-				|| bodyInfo.get("url") == null || bodyInfo.get("coupon_name") == null
-				|| bodyInfo.get("coupon_stock") == null || bodyInfo.get("coupon_uuid") == null
-				|| bodyInfo.get("type") == null) {
+		if (bodyInfo.get("coupon_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonObject(json);
@@ -381,15 +378,39 @@ public class CouponsController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			coupon.setAmount(bodyInfo.getString("amount"));
-			coupon.setTitle(bodyInfo.getString("coupon_name"));
-			coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
-			coupon.setType(bodyInfo.getString("type"));
-			coupon.setDescription(bodyInfo.getString("url"));
+		    if(bodyInfo.get("type") != null){
+		    	coupon.setType(bodyInfo.getString("type"));
+		    }
+			if(bodyInfo.get("amount") != null){
+				coupon.setAmount(bodyInfo.getString("amount"));
+			}
+			if(bodyInfo.get("grant_time") != null){
+				coupon.setGrantTime(StringToDate.stringToDateStart(bodyInfo.getString("grant_time")));
+			}
+			if(bodyInfo.get("fail_time") != null){
+				coupon.setFailTime(StringToDate.stringToDateStart(bodyInfo.getString("fail_time")));
+			}
+			if(bodyInfo.get("url") != null){
+				coupon.setDescription(bodyInfo.getString("url"));
+			}
+			if(bodyInfo.get("coupon_name") != null){
+				coupon.setTitle(bodyInfo.getString("coupon_name"));
+			}
+			if(bodyInfo.get("coupon_stock") != null){
+				coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
+			}
 			coupon.setUpdateDatetime(updateTime);
-			coupon.setGrantTime(StringToDate.stringToDateStart(bodyInfo.getString("grant_time")));
-			coupon.setFailTime(StringToDate.stringToDateStart(bodyInfo.getString("fail_time")));
 			coupon.setIsGrant("1");
+			coupon.setGroups("coupon");
+			if(bodyInfo.get("rule_one") != null){
+				coupon.setRuleOne(bodyInfo.getString("rule_one"));
+			}
+			if(bodyInfo.get("rule_two") != null){
+				coupon.setRuleTwo(bodyInfo.getString("rule_two"));
+			}
+			if(bodyInfo.get("description") != null){
+				coupon.setDescription(bodyInfo.getString("description"));
+			}
 			int rs = 0;
 			rs = couponsService.updateByCouponUuid(coupon);
 			if (rs == 1) {
