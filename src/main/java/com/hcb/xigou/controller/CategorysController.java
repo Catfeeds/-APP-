@@ -2,6 +2,8 @@
 package com.hcb.xigou.controller;
 
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
+import com.hcb.xigou.dto.Dailys;
 import com.hcb.xigou.dto.FirstCategorys;
 import com.hcb.xigou.dto.SecondCategorys;
+import com.hcb.xigou.dto.ThirdCategorys;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
+import com.hcb.xigou.service.IThirdCategorysService;
 import com.hcb.xigou.util.MD5Util;
+import com.hcb.xigou.util.RandomStringGenerator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -31,6 +38,8 @@ public class CategorysController extends BaseController{
 	ISecondCategorysService secondCategorysService;
 	@Autowired
 	IFirstCategorysService firstCategorysService;
+	@Autowired
+	IThirdCategorysService thirdCategorysService;
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -512,5 +521,248 @@ public class CategorysController extends BaseController{
 		}
 	}
 	
+	@RequestMapping(value = "/label/publish" , method = RequestMethod.POST)
+	@ResponseBody
+	public String labelPublish(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("second_uuid") == null || bodyInfo.get("category_name") ==null) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		SecondCategorys second = secondCategorysService.selectBySecondUuid(bodyInfo.getString("second_uuid"));
+		if(second == null){
+			json.put("result", "1");
+			json.put("description", "未查询到二级分类信息");
+			return buildReqJsonObject(json);
+		}
+		ThirdCategorys category = new ThirdCategorys();
+		category.setCreateDatetime(Timestamp.from(Instant.now()));
+		category.setSecondUuid(second.getSecondUuid());
+		category.setCategoryName(bodyInfo.getString("category_name"));
+		category.setFirstUuid(second.getFirstUuid());
+		category.setStoreUuid(second.getStoreUuid());
+		try {
+			category.setThirdUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Integer rs = thirdCategorysService.insertSelective(category);
+		if(rs == 1){
+			json.put("result", "0");
+			json.put("description", "添加成功");
+		}else{
+			json.put("result", "1");
+			json.put("description", "添加失败");
+			return buildReqJsonObject(json);
+		}
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "/label/edit" , method = RequestMethod.POST)
+	@ResponseBody
+	public String labelEdit(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("third_uuid") == null ) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		ThirdCategorys category = thirdCategorysService.selectByThirdUuid(bodyInfo.getString("third_uuid"));
+		if(category == null){
+			json.put("result", "1");
+			json.put("description", "未查询到标签信息");
+			return buildReqJsonObject(json);
+		}
+		if(bodyInfo.get("category_name") != null){
+			category.setCategoryName(bodyInfo.getString("category_name"));
+		}
+		Integer rs = thirdCategorysService.updateByPrimaryKeySelective(category);
+		if(rs == 1){
+			json.put("result", "0");
+			json.put("description", "编辑成功");
+		}else{
+			json.put("result", "1");
+			json.put("description", "编辑失败");
+			return buildReqJsonObject(json);
+		}
+		return buildReqJsonObject(json);
+	}
+	
+	
+	@RequestMapping(value = "/label/delete" , method = RequestMethod.POST)
+	@ResponseBody
+	public String labelDelete(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整1");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("third_uuid") == null ) {
+			json.put("result", 1);
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Boolean flag = false;
+	    JSONArray array = JSONArray.fromObject(bodyInfo.getString("third_uuid"));
+	    for (int i = 0; i < array.size(); i++) {
+	      	if(array.get(i).toString() != null){
+              ThirdCategorys category = thirdCategorysService.selectByThirdUuid(array.get(i).toString());
+				if (category != null) {
+					category.setDeleteAt("del");
+					Integer rs = thirdCategorysService.updateByPrimaryKeySelective(category);
+					if (rs == 1) {
+						flag = true;
+						continue;
+					} else {
+						flag = false;
+						break;
+					}
+				}
+	      	}
+	    }
+	    if(flag){
+	    	json.put("result", 0);
+	    	json.put("description", "删除成功");
+	    }else{
+	     	json.put("result", 1);
+	    	json.put("description", "删除失败");
+	    }
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "/label/list" , method = RequestMethod.POST)
+	@ResponseBody
+	public String labelList(){
+		JSONObject json = new JSONObject();
+		if (sign == 1) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		// 登录认证失败
+		if (sign == 2) {
+			json.put("result", "2");
+			json.put("description", "验证失败，user_uuid或密码不正确");
+			return buildReqJsonInteger(2, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("pageIndex") == null || bodyInfo.get("pageSize") == null || bodyInfo.get("second_uuid") == null) {
+			json.put("result", "1");
+			json.put("description", "操作失败，请检查输入的参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		if ("".equals(bodyInfo.get("pageIndex")) || "".equals(bodyInfo.get("pageSize")) || "".equals(bodyInfo.get("second_uuid"))) {
+			json.put("result", "1");
+			json.put("description", "操作失败，请检查输入的参数是否正确");
+			return buildReqJsonObject(json);
+		}
+		ModelMap model = new ModelMap();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Integer pageIndex = bodyInfo.getInt("pageIndex");
+		Integer pageSize = bodyInfo.getInt("pageSize");
+		if (pageIndex <= 0) {
+			json.put("result", "1");
+			json.put("description", "操作失败，pageIndex不小于0");
+			return buildReqJsonObject(json);
+		} else {
+			Map<String, Object> map = new HashMap<String, Object>();
+			int start = (pageIndex - 1) * pageSize;
+			map.put("start", start);
+			map.put("end", pageSize);
+			map.put("secondUuid", bodyInfo.getString("second_uuid"));
+			list = thirdCategorysService.selectByPaging(map);
+			Integer count = 0;
+			count = thirdCategorysService.totalCount(map);
+			  if (count % pageSize == 0) {
+					Integer total = count / pageSize;
+					Integer sign = 0;
+					if (!total.equals(sign)) {
+						if (pageIndex > total) {
+							json.put("result", "1");
+							json.put("description", "操作失败，请求页数大于总页数");
+							return buildReqJsonObject(json);
+						}
+					}
+					model.put("total", total);
+					model.put("page", pageIndex);
+				} else {
+					Integer total = count / pageSize + 1;
+					if (pageIndex > total) {
+						json.put("result", "1");
+						json.put("description", "操作失败，请求页数大于总页数");
+						return buildReqJsonObject(json);
+					}
+					model.put("total", total);// 页码总数
+					model.put("page", pageIndex);
+				}
+		}
+		model.put("description", "查询成功");
+		model.put("result", "0");
+		model.put("list", list);
+		String a = buildReqJsonObject(model);
+		a = a.replace("\"[", "[");
+		a = a.replace("]\"", "]");
+		a = a.replaceAll("\\\\", "");
+		return a;
+	}
+	
+	@RequestMapping(value = "/label/all" , method = RequestMethod.POST)
+	@ResponseBody
+	public String labelAll(){
+		JSONObject json = new JSONObject();
+		if (sign == 1) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		// 登录认证失败
+		if (sign == 2) {
+			json.put("result", "2");
+			json.put("description", "验证失败，user_uuid或密码不正确");
+			return buildReqJsonInteger(2, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("second_uuid") == null) {
+			json.put("result", "1");
+			json.put("description", "操作失败，请检查输入的参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		if ("".equals(bodyInfo.get("second_uuid"))) {
+			json.put("result", "1");
+			json.put("description", "操作失败，请检查输入的参数是否正确");
+			return buildReqJsonObject(json);
+		}
+		ModelMap model = new ModelMap();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("secondUuid", bodyInfo.getString("second_uuid"));
+		Integer count = 0;
+		count = thirdCategorysService.totalCount(map);
+		map.put("start", 0);
+		map.put("end", count);
+		List<Map<String, Object>> list = thirdCategorysService.selectByPaging(map);
+		model.put("description", "查询成功");
+		model.put("result", "0");
+		model.put("list", list);
+		String a = buildReqJsonObject(model);
+		a = a.replace("\"[", "[");
+		a = a.replace("]\"", "]");
+		a = a.replaceAll("\\\\", "");
+		return a;
+	}
 }
 

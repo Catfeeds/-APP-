@@ -29,6 +29,8 @@
     <result column="photos" property="photos" jdbcType="LONGVARCHAR" />
     <result column="models" property="models" jdbcType="LONGVARCHAR" />
     <result column="skus" property="skus" jdbcType="LONGVARCHAR" />
+    <result column="third_uuids" property="thirdUuids" jdbcType="LONGVARCHAR" />
+    <result column="third_category_names" property="thirdCategoryNames" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, good_uuid, create_datetime, update_datetime, delete_at, merchant_uuid, good_name, 
@@ -36,7 +38,7 @@
     second_uuid, second_category_name, store_uuid, address, good_code,good_status
   </sql>
   <sql id="Blob_Column_List" >
-    poster, photos, models,skus
+    poster, photos, models,skus,third_uuids,third_category_names
   </sql>
   
   <update id="updateByGoodsStatus" parameterType="java.util.HashMap">
@@ -279,6 +281,12 @@
       <if test="skus != null" >
         skus,
       </if>
+      <if test="thirdUuids != null" >
+        third_uuids,
+      </if>
+      <if test="thirdCategoryNames != null" >
+        third_category_names,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -355,6 +363,12 @@
       </if>
       <if test="skus != null" >
         #{skus,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="thirdUuids != null" >
+        #{thirdUuids,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="thirdCategoryNames != null" >
+        #{thirdCategoryNames,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -433,6 +447,12 @@
       <if test="skus != null" >
         skus = #{skus,jdbcType=LONGVARCHAR},
       </if>
+       <if test="thirdUuids != null" >
+        third_uuids = #{thirdUuids,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="thirdCategoryNames != null" >
+        third_category_names = #{thirdCategoryNames,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
@@ -509,6 +529,12 @@
       <if test="skus != null" >
         skus = #{skus,jdbcType=LONGVARCHAR},
       </if>
+       <if test="thirdUuids != null" >
+        third_uuids = #{thirdUuids,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="thirdCategoryNames != null" >
+        third_category_names = #{thirdCategoryNames,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where good_uuid = #{goodUuid,jdbcType=VARCHAR}
   </update>
@@ -538,7 +564,9 @@
       poster = #{poster,jdbcType=LONGVARCHAR},
       photos = #{photos,jdbcType=LONGVARCHAR},
       models = #{models,jdbcType=LONGVARCHAR},
-      skus = #{skus,jdbcType=LONGVARCHAR}
+      skus = #{skus,jdbcType=LONGVARCHAR},
+      third_uuids = #{thirdUuids,jdbcType=LONGVARCHAR},
+      third_category_names = #{thirdCategoryNames,jdbcType=LONGVARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.pojo.Goods" >
@@ -564,6 +592,8 @@
       good_code = #{goodCode,jdbcType=VARCHAR},
       good_status = #{goodStatus,jdbcType=INTEGER},
       skus = #{skus,jdbcType=LONGVARCHAR},
+      third_uuids = #{thirdUuids,jdbcType=LONGVARCHAR},
+      third_category_names = #{thirdCategoryNames,jdbcType=LONGVARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

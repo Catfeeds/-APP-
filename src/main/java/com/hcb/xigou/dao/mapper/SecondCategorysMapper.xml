@@ -58,6 +58,13 @@
   	</if>
   </select>
   
+    <select id="selectBySecondUuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from second_categorys
+  	where second_uuid = #{secondUuid,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

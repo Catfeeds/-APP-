@@ -391,6 +391,12 @@ public class GoodsController extends BaseController{
 		if(bodyInfo.get("good_code") != null){
 			goods.setGoodCode(bodyInfo.getString("good_code"));
 		}
+		if(bodyInfo.get("third_uuids") != null){
+			goods.setThirdUuids(bodyInfo.getString("third_uuids"));
+		}
+		if(bodyInfo.get("third_category_names") != null){
+			goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
+		}
 		int rs = 0;
 		rs = goodsService.insertSelective(goods);
 		if(rs == 1){
@@ -443,6 +449,12 @@ public class GoodsController extends BaseController{
 		}
 		if(bodyInfo.get("good_code") != null){
 			goods.setGoodCode(bodyInfo.getString("good_code"));
+		}
+		if(bodyInfo.get("third_uuids") != null){
+			goods.setThirdUuids(bodyInfo.getString("third_uuids"));
+		}
+		if(bodyInfo.get("third_category_names") != null){
+			goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
 		}
 		int rs = 0;
 		rs = goodsService.updateByGoodsUuid(goods);

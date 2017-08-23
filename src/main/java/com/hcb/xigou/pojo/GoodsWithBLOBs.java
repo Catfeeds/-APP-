@@ -8,6 +8,10 @@ public class GoodsWithBLOBs extends Goods {
     private String models;
     
     private String skus;
+    
+    private String thirdUuids;
+    
+    private String thirdCategoryNames;
 
 	public String getPoster() {
 		return poster;
@@ -52,5 +56,21 @@ public class GoodsWithBLOBs extends Goods {
 
 	public void setSkus(String skus) {
 		this.skus = skus == null ? null : skus.trim();
+	}
+
+	public String getThirdUuids() {
+		return thirdUuids;
+	}
+
+	public void setThirdUuids(String thirdUuids) {
+		this.thirdUuids = thirdUuids == null ? null : thirdUuids.trim();
+	}
+
+	public String getThirdCategoryNames() {
+		return thirdCategoryNames;
+	}
+
+	public void setThirdCategoryNames(String thirdCategoryNames) {
+		this.thirdCategoryNames = thirdCategoryNames == null ? null : thirdCategoryNames.trim();
 	}
 }
