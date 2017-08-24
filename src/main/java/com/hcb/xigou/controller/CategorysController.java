@@ -385,26 +385,39 @@ public class CategorysController extends BaseController{
 		if (rs >= 1) {
 			json.put("result", 0);
 			json.put("description", "编辑商品分类成功");
-			 if(bodyInfo.get("labels") != null){
-				    SecondCategorys se = secondCategorysService.selectBySecondUuid(bodyInfo.getString("second_uuid"));
-			    	JSONArray array = JSONArray.fromObject(bodyInfo.getString("labels"));
-			    	for (int i = 0; i < array.size(); i++) {
-						if(array.get(i).toString() != null &&! array.get(i).toString().equals("")){
-							ThirdCategorys category = new ThirdCategorys();
-							category.setCreateDatetime(Timestamp.from(Instant.now()));
-							category.setSecondUuid(se.getSecondUuid());
-							category.setCategoryName(array.get(i).toString());
-							category.setFirstUuid(se.getFirstUuid());
-							category.setStoreUuid(se.getStoreUuid());
-							try {
-								category.setThirdUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							thirdCategorysService.insertSelective(category);					
+			if (bodyInfo.get("labels") != null) {
+				SecondCategorys se = secondCategorysService.selectBySecondUuid(bodyInfo.getString("second_uuid"));
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("secondUuid", se.getSecondUuid());
+				Integer count = 0;
+				count = thirdCategorysService.totalCount(map);
+				map.put("start", 0);
+				map.put("end", count);
+				List<Map<String, Object>> list = thirdCategorysService.selectByPaging(map);
+                for (Map<String, Object> map2 : list) {
+					ThirdCategorys thrid= thirdCategorysService.selectByThirdUuid(String.valueOf(map2.get("third_uuid")));
+					thrid.setDeleteAt("del");
+					thirdCategorysService.updateByPrimaryKey(thrid);
+				}
+				JSONArray array = JSONArray.fromObject(bodyInfo.getString("labels"));
+				for (int i = 0; i < array.size(); i++) {
+					if (array.get(i).toString() != null && !array.get(i).toString().equals("")) {
+						ThirdCategorys category = new ThirdCategorys();
+						category.setCreateDatetime(Timestamp.from(Instant.now()));
+						category.setSecondUuid(se.getSecondUuid());
+						category.setCategoryName(array.get(i).toString());
+						category.setFirstUuid(se.getFirstUuid());
+						category.setStoreUuid(se.getStoreUuid());
+						try {
+							category.setThirdUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32)
+									+ System.currentTimeMillis() + RandomStringUtils.random(8)));
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
+						thirdCategorysService.insertSelective(category);
 					}
-			    } 
+				}
+			} 
 			return buildReqJsonObject(json);
 		} else {
 			json.put("result", 1);
