@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
-import com.hcb.xigou.dto.Dailys;
 import com.hcb.xigou.dto.FirstCategorys;
 import com.hcb.xigou.dto.SecondCategorys;
 import com.hcb.xigou.dto.ThirdCategorys;
@@ -289,6 +288,25 @@ public class CategorysController extends BaseController{
 		if(rs == 1){
 			json.put("result", 0);
 			json.put("description", "添加商品分类成功");
+		    if(bodyInfo.get("labels") != null){
+		    	JSONArray array = JSONArray.fromObject(bodyInfo.getString("labels"));
+		    	for (int i = 0; i < array.size(); i++) {
+					if(array.get(i).toString() != null &&! array.get(i).toString().equals("")){
+						ThirdCategorys category = new ThirdCategorys();
+						category.setCreateDatetime(Timestamp.from(Instant.now()));
+						category.setSecondUuid(second.getSecondUuid());
+						category.setCategoryName(array.get(i).toString());
+						category.setFirstUuid(second.getFirstUuid());
+						category.setStoreUuid(second.getStoreUuid());
+						try {
+							category.setThirdUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						thirdCategorysService.insertSelective(category);					
+					}
+				}
+		    } 
 			return buildReqJsonObject(json);
 		}else{
 			json.put("result", 1);
@@ -341,40 +359,58 @@ public class CategorysController extends BaseController{
 	
 	@RequestMapping("secondupdate")
 	@ResponseBody
-	public String secondupdate(){
+	public String secondupdate() {
 		JSONObject json = new JSONObject();
-		if (sign == 1||sign == 2) {
+		if (sign == 1 || sign == 2) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
 			return buildReqJsonInteger(1, json);
 		}
-		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("category_name")==null||bodyInfo.get("image") == null||
-			headInfo.get("store_uuid") == null||bodyInfo.get("second_uuid") == null) {
+		if (bodyInfo.get("second_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "有参数为空，请重试");
 			return buildReqJsonObject(json);
 		}
 		SecondCategorys second = new SecondCategorys();
-
-			second.setSecondUuid(bodyInfo.getString("second_uuid"));
+		second.setSecondUuid(bodyInfo.getString("second_uuid"));
+		if(bodyInfo.get("category_name") != null){
 			second.setCategoryName(bodyInfo.getString("category_name"));
+		}
+		if(bodyInfo.get("image") != null){
 			second.setImage(bodyInfo.getString("image"));
-			int rs = 0;
-			rs = secondCategorysService.updateBySecondUuid(second);
-			if(rs >= 1){
-				json.put("result", 0);
-				json.put("description", "编辑商品分类成功");
-				return buildReqJsonObject(json);
-			}else{
-				json.put("result", 1);
-				json.put("description", "编辑商品分类失败，请重试"+bodyInfo.getString("second_uuid")+
-						bodyInfo.getString("category_name")+bodyInfo.getString("image"));
-				return buildReqJsonObject(json);
-			}
-
-		
+		}
+		int rs = 0;
+		rs = secondCategorysService.updateBySecondUuid(second);
+		if (rs >= 1) {
+			json.put("result", 0);
+			json.put("description", "编辑商品分类成功");
+			 if(bodyInfo.get("labels") != null){
+				    SecondCategorys se = secondCategorysService.selectBySecondUuid(bodyInfo.getString("second_uuid"));
+			    	JSONArray array = JSONArray.fromObject(bodyInfo.getString("labels"));
+			    	for (int i = 0; i < array.size(); i++) {
+						if(array.get(i).toString() != null &&! array.get(i).toString().equals("")){
+							ThirdCategorys category = new ThirdCategorys();
+							category.setCreateDatetime(Timestamp.from(Instant.now()));
+							category.setSecondUuid(se.getSecondUuid());
+							category.setCategoryName(array.get(i).toString());
+							category.setFirstUuid(se.getFirstUuid());
+							category.setStoreUuid(se.getStoreUuid());
+							try {
+								category.setThirdUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32) + System.currentTimeMillis() + RandomStringUtils.random(8)));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							thirdCategorysService.insertSelective(category);					
+						}
+					}
+			    } 
+			return buildReqJsonObject(json);
+		} else {
+			json.put("result", 1);
+			json.put("description", "编辑商品分类失败，请重试");
+			return buildReqJsonObject(json);
+		}
 	}
 	@RequestMapping("delete")
 	@ResponseBody
