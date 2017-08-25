@@ -110,8 +110,8 @@
    <select id="selectByPaging" resultType="java.util.Map" parameterType="java.util.HashMap">
   	select
   	cast( a.create_datetime as char(32) ) AS create_datetime, 
-    g.good_name,g.cover,g.good_code,g.good_status,a.title,a.is_stop,
-    a.activity_uuid,a.currentIndex
+    g.good_name,g.cover,g.good_code,g.good_status,g.second_category_name,g.firt_category_name,a.title,a.is_stop,
+    a.activity_uuid,a.currentIndex,g.good_uuid,g.first_uuid,g.second_uuid
   	from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
   	where  a.type = 'host'
   	<if test="goodname != null and goodname != ''">
