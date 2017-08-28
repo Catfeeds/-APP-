@@ -35,7 +35,7 @@ public class Banners {
 
     private Date endTime;
 
-    private Integer activityId;
+    private String activityId;
 
     private String goodCode;
 
@@ -167,14 +167,6 @@ public class Banners {
         this.endTime = endTime;
     }
 
-    public Integer getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
-    }
-
     public String getGoodCode() {
         return goodCode;
     }
@@ -182,4 +174,12 @@ public class Banners {
     public void setGoodCode(String goodCode) {
         this.goodCode = goodCode == null ? null : goodCode.trim();
     }
+
+	public String getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(String activityId) {
+		this.activityId = activityId == null ? null : activityId.trim();
+	}
 }

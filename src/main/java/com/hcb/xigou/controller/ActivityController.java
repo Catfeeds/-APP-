@@ -91,6 +91,12 @@ public class ActivityController extends BaseController{
 		if(bodyInfo.get("description") != null){
 			activity.setDescription(bodyInfo.getString("description"));
 		}
+		if(bodyInfo.get("good_uuid") != null){
+			if(!bodyInfo.getString("good_uuid").equals(""))activity.setGoodUuid(bodyInfo.getString("good_uuid"));
+		}
+		if(bodyInfo.get("eventId") != null){
+			if(!bodyInfo.getString("eventId").equals(""))activity.setActivityId(bodyInfo.getString("eventId"));
+		}
 		
 		int rs = 0;
 		rs = activityZonesService.insertSelective(activity);
@@ -159,6 +165,12 @@ public class ActivityController extends BaseController{
 			activity.setActivityUuid(bodyInfo.getString("activity_uuid"));
 			activity.setImage(bodyInfo.getString("image"));
 			activity.setIsStop("2");
+			if(bodyInfo.get("good_uuid") != null){
+				if(!bodyInfo.getString("good_uuid").equals(""))activity.setGoodUuid(bodyInfo.getString("good_uuid"));
+			}
+			if(bodyInfo.get("eventId") != null){
+				if(!bodyInfo.getString("eventId").equals(""))activity.setActivityId(bodyInfo.getString("eventId"));
+			}
 			int rs = 0;
 			rs = activityZonesService.updateByActivityUuid(activity);
 			if(rs == 1){

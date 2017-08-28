@@ -436,13 +436,13 @@ public class BannersController extends BaseController{
 		banner.setBannerName(bodyInfo.getString("banner_name"));
 		banner.setStoreUuid(headInfo.getString("store_uuid"));
 		if(bodyInfo.get("web_url") != null){
-			banner.setWebUrl(bodyInfo.getString("web_url"));
+			if(!bodyInfo.getString("web_url").equals(""))banner.setWebUrl(bodyInfo.getString("web_url"));
 		}
 		if(bodyInfo.get("good_uuid") != null){
-			banner.setGoodUuid(bodyInfo.getString("good_uuid"));
+			if(!bodyInfo.getString("good_uuid").equals(""))banner.setGoodUuid(bodyInfo.getString("good_uuid"));
 		}
 		if(bodyInfo.get("eventId") != null){
-			banner.setActivityId(bodyInfo.getInt("eventId"));
+			if(!bodyInfo.getString("eventId").equals(""))banner.setActivityId(bodyInfo.getString("eventId"));
 		}
 		if(bodyInfo.get("start_time") != null){
 			banner.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));

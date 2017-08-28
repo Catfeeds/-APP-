@@ -27,11 +27,12 @@
     <result column="rule_one" property="ruleOne" jdbcType="VARCHAR" />
     <result column="rule_two" property="ruleTwo" jdbcType="VARCHAR" />
     <result column="currentIndex" property="currentIndex" jdbcType="INTEGER" />
+    <result column="activityId" property="activityId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, activity_uuid, create_datetime, update_datetime, delete_at, good_uuid, merchant_uuid, 
     image, title, description, start_time, end_time, open_time, type, sign, groups, banner, 
-    store_uuid, is_stop, position, is_open, url, rule_one, rule_two, currentIndex
+    store_uuid, is_stop, position, is_open, url, rule_one, rule_two, currentIndex,activityId
   </sql>
   
   
@@ -169,10 +170,10 @@
   </select>
   <!-- 活动专场  -->
    <select id="selectByAll" resultType="java.util.Map">
-  	select 
-  	fake_id AS eventId , title
+    select 
+  	groups AS eventId , title
   	from activity_zones
-  	where delete_at is null and type = 'event'
+  	where delete_at is null and type = 'selling' GROUP BY groups
   </select>
   
   
@@ -333,6 +334,9 @@
        <if test="currentIndex != null" >
         currentIndex,
       </if>
+       <if test="activityId != null" >
+        activityId,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fakeId != null" >
@@ -410,6 +414,9 @@
       <if test="currentIndex != null" >
         #{currentIndex,jdbcType=INTEGER},
       </if>
+       <if test="activityId != null" >
+        #{activityId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.ActivityZones" >
@@ -486,6 +493,9 @@
       </if>
       <if test="currentIndex != null" >
         currentIndex = #{currentIndex,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null" >
+        activityId = #{activityId,jdbcType=VARCHAR},
       </if>
     </set>
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
@@ -566,6 +576,9 @@
       <if test="currentIndex != null" >
         currentIndex = #{currentIndex,jdbcType=INTEGER},
       </if>
+      <if test="activityId != null" >
+        activityId = #{activityId,jdbcType=VARCHAR},
+      </if>
     </set>
     where activity_uuid = #{activityUuid,jdbcType=VARCHAR}
   </update>
@@ -591,7 +604,8 @@
       is_stop = #{isStop,jdbcType=CHAR},
       rule_one = #{ruleOne,jdbcType=CHAR},
       rule_two = #{ruleTwo,jdbcType=CHAR},
-      currentIndex = #{currentIndex,jdbcType=INTEGER}
+      currentIndex = #{currentIndex,jdbcType=INTEGER},
+      activityId = #{activityId,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>
 </mapper>

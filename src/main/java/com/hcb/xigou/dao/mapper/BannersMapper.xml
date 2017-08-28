@@ -18,7 +18,7 @@
     <result column="shelves_time" property="shelvesTime" jdbcType="TIMESTAMP" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="activity_id" property="activityId" jdbcType="VARCHAR" />
     <result column="good_code" property="goodCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -121,7 +121,7 @@
       #{url,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, #{goodUuid,jdbcType=VARCHAR}, 
       #{currentindex,jdbcType=INTEGER}, #{bannerStatus,jdbcType=INTEGER}, #{bannerName,jdbcType=VARCHAR}, 
       #{webUrl,jdbcType=VARCHAR}, #{shelvesTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{activityId,jdbcType=INTEGER}, #{goodCode,jdbcType=VARCHAR}
+      #{endTime,jdbcType=TIMESTAMP}, #{activityId,jdbcType=VARCHAR}, #{goodCode,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Banners" >
@@ -232,7 +232,7 @@
         #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="activityId != null" >
-        #{activityId,jdbcType=INTEGER},
+        #{activityId,jdbcType=VARCHAR},
       </if>
       <if test="goodCode != null" >
         #{goodCode,jdbcType=VARCHAR},
@@ -288,7 +288,7 @@
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="activityId != null" >
-        activity_id = #{activityId,jdbcType=INTEGER},
+        activity_id = #{activityId,jdbcType=VARCHAR},
       </if>
       <if test="goodCode != null" >
         good_code = #{goodCode,jdbcType=VARCHAR},
@@ -313,7 +313,7 @@
       shelves_time = #{shelvesTime,jdbcType=TIMESTAMP},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
-      activity_id = #{activityId,jdbcType=INTEGER},
+      activity_id = #{activityId,jdbcType=VARCHAR},
       good_code = #{goodCode,jdbcType=VARCHAR}
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </update>

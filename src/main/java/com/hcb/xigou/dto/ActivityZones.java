@@ -55,6 +55,8 @@ public class ActivityZones {
     
     private Integer currentIndex;
     
+    private String activityId;
+    
     public String getRuleOne() {
 		return ruleOne;
 	}
@@ -261,5 +263,13 @@ public class ActivityZones {
 
 	public void setCurrentIndex(Integer currentIndex) {
 		this.currentIndex = currentIndex;
+	}
+
+	public String getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(String activityId) {
+		this.activityId = activityId == null ? null : activityId.trim();
 	}
 }
