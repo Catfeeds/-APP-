@@ -91,6 +91,12 @@ public class BaseController {
 							//不做处理
 						} else if(url.contains("banner/all/events")){
 							//不做处理
+						}else if(url.contains("activity/good/info")){
+							JSONObject bodyInfo = (JSONObject) json.get("body");
+							bodyString = bodyInfo.toString();
+							if (bodyString == null) {
+								sign = 1;
+							}
 						}
 						else {
 							JSONObject headInfo = (JSONObject) json.get("head");

@@ -12,11 +12,15 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.ActivityZones;
+import com.hcb.xigou.pojo.GoodsWithBLOBs;
+import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IActivityZonesService;
 import com.hcb.xigou.util.MD5Util;
 
@@ -28,6 +32,8 @@ public class ActivityController extends BaseController{
 
 	@Autowired
 	IActivityZonesService activityZonesService;
+	@Autowired
+	GoodsService goodsService;
 	
 	
 	@RequestMapping("insert")
@@ -458,6 +464,41 @@ public class ActivityController extends BaseController{
 		a = a.replace("\"[", "[");
 		a = a.replace("]\"", "]");
 		return a;
+	}
+	
+	@RequestMapping(value = "good/info" , method = RequestMethod.POST)
+	@ResponseBody
+	public String activityOfGoodInfo(){
+		JSONObject json = new JSONObject();
+		if (sign == 1) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("good_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		
+		ModelMap model = new ModelMap();
+		GoodsWithBLOBs good = goodsService.selectGoodByGoodUuid(bodyInfo.getString("good_uuid"));
+		if(good != null){
+			if(good.getFirstUuid() != null)model.put("first_uuid",good.getFirstUuid());
+			if(good.getFirtCategoryName() != null)model.put("first_ctatgory_name",good.getFirtCategoryName());
+			if(good.getSecondUuid() != null)model.put("second_uuid",good.getSecondUuid());
+			if(good.getSecondCategoryName() != null)model.put("secont_catagory_name",good.getSecondCategoryName());
+			if(good.getGoodUuid() != null)model.put("good_uuid",good.getGoodUuid());
+			if(good.getGoodName() != null)model.put("good_name",good.getGoodName());
+		}else{
+			model.put("result",1);
+			model.put("description", "查询失败");
+			return buildReqJsonObject(model);
+		}
+		model.put("description", "查询成功");
+		model.put("result",0);
+		return buildReqJsonObject(model);
 	}
 }
 
