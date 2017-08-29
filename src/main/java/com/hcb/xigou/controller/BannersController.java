@@ -495,6 +495,7 @@ public class BannersController extends BaseController{
 	}
 	
 	@RequestMapping(value = "all/goods" , method = RequestMethod.POST)
+	@ResponseBody
 	public String allOfGoods(){
 		JSONObject json = new JSONObject();
 		List<Map<String, Object>> list = goodsService.selectByAll();
@@ -505,6 +506,7 @@ public class BannersController extends BaseController{
 	}
 	
 	@RequestMapping(value = "all/events" , method = RequestMethod.POST)
+	@ResponseBody
 	public String allOfEvents(){
 		JSONObject json = new JSONObject();
 		List<Map<String, Object>> list = activityZonesService.selectByAll();
