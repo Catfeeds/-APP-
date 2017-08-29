@@ -161,59 +161,51 @@ public class BannersController extends BaseController{
 			return buildReqJsonObject(json);
 		}
 		Banners banner = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
-		int i = bannersService.selectByBannerStatus();
-		if ("1".equals(bodyInfo.getString("banner_status"))) {
+		if (1 == bodyInfo.getInt("banner_status")) {
+			Integer count = bannersService.selectByBannerStatus();
+			if(count >= 4){
+				json.put("result", 1);
+				json.put("description", "上架数量最多数量为4个");
+				return buildReqJsonObject(json);
+			}
 			banner.setBannerStatus(1);
+			banner.setShelvesTime(Timestamp.from(Instant.now()));
+			int rs = 0;
+			rs = bannersService.updateByPrimaryKey(banner);
+			if (rs == 1) {
+				// 默認第一張
+				Map<String, Object> mtp = new HashMap<String, Object>();
+				mtp.put("currentindex", 1);
+				mtp.put("type", "home");
+				Banners b1 = bannersService.selectByCurrentindex(mtp);
+				if (b1 != null && banner != null) {
+					b1.setCurrentindex(banner.getCurrentindex());
+					banner.setCurrentindex(1);
+					bannersService.updateByPrimaryKey(b1);
+					bannersService.updateByPrimaryKey(banner);
+				}
+				json.put("result", 0);
+				json.put("description", "上架成功");
+			} else {
+				json.put("result", 1);
+				json.put("description", "上架失败");
+				return buildReqJsonObject(json);
+			}
+		}
+		if (2 == bodyInfo.getInt("banner_status")) {
+			banner.setBannerStatus(2);
 			banner.setShelvesTime(null);
 			int rs = 0;
-			banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
 			rs = bannersService.updateByPrimaryKey(banner);
 			if (rs == 1) {
 				json.put("result", 0);
-				json.put("description", "更改banner状态成功");
-				return buildReqJsonObject(json);
+				json.put("description", "下架成功");
 			} else {
 				json.put("result", 1);
-				json.put("description", "更改banner状态失败，请重试");
+				json.put("description", "下架失败");
 				return buildReqJsonObject(json);
 			}
 		}
-		if ("2".equals(bodyInfo.getString("banner_status"))) {
-			banner.setBannerStatus(2);
-			banner.setShelvesTime(Timestamp.from(Instant.now()));
-			banner.setBannerUuid(bodyInfo.getString("banner_uuid"));
-			int rs = 0;
-			if(i>=4){
-				json.put("result", -1);
-				json.put("description", "修改失败，超过可使用banner数量限制");
-				return buildReqJsonObject(json);
-			}else{
-				rs = bannersService.updateByPrimaryKeySelective(banner);
-				if (rs == 1) {
-					//默認第一張
-					Map<String, Object> mtp = new HashMap<String, Object>();
-					mtp.put("currentindex", 1);
-					mtp.put("type", "home");
-					Banners b1 = bannersService.selectByCurrentindex(mtp);
-					Banners b2 = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
-					if(b1 != null && b2 != null){
-						b1.setCurrentindex(b2.getCurrentindex());
-						b2.setCurrentindex(b1.getCurrentindex());
-						bannersService.updateByPrimaryKeySelective(b1);
-						bannersService.updateByPrimaryKeySelective(b2);
-					}
-					json.put("result", 0);
-					json.put("description", "更改banner状态成功");
-					return buildReqJsonObject(json);
-				} else {
-					json.put("result", 1);
-					json.put("description", "更改banner状态失败，请重试");
-					return buildReqJsonObject(json);
-				}
-			}
-		}
-		json.put("result", 1);
-		json.put("description", "参数错误");
 		return buildReqJsonObject(json);
 	}
 
