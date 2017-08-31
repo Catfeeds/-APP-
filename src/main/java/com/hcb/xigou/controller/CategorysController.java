@@ -280,7 +280,7 @@ public class CategorysController extends BaseController{
 		second.setSecondUuid(secondUuid);
 		second.setFirstUuid(bodyInfo.getString("first_uuid"));
 		second.setCategoryName(bodyInfo.getString("category_name"));
-		second.setImage(bodyInfo.getString("image"));
+		if(!bodyInfo.getString("image").equals(""))second.setImage(bodyInfo.getString("image"));
 		second.setStoreUuid(headInfo.getString("store_uuid"));
 		
 		int rs = 0;
@@ -378,7 +378,7 @@ public class CategorysController extends BaseController{
 			second.setCategoryName(bodyInfo.getString("category_name"));
 		}
 		if(bodyInfo.get("image") != null){
-			second.setImage(bodyInfo.getString("image"));
+			if(!bodyInfo.getString("image").equals(""))second.setImage(bodyInfo.getString("image"));
 		}
 		int rs = 0;
 		rs = secondCategorysService.updateBySecondUuid(second);
