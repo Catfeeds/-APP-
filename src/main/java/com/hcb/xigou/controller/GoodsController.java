@@ -383,7 +383,8 @@ public class GoodsController extends BaseController{
 		goods.setGoodName((bodyInfo.getString("good_name")));
 		goods.setStoreUuid(headInfo.getString("store_uuid"));
 		if(bodyInfo.get("skus") != null){
-			goods.setSkus(bodyInfo.getString("skus"));
+			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("skus"));
+			if(arrays.size() >0)goods.setSkus(bodyInfo.getString("skus"));
 		}
 		if(bodyInfo.get("numbers") != null){
 			goods.setNumbers(bodyInfo.getInt("numbers"));
@@ -392,10 +393,12 @@ public class GoodsController extends BaseController{
 			goods.setGoodCode(bodyInfo.getString("good_code"));
 		}
 		if(bodyInfo.get("third_uuids") != null){
-			goods.setThirdUuids(bodyInfo.getString("third_uuids"));
+			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("third_uuids"));
+			if(arrays.size() >0)goods.setThirdUuids(bodyInfo.getString("third_uuids"));
 		}
 		if(bodyInfo.get("third_category_names") != null){
-			goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
+			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("third_category_names"));
+			if(arrays.size() >0)goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
 		}
 		int rs = 0;
 		rs = goodsService.insertSelective(goods);
@@ -442,7 +445,8 @@ public class GoodsController extends BaseController{
 		goods.setGoodName((bodyInfo.getString("good_name")));
 		goods.setGoodUuid(bodyInfo.getString("good_uuid"));
 		if(bodyInfo.get("skus") != null){
-			goods.setSkus(bodyInfo.getString("skus"));
+			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("skus"));
+			if(arrays.size() >0)goods.setSkus(bodyInfo.getString("skus"));
 		}
 		if(bodyInfo.get("numbers") != null){
 			goods.setNumbers(bodyInfo.getInt("numbers"));
@@ -451,10 +455,12 @@ public class GoodsController extends BaseController{
 			goods.setGoodCode(bodyInfo.getString("good_code"));
 		}
 		if(bodyInfo.get("third_uuids") != null){
-			goods.setThirdUuids(bodyInfo.getString("third_uuids"));
+			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("third_uuids"));
+			if(arrays.size() >0)goods.setThirdUuids(bodyInfo.getString("third_uuids"));
 		}
 		if(bodyInfo.get("third_category_names") != null){
-			goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
+			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("third_category_names"));
+			if(arrays.size() >0)goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
 		}
 		int rs = 0;
 		rs = goodsService.updateByGoodsUuid(goods);
