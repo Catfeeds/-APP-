@@ -383,8 +383,7 @@ public class GoodsController extends BaseController{
 		goods.setGoodName((bodyInfo.getString("good_name")));
 		goods.setStoreUuid(headInfo.getString("store_uuid"));
 		if(bodyInfo.get("skus") != null){
-			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("skus"));
-			if(arrays.size() >0)goods.setSkus(bodyInfo.getString("skus"));
+			goods.setSkus(bodyInfo.getString("skus"));
 		}
 		if(bodyInfo.get("numbers") != null){
 			goods.setNumbers(bodyInfo.getInt("numbers"));
@@ -445,8 +444,7 @@ public class GoodsController extends BaseController{
 		goods.setGoodName((bodyInfo.getString("good_name")));
 		goods.setGoodUuid(bodyInfo.getString("good_uuid"));
 		if(bodyInfo.get("skus") != null){
-			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("skus"));
-			if(arrays.size() >0)goods.setSkus(bodyInfo.getString("skus"));
+			goods.setSkus(bodyInfo.getString("skus"));
 		}
 		if(bodyInfo.get("numbers") != null){
 			goods.setNumbers(bodyInfo.getInt("numbers"));
