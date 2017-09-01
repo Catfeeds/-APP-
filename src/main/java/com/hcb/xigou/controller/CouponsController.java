@@ -223,7 +223,7 @@ public class CouponsController extends BaseController {
 		coupon.setTitle(bodyInfo.getString("coupon_name"));
 		coupon.setCouponStock(bodyInfo.getInt("coupon_stock"));
 		coupon.setType(bodyInfo.getString("type"));
-		coupon.setDescription(bodyInfo.getString("url"));
+		coupon.setUrl(bodyInfo.getString("url"));
 		coupon.setCouponUuid(couponUuid);
 		coupon.setCreateDatetime(createTime);
 		coupon.setGrantTime(StringToDate.stringToDateStart(bodyInfo.getString("grant_time")));
@@ -391,7 +391,7 @@ public class CouponsController extends BaseController {
 				coupon.setFailTime(StringToDate.stringToDateStart(bodyInfo.getString("fail_time")));
 			}
 			if(bodyInfo.get("url") != null){
-				coupon.setDescription(bodyInfo.getString("url"));
+				coupon.setUrl(bodyInfo.getString("url"));
 			}
 			if(bodyInfo.get("coupon_name") != null){
 				coupon.setTitle(bodyInfo.getString("coupon_name"));
