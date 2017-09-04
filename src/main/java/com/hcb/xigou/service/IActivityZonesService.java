@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hcb.xigou.dto.ActivityZones;
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
 
 public interface IActivityZonesService {
@@ -60,4 +61,6 @@ public interface IActivityZonesService {
 		public List<Map<String, Object>> selectByAll();
 		
 		public List<ActivityZones> selectBySellingOfGroups(Map<String, Object> map);
+		
+		public ActivityZones selectByCurrentindex(Map<String, Object> map);
 }

@@ -112,7 +112,9 @@
   	select
   	cast( a.create_datetime as char(32) ) AS create_datetime, 
     g.good_name,g.cover,g.good_code,g.good_status,g.second_category_name,g.firt_category_name,a.title,a.is_stop,
-    a.activity_uuid,a.currentIndex,g.good_uuid,g.first_uuid,g.second_uuid
+    a.activity_uuid,a.currentIndex,g.good_uuid,g.first_uuid,g.second_uuid,
+    cast( a.start_time as char(32) ) AS start_time,
+    cast( a.end_time as char(32) ) AS end_time
   	from activity_zones AS a INNER JOIN goods AS g ON a.good_uuid = g.good_uuid
   	where  a.type = 'host'
   	<if test="goodname != null and goodname != ''">
@@ -168,6 +170,14 @@
   		and a.store_uuid = #{storeUuid,jdbcType=VARCHAR}
   	</if>
   </select>
+  <!-- 人气推荐排序 -->
+   <select id="selectByCurrentindex" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List"/>
+    from activity_zones
+    where currentIndex = #{currentindex,jdbcType=INTEGER} and type = #{type,jdbcType=VARCHAR} and delete_at is null
+  </select>
+  
   <!-- 活动专场  -->
    <select id="selectByAll" resultType="java.util.Map">
     select 

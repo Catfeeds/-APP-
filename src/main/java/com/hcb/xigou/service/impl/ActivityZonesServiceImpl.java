@@ -151,4 +151,9 @@ public class ActivityZonesServiceImpl implements IActivityZonesService{
 	public List<ActivityZones> selectBySellingOfGroups(Map<String, Object> map) {
 		return activityZonesMapper.selectBySellingOfGroups(map);
 	}
+
+	@Override
+	public ActivityZones selectByCurrentindex(Map<String, Object> map) {
+		return activityZonesMapper.selectByCurrentindex(map);
+	}
 }

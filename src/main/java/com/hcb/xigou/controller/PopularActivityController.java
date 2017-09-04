@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.ActivityZones;
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.PopularActivity;
 import com.hcb.xigou.dto.SecondCategorys;
 import com.hcb.xigou.pojo.Goods;
@@ -29,6 +30,7 @@ import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
 import com.hcb.xigou.service.PopularActivityService;
 import com.hcb.xigou.util.MD5Util;
+import com.hcb.xigou.util.StringToDate;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -225,15 +227,24 @@ public class PopularActivityController extends BaseController{
 		activityZones.setActivityUuid( bodyInfo.getString("activity_uuid"));
 		activityZones.setTitle(bodyInfo.getString("title"));
 		activityZones.setGoodUuid(bodyInfo.getString("good_uuid"));
+		if(bodyInfo.get("currentIndex") != null){
+			activityZones.setCurrentIndex(bodyInfo.getInt("currentIndex"));
+		}
+		if(bodyInfo.get("start_time") != null){
+			activityZones.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+		}
+        if(bodyInfo.get("end_time") != null){
+        	activityZones.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
+		}
 		int rs = 0;
 		rs = activityZonesService.updateByPrimaryKeySelective(activityZones);
 		if (rs >= 1) {
 			json.put("result", 0);
-			json.put("description", "更改Activity成功");
+			json.put("description", "更改人气推荐成功");
 			return buildReqJsonObject(json);
 		} else {
 			json.put("result", 1);
-			json.put("description", "更改Activity失败");
+			json.put("description", "更改人气推荐失败");
 			return buildReqJsonObject(json);
 		}
 	}
@@ -379,15 +390,21 @@ public class PopularActivityController extends BaseController{
 			if(bodyInfo.get("currentIndex") != null){
 				activityZones.setCurrentIndex(bodyInfo.getInt("currentIndex"));
 			}
+			if(bodyInfo.get("start_time") != null){
+				activityZones.setStartTime(StringToDate.stringToDateStart(bodyInfo.getString("start_time")));
+			}
+            if(bodyInfo.get("end_time") != null){
+            	activityZones.setEndTime(StringToDate.stringToDateStart(bodyInfo.getString("end_time")));
+			}
 			int rs = 0;
 			rs = activityZonesService.insertSelective(activityZones);
 			if (rs >= 1) {
 				json.put("result", 0);
-				json.put("description", "添加Activity成功");
+				json.put("description", "新增人气推荐成功");
 				return buildReqJsonObject(json);
 			} else {
 				json.put("result", 1);
-				json.put("description", "添加Activity失败，请重试");
+				json.put("description", "新增人气推荐失败，请重试");
 				return buildReqJsonObject(json);
 			}
 		}
@@ -475,5 +492,44 @@ public class PopularActivityController extends BaseController{
 		model.put("description", "查询成功");
 		model.put("result", "0");
 		return buildReqJsonObject(model);
+	}
+	
+	@RequestMapping("sort")
+	@ResponseBody
+	public String hostOfCurrentIndex() {
+		JSONObject json = new JSONObject();
+		if (sign == 1 || sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("activity_uuid") == null || bodyInfo.get("currentIndex") == null) {
+			json.put("result", 1);
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonObject(json);
+		}
+		ActivityZones activity = activityZonesService.selectByActivityUuid(bodyInfo.getString("activity_uuid"));
+		if (activity != null) {
+			Map<String, Object> mtp = new HashMap<String, Object>();
+			mtp.put("currentindex", bodyInfo.getInt("currentIndex"));
+			mtp.put("type", "host");
+			ActivityZones host = activityZonesService.selectByCurrentindex(mtp);
+			activity.setCurrentIndex(bodyInfo.getInt("currentIndex"));
+			if(host != null){
+				host.setCurrentIndex(null);
+				activityZonesService.updateByPrimaryKey(host);
+			}
+			Integer rs = activityZonesService.updateByPrimaryKeySelective(activity);
+			if(rs == 1){
+				json.put("result", 0);
+				json.put("description", "更改成功");
+			}else{
+				json.put("result", 1);
+				json.put("description", "更改失败");
+				return buildReqJsonObject(json);
+			}
+		}
+		return buildReqJsonObject(json);
 	}
 }

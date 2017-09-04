@@ -60,4 +60,6 @@ public interface ActivityZonesMapper {
     List<Map<String, Object>> selectByAll();
     
     List<ActivityZones> selectBySellingOfGroups(Map<String, Object> map);
+    
+    ActivityZones selectByCurrentindex(Map<String, Object> map);
 }
