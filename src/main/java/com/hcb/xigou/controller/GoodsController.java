@@ -457,8 +457,10 @@ public class GoodsController extends BaseController{
 			if(arrays.size() >0)goods.setThirdUuids(bodyInfo.getString("third_uuids"));
 		}
 		if(bodyInfo.get("third_category_names") != null){
-			JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("third_category_names"));
-			if(arrays.size() >0 && !"".equals(bodyInfo.getString("third_category_names")))goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
+			if(!"".equals(bodyInfo.getString("third_category_names"))){
+				JSONArray arrays = JSONArray.fromObject(bodyInfo.getString("third_category_names"));
+				if(arrays.size() >0)goods.setThirdCategoryNames(bodyInfo.getString("third_category_names"));
+			}
 		}
 		int rs = 0;
 		rs = goodsService.updateByGoodsUuid(goods);
