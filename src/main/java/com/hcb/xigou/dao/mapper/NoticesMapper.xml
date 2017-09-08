@@ -38,7 +38,7 @@
   	select 
   	notice_uuid,content,is_open
   	from notices
-  	where is_open = 'yes' and type = 'system' and delete_at is null
+  	where type = 'system' and delete_at is null
   	order by create_datetime desc LIMIT #{start},#{end}
   </select>
   
