@@ -399,7 +399,7 @@ public class BannersController extends BaseController{
 		}
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("currentIndex")==null||bodyInfo.get("banner_name") == null||bodyInfo.get("url") == null) {
+		if (bodyInfo.get("banner_name") == null||bodyInfo.get("url") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整2");
 			return buildReqJsonObject(json);
@@ -415,16 +415,6 @@ public class BannersController extends BaseController{
 		banner.setBannerUuid(bannerUuid);
 		banner.setType("home");
 		banner.setUrl(bodyInfo.getString("url"));
-		Map<String, Object> mtp = new HashMap<String, Object>();
-		mtp.put("currentindex", bodyInfo.getInt("currentIndex"));
-		mtp.put("type", "home");
-		Banners b1 = bannersService.selectByCurrentindex(mtp);
-		if(b1 != null){
-			bannersService.deleteByPrimaryKey(b1.getFakeId());
-		}else{
-			//暂不处理
-		}
-		banner.setCurrentindex(bodyInfo.getInt("currentIndex"));
 		banner.setBannerName(bodyInfo.getString("banner_name"));
 		banner.setStoreUuid(headInfo.getString("store_uuid"));
 		if(bodyInfo.get("web_url") != null){
@@ -484,9 +474,9 @@ public class BannersController extends BaseController{
           b2.setCurrentindex(bodyInfo.getInt("currentIndex"));
           bannersService.updateByPrimaryKeySelective(b2);
 		}else{
-			b1.setCurrentindex(b2.getCurrentindex());
+			b1.setCurrentindex(null);
 			b2.setCurrentindex(bodyInfo.getInt("currentIndex"));
-			bannersService.updateByPrimaryKeySelective(b1);
+			bannersService.updateByPrimaryKey(b1);
 			bannersService.updateByPrimaryKeySelective(b2);
 		}
 		json.put("result", 0);
