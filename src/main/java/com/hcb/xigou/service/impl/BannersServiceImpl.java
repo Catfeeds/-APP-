@@ -83,7 +83,11 @@ public class BannersServiceImpl implements IBannersService{
 
 	@Override
 	public List<Banners> searchBannerExcelByMap(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return bannersMapper.searchBannerExcelByMap(map);
+	}
+
+	@Override
+	public Map<String,Object> selectByCategoryOfBanner() {
+		return bannersMapper.selectByCategoryOfBanner();
 	}
 }

@@ -5,6 +5,7 @@ package com.hcb.xigou.controller;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcb.xigou.controller.base.BaseController;
+import com.hcb.xigou.dto.Banners;
 import com.hcb.xigou.dto.FirstCategorys;
 import com.hcb.xigou.dto.SecondCategorys;
 import com.hcb.xigou.dto.ThirdCategorys;
+import com.hcb.xigou.service.IBannersService;
 import com.hcb.xigou.service.IFirstCategorysService;
 import com.hcb.xigou.service.ISecondCategorysService;
 import com.hcb.xigou.service.IThirdCategorysService;
@@ -39,6 +42,8 @@ public class CategorysController extends BaseController{
 	IFirstCategorysService firstCategorysService;
 	@Autowired
 	IThirdCategorysService thirdCategorysService;
+	@Autowired
+	IBannersService bannersService;
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -115,6 +120,7 @@ public class CategorysController extends BaseController{
 		model.put("description", "查询成功");
 		model.put("result",0);
 		model.put("categoryList", list);
+		model.put("categoryOfBanner", bannersService.selectByCategoryOfBanner());
 		String a = buildReqJsonObject(model);
 		a = a.replace("\"[", "[");
 		a = a.replace("]\"", "]");
@@ -262,7 +268,7 @@ public class CategorysController extends BaseController{
 		}
 		JSONObject headInfo = JSONObject.fromObject(headString);
 		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
-		if (bodyInfo.get("category_name")==null||bodyInfo.get("image") == null||
+		if (bodyInfo.get("category_name")==null||
 			headInfo.get("store_uuid") == null) {
 			json.put("result", 1);
 			json.put("description", "请检查参数格式是否正确或者参数是否完整");
@@ -280,7 +286,9 @@ public class CategorysController extends BaseController{
 		second.setSecondUuid(secondUuid);
 		second.setFirstUuid(bodyInfo.getString("first_uuid"));
 		second.setCategoryName(bodyInfo.getString("category_name"));
-		if(!bodyInfo.getString("image").equals(""))second.setImage(bodyInfo.getString("image"));
+		if(bodyInfo.get("image") != null){
+			if(!bodyInfo.getString("image").equals(""))second.setImage(bodyInfo.getString("image"));
+		}
 		second.setStoreUuid(headInfo.getString("store_uuid"));
 		
 		int rs = 0;
@@ -813,5 +821,92 @@ public class CategorysController extends BaseController{
 		a = a.replaceAll("\\\\", "");
 		return a;
 	}
+	
+	@RequestMapping(value = "banner/create" , method = RequestMethod.POST)
+	@ResponseBody
+	public String categoryOfBannerCreate(){
+		JSONObject json = new JSONObject();
+		if (sign == 1) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		// 登录认证失败
+		if (sign == 2) {
+			json.put("result", "2");
+			json.put("description", "验证失败，user_uuid或密码不正确");
+			return buildReqJsonInteger(2, json);
+		}
+		JSONObject headInfo = JSONObject.fromObject(headString);
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("image") == null) {
+			json.put("result", "1");
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		if ("".equals(bodyInfo.get("image"))) {
+			json.put("result", "1");
+			json.put("description", "请输入必填项");
+			return buildReqJsonObject(json);
+		}
+		Banners banner = new Banners();
+		banner.setType("find");
+		banner.setCreateDatetime(new Date());
+		banner.setUrl(bodyInfo.getString("image"));
+		banner.setStoreUuid(headInfo.getString("store_uuid"));
+		try {
+			 banner.setBannerUuid(MD5Util.md5Digest(RandomStringGenerator.getRandomStringByLength(32)+ System.currentTimeMillis() + RandomStringUtils.random(8)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		Integer rs = bannersService.insertSelective(banner);
+		if(rs == 1){
+			json.put("result","0");
+			json.put("description", "添加成功");
+		}else{
+			json.put("result", "1");
+			json.put("description", "添加失败");
+			return buildReqJsonObject(json);
+		}
+		return buildReqJsonObject(json);
+	}
+	
+	@RequestMapping(value = "banner/edit" , method = RequestMethod.POST)
+	@ResponseBody
+	public String updateBannerImage(){
+		JSONObject json = new JSONObject();
+		if (sign == 1||sign == 2) {
+			json.put("result", "1");
+			json.put("description", "请检查参数格式是否正确或者参数是否完整");
+			return buildReqJsonInteger(1, json);
+		}
+		JSONObject bodyInfo = JSONObject.fromObject(bodyString);
+		if (bodyInfo.get("banner_uuid") == null) {
+			json.put("result", 1);
+			json.put("description", "");
+			return buildReqJsonObject(json);
+		}
+		Banners banner = bannersService.selectByBannerUuid(bodyInfo.getString("banner_uuid"));
+		if(null == banner){
+			json.put("result", "1");
+			json.put("description", "未查询到轮播图信息");
+			return buildReqJsonObject(json);
+		}
+		if(bodyInfo.get("url") != null){
+			if(!"".equals(bodyInfo.getString("url")))banner.setUrl(bodyInfo.getString("url"));
+		}
+		int rs = 0;
+		rs = bannersService.updateByPrimaryKeySelective(banner);
+		if(rs == 1){
+			json.put("result", "0");
+			json.put("description", "编辑成功");
+			return buildReqJsonObject(json);
+		}else{
+			json.put("result", "1");
+			json.put("description", "编辑失败");
+			return buildReqJsonObject(json);
+		}
+	}
+	
 }
 

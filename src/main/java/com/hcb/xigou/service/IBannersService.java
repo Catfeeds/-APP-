@@ -33,4 +33,6 @@ public interface IBannersService {
 	int selectByBannerStatus();
 	
 	public Banners selectByCurrentindex(Map<String, Object> map);
+	
+	public Map<String,Object> selectByCategoryOfBanner();
 }

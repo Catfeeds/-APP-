@@ -92,6 +92,14 @@
 		and store_uuid = #{storeUuid,jdbcType=VARCHAR}
 	</if>
   </select>
+  <!-- 分类页banner -->
+  <select id="selectByCategoryOfBanner" resultType="java.util.Map">
+    select 
+    banner_uuid,url
+    from banners
+    where type = 'find' and delete_at is null
+  </select>
+  
   
   <delete id="deleteByBannerUuids" parameterType="java.util.HashMap" >
    delete from banners
