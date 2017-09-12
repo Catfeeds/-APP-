@@ -849,6 +849,11 @@ public class CategorysController extends BaseController{
 			json.put("description", "请输入必填项");
 			return buildReqJsonObject(json);
 		}
+		if(null != bannersService.selectByCategoryOfBanner()){
+			json.put("result", "1");
+			json.put("description", "只能新建一张");
+			return buildReqJsonObject(json);
+		}
 		Banners banner = new Banners();
 		banner.setType("find");
 		banner.setCreateDatetime(new Date());

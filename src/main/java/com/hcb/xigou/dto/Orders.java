@@ -24,7 +24,17 @@ public class Orders {
 
     private BigDecimal couponMoney;
 
+    private BigDecimal rewardMoney;
+
+    private BigDecimal fractionMoney;
+
     private Integer fraction;
+
+    private BigDecimal salesMoney;
+
+    private BigDecimal discountMoney;
+
+    private BigDecimal deliveryFee;
 
     private BigDecimal paidMoney;
 
@@ -80,8 +90,10 @@ public class Orders {
 
     private String isSign;
 
+    private Double distance;
+
     private String carUuids;
-    
+
     public Integer getFakeId() {
         return fakeId;
     }
@@ -162,12 +174,52 @@ public class Orders {
         this.couponMoney = couponMoney;
     }
 
+    public BigDecimal getRewardMoney() {
+        return rewardMoney;
+    }
+
+    public void setRewardMoney(BigDecimal rewardMoney) {
+        this.rewardMoney = rewardMoney;
+    }
+
+    public BigDecimal getFractionMoney() {
+        return fractionMoney;
+    }
+
+    public void setFractionMoney(BigDecimal fractionMoney) {
+        this.fractionMoney = fractionMoney;
+    }
+
     public Integer getFraction() {
         return fraction;
     }
 
     public void setFraction(Integer fraction) {
         this.fraction = fraction;
+    }
+
+    public BigDecimal getSalesMoney() {
+        return salesMoney;
+    }
+
+    public void setSalesMoney(BigDecimal salesMoney) {
+        this.salesMoney = salesMoney;
+    }
+
+    public BigDecimal getDiscountMoney() {
+        return discountMoney;
+    }
+
+    public void setDiscountMoney(BigDecimal discountMoney) {
+        this.discountMoney = discountMoney;
+    }
+
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
     public BigDecimal getPaidMoney() {
@@ -384,6 +436,14 @@ public class Orders {
 
     public void setIsSign(String isSign) {
         this.isSign = isSign == null ? null : isSign.trim();
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 
     public String getCarUuids() {

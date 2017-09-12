@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hcb.xigou.controller.base.BaseController;
 import com.hcb.xigou.dto.Orders;
 import com.hcb.xigou.dto.ShoppingCarts;
+import com.hcb.xigou.pojo.GoodsWithBLOBs;
+import com.hcb.xigou.service.GoodsService;
 import com.hcb.xigou.service.IOrdersService;
 import com.hcb.xigou.service.IShoppingCartsService;
 import com.hcb.xigou.service.UserOrdersService;
@@ -31,6 +33,8 @@ public class OrdersController extends BaseController{
 	IOrdersService ordersService;
 	@Autowired
 	IShoppingCartsService shoppingCartsService;
+	@Autowired
+	GoodsService goodsService;
 	
 	@RequestMapping("search")
 	@ResponseBody
@@ -271,12 +275,24 @@ public class OrdersController extends BaseController{
 					map.put("good_name", car.getGoodName());
 					map.put("number", car.getNumbers());
 					map.put("image", car.getGoodImage());
+					GoodsWithBLOBs good = goodsService.selectGoodByGoodUuid(car.getGoodUuid());
+					if(null != good){
+						map.put("good_code", good.getGoodCode());
+						map.put("firt_category_name", good.getFirtCategoryName());
+						map.put("second_category_name", good.getSecondCategoryName());
+					}
 					info.add(map);
 				}
 			}
 		}
 		model.put("description", "查询成功");
 		model.put("result",0);
+		model.put("coupon_money", order.getCouponMoney());
+		model.put("reward_money", order.getRewardMoney());
+		model.put("fraction_money", order.getFractionMoney());
+		model.put("fraction", order.getFraction());
+		model.put("delivery_fee", order.getDeliveryFee());
+		model.put("paid_money", order.getPaidMoney());
 		model.put("info", info);
 		return buildReqJsonObject(model);
 	}

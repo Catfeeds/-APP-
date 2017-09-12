@@ -12,11 +12,16 @@
     <result column="coupon_uuids" property="couponUuids" jdbcType="VARCHAR" />
     <result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
     <result column="coupon_money" property="couponMoney" jdbcType="DECIMAL" />
+    <result column="reward_money" property="rewardMoney" jdbcType="DECIMAL" />
+    <result column="fraction_money" property="fractionMoney" jdbcType="DECIMAL" />
     <result column="fraction" property="fraction" jdbcType="INTEGER" />
+    <result column="sales_money" property="salesMoney" jdbcType="DECIMAL" />
+    <result column="discount_money" property="discountMoney" jdbcType="DECIMAL" />
+    <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
     <result column="paid_money" property="paidMoney" jdbcType="DECIMAL" />
     <result column="numbers" property="numbers" jdbcType="INTEGER" />
-    <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
-    <result column="pay_way" property="payWay" jdbcType="VARCHAR" />
+    <result column="pay_status" property="payStatus" jdbcType="CHAR" />
+    <result column="pay_way" property="payWay" jdbcType="CHAR" />
     <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
     <result column="alipay_number" property="alipayNumber" jdbcType="VARCHAR" />
     <result column="wechat_number" property="wechatNumber" jdbcType="VARCHAR" />
@@ -37,20 +42,22 @@
     <result column="voucher" property="voucher" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
-    <result column="is_sign" property="isSign" jdbcType="VARCHAR" />
+    <result column="is_sign" property="isSign" jdbcType="CHAR" />
+    <result column="distance" property="distance" jdbcType="DOUBLE" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hcb.xigou.dto.Orders" extends="BaseResultMap" >
     <result column="car_uuids" property="carUuids" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     fake_id, order_uuid, create_datetime, update_datetime, delete_at, user_uuid, good_uuid, 
-    coupon_uuids, total_money, coupon_money, fraction, paid_money, numbers, pay_status, 
-    pay_way, order_number, alipay_number, wechat_number, pay_time, fail_time, collect_time, 
-    comment_time, return_time, address_uuid, delivery_time, give_status, sign_time, courier_uuid, 
-    scaner_uuid, remarks, store_uuid, daily_sign, voucher, content, code, type, bar_code, 
-    is_sign
+    coupon_uuids, total_money, coupon_money, reward_money, fraction_money, fraction, 
+    sales_money, discount_money, delivery_fee, paid_money, numbers, pay_status, pay_way, 
+    order_number, alipay_number, wechat_number, pay_time, fail_time, collect_time, comment_time, 
+    return_time, address_uuid, delivery_time, give_status, sign_time, courier_uuid, scaner_uuid, 
+    remarks, store_uuid, daily_sign, voucher, content, code, type, bar_code, is_sign, 
+    distance
   </sql>
   <sql id="Blob_Column_List" >
     car_uuids
@@ -63,11 +70,7 @@
     from orders
     where fake_id = #{fakeId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from orders
-    where fake_id = #{fakeId,jdbcType=INTEGER}
-  </delete>
-  <!-- 根据订单号 -->
+    <!-- 根据订单号 -->
   <select id="selectByOrderNumber" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -148,4 +151,551 @@
   		and pay_status = #{payStatus,jdbcType=VARCHAR}
   	</if>
   </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hcb.xigou.dto.Orders" >
+    insert into orders (fake_id, order_uuid, create_datetime, 
+      update_datetime, delete_at, user_uuid, 
+      good_uuid, coupon_uuids, total_money, 
+      coupon_money, reward_money, fraction_money, 
+      fraction, sales_money, discount_money, 
+      delivery_fee, paid_money, numbers, 
+      pay_status, pay_way, order_number, 
+      alipay_number, wechat_number, pay_time, 
+      fail_time, collect_time, comment_time, 
+      return_time, address_uuid, delivery_time, 
+      give_status, sign_time, courier_uuid, 
+      scaner_uuid, remarks, store_uuid, 
+      daily_sign, voucher, content, 
+      code, type, bar_code, is_sign, 
+      distance, car_uuids)
+    values (#{fakeId,jdbcType=INTEGER}, #{orderUuid,jdbcType=VARCHAR}, #{createDatetime,jdbcType=TIMESTAMP}, 
+      #{updateDatetime,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=VARCHAR}, #{userUuid,jdbcType=VARCHAR}, 
+      #{goodUuid,jdbcType=VARCHAR}, #{couponUuids,jdbcType=VARCHAR}, #{totalMoney,jdbcType=DECIMAL}, 
+      #{couponMoney,jdbcType=DECIMAL}, #{rewardMoney,jdbcType=DECIMAL}, #{fractionMoney,jdbcType=DECIMAL}, 
+      #{fraction,jdbcType=INTEGER}, #{salesMoney,jdbcType=DECIMAL}, #{discountMoney,jdbcType=DECIMAL}, 
+      #{deliveryFee,jdbcType=DECIMAL}, #{paidMoney,jdbcType=DECIMAL}, #{numbers,jdbcType=INTEGER}, 
+      #{payStatus,jdbcType=CHAR}, #{payWay,jdbcType=CHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{alipayNumber,jdbcType=VARCHAR}, #{wechatNumber,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{failTime,jdbcType=TIMESTAMP}, #{collectTime,jdbcType=TIMESTAMP}, #{commentTime,jdbcType=TIMESTAMP}, 
+      #{returnTime,jdbcType=TIMESTAMP}, #{addressUuid,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=VARCHAR}, 
+      #{giveStatus,jdbcType=CHAR}, #{signTime,jdbcType=TIMESTAMP}, #{courierUuid,jdbcType=VARCHAR}, 
+      #{scanerUuid,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{storeUuid,jdbcType=VARCHAR}, 
+      #{dailySign,jdbcType=VARCHAR}, #{voucher,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{barCode,jdbcType=VARCHAR}, #{isSign,jdbcType=CHAR}, 
+      #{distance,jdbcType=DOUBLE}, #{carUuids,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcb.xigou.dto.Orders" >
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        fake_id,
+      </if>
+      <if test="orderUuid != null" >
+        order_uuid,
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime,
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime,
+      </if>
+      <if test="deleteAt != null" >
+        delete_at,
+      </if>
+      <if test="userUuid != null" >
+        user_uuid,
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid,
+      </if>
+      <if test="couponUuids != null" >
+        coupon_uuids,
+      </if>
+      <if test="totalMoney != null" >
+        total_money,
+      </if>
+      <if test="couponMoney != null" >
+        coupon_money,
+      </if>
+      <if test="rewardMoney != null" >
+        reward_money,
+      </if>
+      <if test="fractionMoney != null" >
+        fraction_money,
+      </if>
+      <if test="fraction != null" >
+        fraction,
+      </if>
+      <if test="salesMoney != null" >
+        sales_money,
+      </if>
+      <if test="discountMoney != null" >
+        discount_money,
+      </if>
+      <if test="deliveryFee != null" >
+        delivery_fee,
+      </if>
+      <if test="paidMoney != null" >
+        paid_money,
+      </if>
+      <if test="numbers != null" >
+        numbers,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="payWay != null" >
+        pay_way,
+      </if>
+      <if test="orderNumber != null" >
+        order_number,
+      </if>
+      <if test="alipayNumber != null" >
+        alipay_number,
+      </if>
+      <if test="wechatNumber != null" >
+        wechat_number,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="failTime != null" >
+        fail_time,
+      </if>
+      <if test="collectTime != null" >
+        collect_time,
+      </if>
+      <if test="commentTime != null" >
+        comment_time,
+      </if>
+      <if test="returnTime != null" >
+        return_time,
+      </if>
+      <if test="addressUuid != null" >
+        address_uuid,
+      </if>
+      <if test="deliveryTime != null" >
+        delivery_time,
+      </if>
+      <if test="giveStatus != null" >
+        give_status,
+      </if>
+      <if test="signTime != null" >
+        sign_time,
+      </if>
+      <if test="courierUuid != null" >
+        courier_uuid,
+      </if>
+      <if test="scanerUuid != null" >
+        scaner_uuid,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid,
+      </if>
+      <if test="dailySign != null" >
+        daily_sign,
+      </if>
+      <if test="voucher != null" >
+        voucher,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="barCode != null" >
+        bar_code,
+      </if>
+      <if test="isSign != null" >
+        is_sign,
+      </if>
+      <if test="distance != null" >
+        distance,
+      </if>
+      <if test="carUuids != null" >
+        car_uuids,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fakeId != null" >
+        #{fakeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderUuid != null" >
+        #{orderUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="couponUuids != null" >
+        #{couponUuids,jdbcType=VARCHAR},
+      </if>
+      <if test="totalMoney != null" >
+        #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="couponMoney != null" >
+        #{couponMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="rewardMoney != null" >
+        #{rewardMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="fractionMoney != null" >
+        #{fractionMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="fraction != null" >
+        #{fraction,jdbcType=INTEGER},
+      </if>
+      <if test="salesMoney != null" >
+        #{salesMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="discountMoney != null" >
+        #{discountMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryFee != null" >
+        #{deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="paidMoney != null" >
+        #{paidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="numbers != null" >
+        #{numbers,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=CHAR},
+      </if>
+      <if test="payWay != null" >
+        #{payWay,jdbcType=CHAR},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayNumber != null" >
+        #{alipayNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatNumber != null" >
+        #{wechatNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failTime != null" >
+        #{failTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="collectTime != null" >
+        #{collectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentTime != null" >
+        #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnTime != null" >
+        #{returnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addressUuid != null" >
+        #{addressUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null" >
+        #{deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="giveStatus != null" >
+        #{giveStatus,jdbcType=CHAR},
+      </if>
+      <if test="signTime != null" >
+        #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courierUuid != null" >
+        #{courierUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="scanerUuid != null" >
+        #{scanerUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="dailySign != null" >
+        #{dailySign,jdbcType=VARCHAR},
+      </if>
+      <if test="voucher != null" >
+        #{voucher,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isSign != null" >
+        #{isSign,jdbcType=CHAR},
+      </if>
+      <if test="distance != null" >
+        #{distance,jdbcType=DOUBLE},
+      </if>
+      <if test="carUuids != null" >
+        #{carUuids,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcb.xigou.dto.Orders" >
+    update orders
+    <set >
+      <if test="orderUuid != null" >
+        order_uuid = #{orderUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null" >
+        create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDatetime != null" >
+        update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteAt != null" >
+        delete_at = #{deleteAt,jdbcType=VARCHAR},
+      </if>
+      <if test="userUuid != null" >
+        user_uuid = #{userUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="goodUuid != null" >
+        good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="couponUuids != null" >
+        coupon_uuids = #{couponUuids,jdbcType=VARCHAR},
+      </if>
+      <if test="totalMoney != null" >
+        total_money = #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="couponMoney != null" >
+        coupon_money = #{couponMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="rewardMoney != null" >
+        reward_money = #{rewardMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="fractionMoney != null" >
+        fraction_money = #{fractionMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="fraction != null" >
+        fraction = #{fraction,jdbcType=INTEGER},
+      </if>
+      <if test="salesMoney != null" >
+        sales_money = #{salesMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="discountMoney != null" >
+        discount_money = #{discountMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryFee != null" >
+        delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="paidMoney != null" >
+        paid_money = #{paidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="numbers != null" >
+        numbers = #{numbers,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=CHAR},
+      </if>
+      <if test="payWay != null" >
+        pay_way = #{payWay,jdbcType=CHAR},
+      </if>
+      <if test="orderNumber != null" >
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayNumber != null" >
+        alipay_number = #{alipayNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatNumber != null" >
+        wechat_number = #{wechatNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failTime != null" >
+        fail_time = #{failTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="collectTime != null" >
+        collect_time = #{collectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentTime != null" >
+        comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnTime != null" >
+        return_time = #{returnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addressUuid != null" >
+        address_uuid = #{addressUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null" >
+        delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="giveStatus != null" >
+        give_status = #{giveStatus,jdbcType=CHAR},
+      </if>
+      <if test="signTime != null" >
+        sign_time = #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courierUuid != null" >
+        courier_uuid = #{courierUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="scanerUuid != null" >
+        scaner_uuid = #{scanerUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="storeUuid != null" >
+        store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="dailySign != null" >
+        daily_sign = #{dailySign,jdbcType=VARCHAR},
+      </if>
+      <if test="voucher != null" >
+        voucher = #{voucher,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="barCode != null" >
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isSign != null" >
+        is_sign = #{isSign,jdbcType=CHAR},
+      </if>
+      <if test="distance != null" >
+        distance = #{distance,jdbcType=DOUBLE},
+      </if>
+      <if test="carUuids != null" >
+        car_uuids = #{carUuids,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hcb.xigou.dto.Orders" >
+    update orders
+    set order_uuid = #{orderUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      user_uuid = #{userUuid,jdbcType=VARCHAR},
+      good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      coupon_uuids = #{couponUuids,jdbcType=VARCHAR},
+      total_money = #{totalMoney,jdbcType=DECIMAL},
+      coupon_money = #{couponMoney,jdbcType=DECIMAL},
+      reward_money = #{rewardMoney,jdbcType=DECIMAL},
+      fraction_money = #{fractionMoney,jdbcType=DECIMAL},
+      fraction = #{fraction,jdbcType=INTEGER},
+      sales_money = #{salesMoney,jdbcType=DECIMAL},
+      discount_money = #{discountMoney,jdbcType=DECIMAL},
+      delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      paid_money = #{paidMoney,jdbcType=DECIMAL},
+      numbers = #{numbers,jdbcType=INTEGER},
+      pay_status = #{payStatus,jdbcType=CHAR},
+      pay_way = #{payWay,jdbcType=CHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      alipay_number = #{alipayNumber,jdbcType=VARCHAR},
+      wechat_number = #{wechatNumber,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      fail_time = #{failTime,jdbcType=TIMESTAMP},
+      collect_time = #{collectTime,jdbcType=TIMESTAMP},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      return_time = #{returnTime,jdbcType=TIMESTAMP},
+      address_uuid = #{addressUuid,jdbcType=VARCHAR},
+      delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      give_status = #{giveStatus,jdbcType=CHAR},
+      sign_time = #{signTime,jdbcType=TIMESTAMP},
+      courier_uuid = #{courierUuid,jdbcType=VARCHAR},
+      scaner_uuid = #{scanerUuid,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      daily_sign = #{dailySign,jdbcType=VARCHAR},
+      voucher = #{voucher,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      bar_code = #{barCode,jdbcType=VARCHAR},
+      is_sign = #{isSign,jdbcType=CHAR},
+      distance = #{distance,jdbcType=DOUBLE},
+      car_uuids = #{carUuids,jdbcType=LONGVARCHAR}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hcb.xigou.dto.Orders" >
+    update orders
+    set order_uuid = #{orderUuid,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+      delete_at = #{deleteAt,jdbcType=VARCHAR},
+      user_uuid = #{userUuid,jdbcType=VARCHAR},
+      good_uuid = #{goodUuid,jdbcType=VARCHAR},
+      coupon_uuids = #{couponUuids,jdbcType=VARCHAR},
+      total_money = #{totalMoney,jdbcType=DECIMAL},
+      coupon_money = #{couponMoney,jdbcType=DECIMAL},
+      reward_money = #{rewardMoney,jdbcType=DECIMAL},
+      fraction_money = #{fractionMoney,jdbcType=DECIMAL},
+      fraction = #{fraction,jdbcType=INTEGER},
+      sales_money = #{salesMoney,jdbcType=DECIMAL},
+      discount_money = #{discountMoney,jdbcType=DECIMAL},
+      delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      paid_money = #{paidMoney,jdbcType=DECIMAL},
+      numbers = #{numbers,jdbcType=INTEGER},
+      pay_status = #{payStatus,jdbcType=CHAR},
+      pay_way = #{payWay,jdbcType=CHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      alipay_number = #{alipayNumber,jdbcType=VARCHAR},
+      wechat_number = #{wechatNumber,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      fail_time = #{failTime,jdbcType=TIMESTAMP},
+      collect_time = #{collectTime,jdbcType=TIMESTAMP},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      return_time = #{returnTime,jdbcType=TIMESTAMP},
+      address_uuid = #{addressUuid,jdbcType=VARCHAR},
+      delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      give_status = #{giveStatus,jdbcType=CHAR},
+      sign_time = #{signTime,jdbcType=TIMESTAMP},
+      courier_uuid = #{courierUuid,jdbcType=VARCHAR},
+      scaner_uuid = #{scanerUuid,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      store_uuid = #{storeUuid,jdbcType=VARCHAR},
+      daily_sign = #{dailySign,jdbcType=VARCHAR},
+      voucher = #{voucher,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      bar_code = #{barCode,jdbcType=VARCHAR},
+      is_sign = #{isSign,jdbcType=CHAR},
+      distance = #{distance,jdbcType=DOUBLE}
+    where fake_id = #{fakeId,jdbcType=INTEGER}
+  </update>
 </mapper>
